@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@latest:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(npx tsc:*)",
+      "Bash(vercel env add:*)",
+      "Bash(vercel link:*)",
+      "Bash(vercel env:*)",
+      "Bash(vercel:*)",
+      "Bash(timeout:*)",
+      "Bash(curl:*)",
+      "Bash(nslookup:*)",
+      "Bash(git init:*)",
+      "Bash(git remote add:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nInitial commit: Los Álamos Capital investment tracker\n\n- Next.js 16 app with Supabase backend\n- Public site with fund metrics, performance chart, portfolio allocation\n- Admin panel for managing positions, transactions, decisions, snapshots\n- All components use inline styles for consistent dark theme\n- Responsive design with mobile breakpoints\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nAdd marketing assets: logos, favicons, OG images, and SEO metadata\n\n- Add SVG logos \\(standalone, white, full with text\\)\n- Add favicons and PWA icons \\(192, 512, apple-touch\\)\n- Add Open Graph and Twitter card images\n- Add manifest.json for PWA support\n- Add dynamic robots.ts and sitemap.ts\n- Update layout.tsx with complete SEO metadata\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit:*)",
+      "Bash(gh api:*)",
+      "Bash(git merge:*)",
+      "Bash(git checkout:*)",
+      "Bash(git fetch:*)",
+      "Bash(gh repo list:*)"
+    ]
+  }
+}

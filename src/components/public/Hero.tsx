@@ -1,68 +1,50 @@
+"use client";
+
 export function Hero() {
   return (
-    <section
-      style={{
-        padding: "5rem 0 3rem",
-        textAlign: "center",
-      }}
-    >
-      <div
-        className="animate-fade-up"
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: "0.5rem",
-          padding: "0.4rem 1rem",
-          border: "1px solid rgba(45, 106, 79, 0.2)",
-          borderRadius: "100px",
-          fontSize: "0.75rem",
-          fontWeight: 500,
-          color: "#95d5b2",
-          letterSpacing: "0.08em",
-          textTransform: "uppercase",
-          marginBottom: "2rem",
-          background: "rgba(82, 183, 136, 0.15)",
-        }}
-      >
-        <span
-          className="animate-pulse-dot"
-          style={{
-            width: "6px",
-            height: "6px",
-            background: "#52b788",
-            borderRadius: "50%",
-          }}
-        />
-        Track Record Público · Transparencia Total
+    <section className="hero-section">
+      {/* Cinematic Background Layers */}
+      <div className="hero-bg-layers">
+        {/* Vignette */}
+        <div className="hero-vignette" />
+
+        {/* Light flicker - golden hour shimmer */}
+        <div className="hero-light-flicker" />
+
+        {/* Film grain */}
+        <div className="hero-grain" />
+
+        {/* Animated leaves */}
+        <div className="hero-leaves">
+          <div className="leaf leaf-1" />
+          <div className="leaf leaf-2" />
+          <div className="leaf leaf-3" />
+          <div className="leaf leaf-4" />
+          <div className="leaf leaf-5" />
+        </div>
+
+        {/* Haze bottom */}
+        <div className="hero-haze-bottom" />
       </div>
-      <h2
-        className="animate-fade-up animate-delay-1 hero-title-responsive"
-        style={{
-          fontFamily: "var(--font-display)",
-          fontSize: "3.2rem",
-          fontWeight: 400,
-          lineHeight: 1.15,
-          marginBottom: "1rem",
-          color: "#e8efe6",
-        }}
-      >
-        Donde hay álamos,
-        <br />
-        hay raíces
-      </h2>
-      <p
-        className="animate-fade-up animate-delay-2"
-        style={{
-          fontSize: "1.1rem",
-          color: "#8a9e93",
-          maxWidth: "540px",
-          margin: "0 auto",
-          fontWeight: 300,
-        }}
-      >
-        Gestión de inversiones con track record público y transparencia
-        absoluta. Cada decisión documentada, cada resultado verificable.
-      </p>
+
+      {/* Content */}
+      <div className="hero-content">
+        <div className="hero-badge animate-fade-up">
+          <span className="hero-badge-dot" />
+          Track Record Público · Transparencia Total
+        </div>
+
+        <h1 className="hero-title animate-fade-up animate-delay-1">
+          Donde hay álamos,
+          <br />
+          hay raíces
+        </h1>
+
+        <p className="hero-subtitle animate-fade-up animate-delay-2">
+          Gestión de inversiones con track record público y transparencia
+          absoluta. Cada decisión documentada, cada resultado verificable.
+        </p>
+      </div>
     </section>
   );
 }
