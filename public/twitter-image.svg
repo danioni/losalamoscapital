@@ -1,0 +1,73 @@
+<svg width="1200" height="600" viewBox="0 0 1200 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Twitter/X Card Image -->
+
+  <!-- Background -->
+  <rect width="1200" height="600" fill="#0a0f0d"/>
+
+  <!-- Subtle gradient overlay -->
+  <defs>
+    <radialGradient id="tglow1" cx="20%" cy="0%" r="50%">
+      <stop offset="0%" stop-color="#2d6a4f" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#0a0f0d" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="tglow2" cx="80%" cy="100%" r="50%">
+      <stop offset="0%" stop-color="#2d6a4f" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#0a0f0d" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="600" fill="url(#tglow1)"/>
+  <rect width="1200" height="600" fill="url(#tglow2)"/>
+
+  <!-- Centered Content -->
+  <!-- Logo Icon -->
+  <g transform="translate(500, 100)">
+    <!-- Outer leaf shape -->
+    <path
+      d="M100 11.3 C79.6 37.9, 45.4 56.8, 45.4 104.4 C45.4 132.8, 68.4 151.7, 100 151.7 C131.6 151.7, 154.6 132.8, 154.6 104.4 C154.6 56.8, 120.4 37.9, 100 11.3Z"
+      fill="none"
+      stroke="#2d6a4f"
+      stroke-width="7.1"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- Inner leaf shape with fill -->
+    <path
+      d="M100 30.3 C85.8 56.8, 64.3 75.7, 64.3 104.4 C64.3 123.4, 79.6 142.3, 100 142.3 C120.4 142.3, 135.7 123.4, 135.7 104.4 C135.7 75.7, 114.2 56.8, 100 30.3Z"
+      fill="rgba(45,106,79,0.25)"
+      stroke="#40916c"
+      stroke-width="4.7"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- Central vein -->
+    <line x1="100" y1="66.2" x2="100" y2="132.8" stroke="#52b788" stroke-width="4.7" stroke-linecap="round" opacity="0.7"/>
+
+    <!-- Left branch vein -->
+    <line x1="79.6" y1="94.9" x2="100" y2="75.9" stroke="#52b788" stroke-width="3.8" stroke-linecap="round" opacity="0.5"/>
+
+    <!-- Right branch vein -->
+    <line x1="120.4" y1="99.6" x2="100" y2="80.6" stroke="#52b788" stroke-width="3.8" stroke-linecap="round" opacity="0.5"/>
+  </g>
+
+  <!-- Main Title -->
+  <text x="600" y="340" font-family="Georgia, 'DM Serif Display', serif" font-size="56" font-weight="400" fill="#e8efe6" text-anchor="middle">
+    Los Álamos Capital
+  </text>
+
+  <!-- Subtitle -->
+  <text x="600" y="400" font-family="'DM Sans', -apple-system, sans-serif" font-size="24" font-weight="400" fill="#8a9e93" text-anchor="middle">
+    Track Record Público de Inversiones
+  </text>
+
+  <!-- Tagline -->
+  <text x="600" y="480" font-family="Georgia, 'DM Serif Display', serif" font-size="20" font-style="italic" fill="#52b788" text-anchor="middle">
+    Donde hay álamos, hay raíces
+  </text>
+
+  <!-- URL -->
+  <text x="600" y="550" font-family="'JetBrains Mono', monospace" font-size="16" fill="#5a6e63" text-anchor="middle">
+    losalamoscapital.com
+  </text>
+</svg>

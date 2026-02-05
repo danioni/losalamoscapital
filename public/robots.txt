@@ -1,0 +1,14 @@
+# robots.txt for Los Álamos Capital
+# https://losalamoscapital.com
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /login
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://losalamoscapital.com/sitemap.xml
+
+# Crawl-delay (optional, for being gentle with crawlers)
+Crawl-delay: 1

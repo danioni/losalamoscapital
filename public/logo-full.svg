@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="120" viewBox="0 0 400 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Los Álamos Capital - Full Logo with Text -->
+
+  <!-- Icon -->
+  <g transform="translate(10, 10)">
+    <!-- Outer leaf shape -->
+    <path
+      d="M50 11.1 C38.9 27.8, 22.2 38.9, 22.2 61.1 C22.2 77.8, 33.3 88.9, 50 88.9 C66.7 88.9, 77.8 77.8, 77.8 61.1 C77.8 38.9, 61.1 27.8, 50 11.1Z"
+      fill="none"
+      stroke="#2d6a4f"
+      stroke-width="4.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- Inner leaf shape with fill -->
+    <path
+      d="M50 22.2 C41.7 36.1, 30.6 44.4, 30.6 61.1 C30.6 72.2, 38.9 80.6, 50 80.6 C61.1 80.6, 69.4 72.2, 69.4 61.1 C69.4 44.4, 58.3 36.1, 50 22.2Z"
+      fill="rgba(45,106,79,0.25)"
+      stroke="#40916c"
+      stroke-width="2.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- Central vein -->
+    <line x1="50" y1="38.9" x2="50" y2="77.8" stroke="#52b788" stroke-width="2.8" stroke-linecap="round" opacity="0.7"/>
+
+    <!-- Left branch vein -->
+    <line x1="38.9" y1="55.6" x2="50" y2="44.4" stroke="#52b788" stroke-width="2.2" stroke-linecap="round" opacity="0.5"/>
+
+    <!-- Right branch vein -->
+    <line x1="61.1" y1="58.3" x2="50" y2="47.2" stroke="#52b788" stroke-width="2.2" stroke-linecap="round" opacity="0.5"/>
+  </g>
+
+  <!-- Text: Los Álamos -->
+  <text x="120" y="58" font-family="Georgia, 'DM Serif Display', serif" font-size="32" font-weight="400" fill="#e8efe6">
+    Los Álamos
+  </text>
+
+  <!-- Text: Capital -->
+  <text x="120" y="90" font-family="'DM Sans', -apple-system, sans-serif" font-size="18" font-weight="400" fill="#8a9e93" letter-spacing="0.15em">
+    CAPITAL
+  </text>
+</svg>
