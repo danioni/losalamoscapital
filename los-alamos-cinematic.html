@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Los Álamos Capital</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400&family=JetBrains+Mono:wght@300&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #050807;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        /* ── CINEMATIC CONTAINER ── */
+        .cinema {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* ── BACKGROUND IMAGE ── */
+        .bg-layer {
+            position: absolute;
+            inset: 0;
+            background-image: url('./alamos-bg.png');
+            background-size: cover;
+            background-position: center 40%;
+            opacity: 0;
+            transform: scale(1.08);
+            animation: bgReveal 4s ease-out 0.5s forwards, bgSlowZoom 30s ease-in-out 4s infinite alternate;
+            filter: brightness(0.55) contrast(1.15) saturate(0.85);
+        }
+
+        @keyframes bgReveal {
+            0% { opacity: 0; transform: scale(1.12); }
+            100% { opacity: 1; transform: scale(1.05); }
+        }
+
+        @keyframes bgSlowZoom {
+            0% { transform: scale(1.05); }
+            100% { transform: scale(1.0); }
+        }
+
+        /* ── VIGNETTE ── */
+        .vignette {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, transparent 30%, rgba(5,8,7,0.6) 70%, rgba(5,8,7,0.95) 100%);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* ── TOP/BOTTOM CINEMATIC BARS ── */
+        .letterbox-top,
+        .letterbox-bottom {
+            position: absolute;
+            left: 0; right: 0;
+            height: 8vh;
+            background: #050807;
+            z-index: 5;
+        }
+        .letterbox-top { top: 0; }
+        .letterbox-bottom { bottom: 0; }
+
+        /* ── FILM GRAIN OVERLAY ── */
+        .grain {
+            position: absolute;
+            inset: 0;
+            opacity: 0.04;
+            z-index: 3;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            background-size: 128px 128px;
+            animation: grainShift 0.3s steps(3) infinite;
+        }
+
+        @keyframes grainShift {
+            0% { transform: translate(0, 0); }
+            33% { transform: translate(-2px, 1px); }
+            66% { transform: translate(1px, -1px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        /* ── ANIMATED LEAVES (SVG OVERLAY) ── */
+        .leaves-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            pointer-events: none;
+            opacity: 0;
+            animation: fadeIn 2s ease 3s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .leaf {
+            position: absolute;
+            width: 8px;
+            height: 4px;
+            background: rgba(149, 163, 97, 0.5);
+            border-radius: 50%;
+            filter: blur(0.5px);
+        }
+
+        .leaf:nth-child(1) { top: 25%; left: 45%; animation: leafDrift1 8s ease-in-out 3.5s infinite; }
+        .leaf:nth-child(2) { top: 30%; left: 40%; animation: leafDrift2 10s ease-in-out 4s infinite; width: 6px; height: 3px; }
+        .leaf:nth-child(3) { top: 20%; left: 50%; animation: leafDrift3 7s ease-in-out 3.2s infinite; width: 5px; height: 2.5px; opacity: 0.6; }
+        .leaf:nth-child(4) { top: 35%; left: 42%; animation: leafDrift1 9s ease-in-out 5s infinite; width: 7px; height: 3px; opacity: 0.4; }
+        .leaf:nth-child(5) { top: 22%; left: 48%; animation: leafDrift2 11s ease-in-out 4.5s infinite; width: 5px; height: 2px; opacity: 0.5; }
+        .leaf:nth-child(6) { top: 40%; left: 35%; animation: leafDrift3 8.5s ease-in-out 3.8s infinite; width: 6px; height: 3px; opacity: 0.35; }
+        .leaf:nth-child(7) { top: 18%; left: 55%; animation: leafDrift1 12s ease-in-out 5.5s infinite; width: 4px; height: 2px; opacity: 0.4; }
+        .leaf:nth-child(8) { top: 45%; left: 38%; animation: leafDrift2 9.5s ease-in-out 6s infinite; width: 7px; height: 3px; opacity: 0.3; }
+
+        @keyframes leafDrift1 {
+            0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            50% { transform: translate(35vw, 8vh) rotate(180deg); opacity: 0.4; }
+            90% { opacity: 0; }
+            100% { transform: translate(60vw, 15vh) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes leafDrift2 {
+            0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 0; }
+            10% { opacity: 0.5; }
+            40% { transform: translate(25vw, -3vh) rotate(120deg) scale(0.8); }
+            70% { transform: translate(45vw, 10vh) rotate(240deg) scale(0.6); opacity: 0.3; }
+            100% { transform: translate(65vw, 5vh) rotate(400deg) scale(0.4); opacity: 0; }
+        }
+
+        @keyframes leafDrift3 {
+            0% { transform: translate(0, 0) rotate(30deg); opacity: 0; }
+            15% { opacity: 0.5; }
+            60% { transform: translate(40vw, 12vh) rotate(200deg); opacity: 0.25; }
+            100% { transform: translate(70vw, 8vh) rotate(380deg); opacity: 0; }
+        }
+
+        /* ── SMOKE from chimney ── */
+        .smoke-overlay {
+            position: absolute;
+            z-index: 3;
+            pointer-events: none;
+            top: 15%;
+            right: 28%;
+            opacity: 0;
+            animation: fadeIn 2s ease 3.5s forwards;
+        }
+
+        .smoke-wisp {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle, rgba(200,200,190,0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(6px);
+        }
+
+        .smoke-wisp:nth-child(1) { animation: smokeRise1 6s ease-out 4s infinite; }
+        .smoke-wisp:nth-child(2) { animation: smokeRise2 7s ease-out 4.5s infinite; left: 8px; }
+        .smoke-wisp:nth-child(3) { animation: smokeRise1 8s ease-out 5s infinite; left: -5px; width: 20px; height: 20px; }
+
+        @keyframes smokeRise1 {
+            0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
+            20% { opacity: 0.15; }
+            50% { transform: translate(15px, -40px) scale(1.2); opacity: 0.08; }
+            100% { transform: translate(30px, -90px) scale(2); opacity: 0; }
+        }
+
+        @keyframes smokeRise2 {
+            0% { transform: translate(0, 0) scale(0.4); opacity: 0; }
+            25% { opacity: 0.12; }
+            60% { transform: translate(20px, -50px) scale(1.5); opacity: 0.05; }
+            100% { transform: translate(40px, -100px) scale(2.5); opacity: 0; }
+        }
+
+        /* ── LIGHT FLICKER — subtle golden hour shimmer ── */
+        .light-flicker {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+            background: radial-gradient(ellipse at 65% 50%, rgba(212,163,115,0.04) 0%, transparent 60%);
+            animation: flicker 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.3; }
+            30% { opacity: 0.7; }
+            50% { opacity: 0.4; }
+            70% { opacity: 0.8; }
+            100% { opacity: 0.5; }
+        }
+
+        /* ── TEXT OVERLAY ── */
+        .title-overlay {
+            position: absolute;
+            z-index: 10;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .title-main {
+            font-family: 'DM Serif Display', Georgia, serif;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 400;
+            color: #e8efe6;
+            letter-spacing: 0.06em;
+            opacity: 0;
+            transform: translateY(15px);
+            animation: textReveal 2.5s ease-out 2s forwards;
+            text-shadow: 0 2px 40px rgba(0,0,0,0.6), 0 0 80px rgba(5,8,7,0.4);
+        }
+
+        .title-sub {
+            font-family: 'DM Sans', sans-serif;
+            font-size: clamp(0.65rem, 1.2vw, 0.9rem);
+            font-weight: 300;
+            color: rgba(149,213,178,0.7);
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: textReveal 2s ease-out 3s forwards;
+            text-shadow: 0 1px 20px rgba(0,0,0,0.5);
+        }
+
+        .title-divider {
+            width: 60px;
+            height: 1px;
+            background: rgba(82,183,136,0.4);
+            opacity: 0;
+            transform: scaleX(0);
+            animation: lineReveal 1.5s ease-out 2.8s forwards;
+        }
+
+        .title-tagline {
+            font-family: 'DM Sans', sans-serif;
+            font-size: clamp(0.7rem, 1vw, 0.85rem);
+            font-weight: 300;
+            font-style: italic;
+            color: rgba(232,239,230,0.45);
+            letter-spacing: 0.08em;
+            opacity: 0;
+            animation: textReveal 2s ease-out 3.8s forwards;
+            text-shadow: 0 1px 20px rgba(0,0,0,0.5);
+        }
+
+        @keyframes textReveal {
+            0% { opacity: 0; transform: translateY(15px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes lineReveal {
+            0% { opacity: 0; transform: scaleX(0); }
+            100% { opacity: 1; transform: scaleX(1); }
+        }
+
+        /* ── INITIAL BLACK FADE ── */
+        .black-cover {
+            position: absolute;
+            inset: 0;
+            background: #050807;
+            z-index: 20;
+            animation: coverFade 2s ease-out 0.3s forwards;
+            pointer-events: none;
+        }
+
+        @keyframes coverFade {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        /* ── SUBTLE TREE SWAY — applied to bg ── */
+        .bg-layer::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: inherit;
+            background-size: inherit;
+            background-position: inherit;
+            opacity: 0;
+        }
+
+        /* ── ATMOSPHERIC HAZE ── */
+        .haze {
+            position: absolute;
+            bottom: 8vh;
+            left: 0;
+            right: 0;
+            height: 25%;
+            background: linear-gradient(to top, rgba(5,8,7,0.7) 0%, rgba(5,8,7,0.2) 40%, transparent 100%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* ── TOP HAZE ── */
+        .haze-top {
+            position: absolute;
+            top: 8vh;
+            left: 0;
+            right: 0;
+            height: 15%;
+            background: linear-gradient(to bottom, rgba(5,8,7,0.5) 0%, transparent 100%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* ── CLICK TO REPLAY ── */
+        .replay-hint {
+            position: absolute;
+            bottom: 10vh;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            font-weight: 300;
+            color: rgba(138,158,147,0.3);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: textReveal 1.5s ease-out 6s forwards;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .replay-hint:hover { color: rgba(138,158,147,0.6); }
+    </style>
+</head>
+<body>
+
+    <div class="cinema" id="cinema">
+        <!-- Initial black cover for fade-in -->
+        <div class="black-cover" id="blackCover"></div>
+
+        <!-- Cinematic letterbox bars -->
+        <div class="letterbox-top"></div>
+        <div class="letterbox-bottom"></div>
+
+        <!-- Background image -->
+        <div class="bg-layer" id="bgLayer"></div>
+
+        <!-- Atmospheric layers -->
+        <div class="vignette"></div>
+        <div class="haze"></div>
+        <div class="haze-top"></div>
+        <div class="light-flicker"></div>
+        <div class="grain"></div>
+
+        <!-- Animated leaves -->
+        <div class="leaves-overlay">
+            <div class="leaf"></div>
+            <div class="leaf"></div>
+            <div class="leaf"></div>
+            <div class="leaf"></div>
+            <div class="leaf"></div>
+            <div class="leaf"></div>
+            <div class="leaf"></div>
+            <div class="leaf"></div>
+        </div>
+
+        <!-- Smoke from chimney -->
+        <div class="smoke-overlay">
+            <div class="smoke-wisp"></div>
+            <div class="smoke-wisp"></div>
+            <div class="smoke-wisp"></div>
+        </div>
+
+        <!-- Title -->
+        <div class="title-overlay">
+            <div class="title-main">Los Álamos</div>
+            <div class="title-divider"></div>
+            <div class="title-sub">Capital</div>
+            <div class="title-tagline">Donde hay álamos, hay raíces</div>
+        </div>
+
+        <!-- Replay -->
+        <div class="replay-hint" onclick="location.reload()">Click para repetir</div>
+    </div>
+
+</body>
+</html>
