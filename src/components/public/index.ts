@@ -1,0 +1,10 @@
+export { Header } from "./Header";
+export { Hero } from "./Hero";
+export { StatsGrid } from "./StatsGrid";
+export { PerformanceChart } from "./PerformanceChart";
+export { PortfolioAllocation } from "./PortfolioAllocation";
+export { DecisionsLog } from "./DecisionsLog";
+export { Methodology } from "./Methodology";
+export { Disclaimer } from "./Disclaimer";
+export { Footer } from "./Footer";
+export { Logo } from "./Logo";
