@@ -674,7 +674,7 @@
 .familia-page .rainbow-iframe-container {
   position: relative;
   width: 100%;
-  aspect-ratio: 5 / 4;
+  aspect-ratio: 16 / 10;
   border-radius: var(--radius-md);
   overflow: hidden;
   background: #f9f6f0;
@@ -682,11 +682,13 @@
 
 .familia-page .rainbow-iframe {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
+  /* Scale and position to show only the chart area */
+  width: 115%;
+  height: 135%;
+  top: -18%;
+  left: -7%;
   border: none;
+  pointer-events: none;
 }
 
 .familia-page .rainbow-legend {
@@ -745,7 +747,14 @@
 
 @media (max-width: 640px) {
   .familia-page .rainbow-iframe-container {
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 4 / 3;
+  }
+
+  .familia-page .rainbow-iframe {
+    width: 130%;
+    height: 150%;
+    top: -20%;
+    left: -15%;
   }
 
   .familia-page .rainbow-legend {
