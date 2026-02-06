@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Los Álamos Capital
 
-## Getting Started
+> *Donde hay álamos, hay raíces.*
 
-First, run the development server:
+Track record público de inversiones de **Los Álamos Capital SpA**. Un family office chileno enfocado en transparencia absoluta y visión de largo plazo.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Filosofía
+
+Los álamos tienen raíces profundas — se sostienen en las tormentas y crecen alto cuando les das tiempo. Esa es nuestra filosofía de inversión:
+
+- **Transparencia total**: Todo está visible públicamente
+- **Largo plazo**: Horizonte de 5+ años
+- **Acumular, no vender**: Buy, Borrow, Die
+- **Simplicidad**: Pocos activos, alta convicción
+
+## Track Record Público
+
+Visitá [losalamoscapital.com](https://losalamoscapital.com) para ver:
+
+- Rendimiento actualizado del portafolio
+- Composición de activos
+- Historial de decisiones de inversión
+- Snapshots mensuales verificables
+
+## Cómo Funciona la Transparencia
+
+### Precios en Tiempo Real
+
+Los precios de los activos se obtienen de fuentes públicas verificables:
+
+| Activo | Fuente | Frecuencia |
+|--------|--------|------------|
+| Bitcoin (BTC) | CoinGecko API | Tiempo real |
+| Acciones/ETFs | Yahoo Finance | Tiempo real |
+| Peso Chileno | Banco Central | Diario |
+
+### Snapshots Mensuales
+
+Cada mes se genera un snapshot inmutable que incluye:
+
+- Valor total del portafolio en USD y CLP
+- Cantidad exacta de cada activo
+- Precio de cada activo al momento del snapshot
+- Hash verificable del estado
+
+### Registro de Decisiones
+
+Cada decisión de inversión (compra, venta, rebalanceo) queda registrada con:
+
+- Fecha y hora
+- Activo afectado
+- Cantidad y precio
+- Razón de la decisión
+- Impacto en el portafolio
+
+## Stack Técnico
+
+- **Frontend**: Next.js 16 + React 19
+- **Base de Datos**: Supabase (PostgreSQL)
+- **Hosting**: Vercel
+- **Precios**: APIs públicas (CoinGecko, Yahoo Finance)
+
+## Estructura del Proyecto
+
+```
+src/
+├── app/
+│   ├── page.tsx          # Landing pública con track record
+│   ├── admin/            # Panel de administración (privado)
+│   ├── familia/          # Contenido familiar (privado)
+│   └── api/              # Endpoints de datos
+├── components/
+│   ├── public/           # Componentes de la landing
+│   ├── admin/            # Componentes del admin
+│   ├── ui/               # Componentes UI reutilizables
+│   └── layout/           # Layouts y estructuras
+└── lib/
+    ├── supabase/         # Cliente y queries
+    └── styles/           # Sistema de colores
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Desarrollo Local
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Instalar dependencias
+npm install
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Variables de entorno
+cp .env.example .env.local
 
-## Learn More
+# Correr en desarrollo
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Variables de Entorno
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_key
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Licencia
 
-## Deploy on Vercel
+Este proyecto es privado. El código fuente no está disponible para uso público.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Los Álamos Capital SpA** · Chile · 2025
+
+*"Las vueltas son las que dejan"*
