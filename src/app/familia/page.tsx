@@ -348,7 +348,7 @@ function FamiliaContent() {
               <div className="legend-item current"><span className="dot blue"></span>Comprar ← Estamos aquí</div>
             </div>
             <div className="rainbow-footer">
-              <strong>Lectura actual:</strong> Bitcoin (~$65K) está en la zona verde/azul — &quot;Todavía barato&quot; según su tendencia histórica.
+              <strong>Lectura actual:</strong> Bitcoin (~$65K) está en la zona verde/azul — &quot;Buen momento para comprar&quot; según su tendencia histórica.
               Históricamente, comprar en esta zona ha generado retornos de <strong>200-500%</strong> en los siguientes 2-3 años.
             </div>
           </div>
