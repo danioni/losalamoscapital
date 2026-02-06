@@ -168,7 +168,6 @@ export default function FamiliaPage() {
             </button>
           </div>
 
-          {/* Hidden submit for enter key */}
           <button type="submit" style={{ display: 'none' }} />
         </form>
 
@@ -202,9 +201,9 @@ function FamiliaContent() {
           <h2>Todo empieza con el tata</h2>
           <p>El tata fue inversionista hasta su último día. Literalmente — preguntando por la bolsa, atento a los números, siempre pensando en hacer crecer lo que tenía. Porque él entendía algo que la mayoría no entiende:</p>
 
-          <div className="solution-card" style={{ textAlign: 'center' }}>
-            <p style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '1.6rem', color: '#1a3a2a', fontStyle: 'italic', marginBottom: '16px' }}>&quot;Las vueltas son las que dejan&quot;</p>
-            <p style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '1.2rem', color: '#2d5a3f', fontStyle: 'italic', marginBottom: 0 }}>&quot;Peso ahorrado es peso ganado&quot;</p>
+          <div className="quote-card">
+            <p className="quote-text">Las vueltas son las que dejan</p>
+            <p className="quote-secondary">Peso ahorrado es peso ganado</p>
           </div>
 
           <p>Las vueltas son las que dejan. No el sueldo, no el ahorro quieto en el banco — <span className="highlight">las vueltas.</span> Poner la plata a trabajar, que genere más, y volver a invertir. Eso hizo el tata toda su vida.</p>
@@ -220,17 +219,17 @@ function FamiliaContent() {
           <p>Los álamos tienen raíces profundas — se sostienen en las tormentas y crecen alto cuando les das tiempo. Por eso elegimos ese nombre para nuestra empresa familiar: tuya y mía, 50/50, transparente, profesional.</p>
           <p>Pero primero, ¿por qué mover la plata? Porque parte del capital estaba en un fondo mutuo de Itaú que en realidad <strong>pierde valor</strong>:</p>
 
-          <div className="problem-card">
-            <div className="stat">
+          <div className="stats-card danger">
+            <div className="stat-row">
               <div className="stat-number">~4%</div>
               <div className="stat-text"><strong>Renta el fondo mutuo</strong> — lo que el banco dice que ganas.</div>
             </div>
-            <div className="stat">
+            <div className="stat-row">
               <div className="stat-number">~5%</div>
               <div className="stat-text"><strong>Inflación en Chile</strong> — lo que suben los precios cada año.</div>
             </div>
-            <div className="stat">
-              <div className="stat-number" style={{ color: '#c45c4a' }}>-1%</div>
+            <div className="stat-row">
+              <div className="stat-number danger">-1%</div>
               <div className="stat-text"><strong>Resultado real</strong> — el capital se achica cada año sin que nadie lo toque.</div>
             </div>
           </div>
@@ -245,15 +244,15 @@ function FamiliaContent() {
           <h2>El plan: hacer crecer las raíces</h2>
           <p>En vez de dejar la plata donde se achica, vamos a invertirla en activos que crecen — principalmente <strong>Bitcoin</strong> y <strong>fondos de tecnología en dólares</strong>. Suena nuevo, pero la lógica es antigua: <span className="highlight">poner la plata donde crece, en una moneda que no se devalúa, y tener paciencia.</span></p>
 
-          <div className="compare">
+          <div className="compare-grid">
             <div className="compare-card before">
               <div className="label">Hoy — Fondo Itaú</div>
-              <div className="big-number" style={{ color: '#c45c4a' }}>-1%</div>
+              <div className="value">-1%</div>
               <div className="desc">Retorno real después de inflación<br/>Todo en pesos chilenos</div>
             </div>
             <div className="compare-card after">
               <div className="label">Mañana — Los Álamos Capital</div>
-              <div className="big-number" style={{ color: '#e8d5a0' }}>+501%</div>
+              <div className="value">+501%</div>
               <div className="desc">Objetivo escenario base a 3-4 años<br/>95% en dólares y Bitcoin</div>
             </div>
           </div>
@@ -261,13 +260,13 @@ function FamiliaContent() {
           <h3>¿Y por qué Bitcoin?</h3>
           <p>Bitcoin es como el oro, pero del siglo XXI. <strong>Solo van a existir 21 millones, nunca más.</strong> Nadie puede &quot;imprimir&quot; más Bitcoin, como sí pueden imprimir más pesos o más dólares. Por eso cada vez más empresas, bancos y hasta gobiernos lo están comprando.</p>
 
-          <div className="problem-card" style={{ borderLeftColor: '#7fa98a' }}>
-            <div className="stat">
-              <div className="stat-number" style={{ color: '#1a3a2a' }}>16</div>
+          <div className="stats-card">
+            <div className="stat-row">
+              <div className="stat-number">16</div>
               <div className="stat-text"><strong>Años funcionando</strong> — desde 2009, sin parar ni un solo día.</div>
             </div>
-            <div className="stat">
-              <div className="stat-number" style={{ color: '#1a3a2a' }}>0</div>
+            <div className="stat-row">
+              <div className="stat-number success">0</div>
               <div className="stat-text"><strong>Veces que ha perdido plata</strong> si lo mantienes más de 4 años. Cero.</div>
             </div>
           </div>
@@ -275,97 +274,101 @@ function FamiliaContent() {
           <h3>Lo más escaso que existe</h3>
           <p>Para entender Bitcoin, hay que entender la escasez. <span className="highlight">Solo existirán 21 millones de Bitcoin. Punto.</span> No 21 millones &quot;por ahora&quot; — 21 millones para siempre. Es matemáticamente imposible crear más.</p>
 
-          <div className="solution-card">
-            <div className="stat">
-              <div className="stat-number" style={{ color: '#c5a55a' }}>59M+</div>
+          <div className="stats-card">
+            <div className="stat-row">
+              <div className="stat-number gold">59M+</div>
               <div className="stat-text"><strong>Millonarios en dólares</strong> en el mundo hoy. Y creciendo cada año.</div>
             </div>
-            <div className="stat">
-              <div className="stat-number" style={{ color: '#1a3a2a' }}>21M</div>
+            <div className="stat-row">
+              <div className="stat-number">21M</div>
               <div className="stat-text"><strong>Bitcoin que existirán</strong> — para siempre. Nunca habrá más.</div>
             </div>
           </div>
 
           <p>Piénsalo así: <strong>hay más millonarios en el mundo que Bitcoin disponibles.</strong> Si cada millonario quisiera tener aunque sea 1 Bitcoin completo, no alcanzaría para todos. Y eso sin contar empresas, fondos, gobiernos...</p>
 
-          <div className="scenarios" style={{ marginTop: '24px', marginBottom: '24px' }}>
-            <div className="scenario gold">
-              <div className="scenario-icon">🥇</div>
-              <div className="scenario-text">
-                <div className="name">Oro</div>
-                <div className="detail">Se sigue minando ~3,000 toneladas al año. La oferta crece ~1.5% anual.</div>
+          <div className="asset-list">
+            <div className="asset-item">
+              <div className="asset-icon">🥇</div>
+              <div className="asset-info">
+                <div className="asset-name">Oro</div>
+                <div className="asset-detail">Se sigue minando ~3,000 toneladas al año. La oferta crece ~1.5% anual.</div>
               </div>
-              <div className="scenario-result" style={{ fontSize: '1rem', color: '#999' }}>∞</div>
+              <div className="asset-value">∞</div>
             </div>
-            <div className="scenario blue">
-              <div className="scenario-icon">💵</div>
-              <div className="scenario-text">
-                <div className="name">Dólares</div>
-                <div className="detail">La Fed imprime cuando quiere. En 2020 imprimió 40% más dólares.</div>
+            <div className="asset-item">
+              <div className="asset-icon">💵</div>
+              <div className="asset-info">
+                <div className="asset-name">Dólares</div>
+                <div className="asset-detail">La Fed imprime cuando quiere. En 2020 imprimió 40% más dólares.</div>
               </div>
-              <div className="scenario-result" style={{ fontSize: '1rem', color: '#999' }}>∞</div>
+              <div className="asset-value">∞</div>
             </div>
-            <div className="scenario green">
-              <div className="scenario-icon">₿</div>
-              <div className="scenario-text">
-                <div className="name">Bitcoin</div>
-                <div className="detail">Máximo 21 millones. Matemáticamente imposible crear más.</div>
+            <div className="asset-item featured">
+              <div className="asset-icon">₿</div>
+              <div className="asset-info">
+                <div className="asset-name">Bitcoin</div>
+                <div className="asset-detail">Máximo 21 millones. Matemáticamente imposible crear más.</div>
               </div>
-              <div className="scenario-result">21M</div>
+              <div className="asset-value">21M</div>
             </div>
           </div>
 
           <p>El oro fue el dinero definitivo durante 5,000 años porque era escaso y difícil de falsificar. <span className="highlight">Bitcoin es más escaso que el oro, imposible de falsificar, y además se puede enviar por internet.</span> Es el dinero definitivo del siglo XXI.</p>
 
-          <div className="solution-card" style={{ textAlign: 'center', borderLeftColor: '#c5a55a' }}>
-            <p style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '1.3rem', color: '#1a3a2a', fontStyle: 'italic', marginBottom: '12px' }}>&quot;Tener 1 Bitcoin completo hoy es como haber comprado una manzana en Manhattan en 1800&quot;</p>
-            <p style={{ fontSize: '0.9rem', color: '#6b6560', marginBottom: 0 }}>El club de los &quot;whole-coiners&quot; (personas con 1+ BTC) es más exclusivo que el club de millonarios.</p>
+          <div className="quote-card">
+            <p className="quote-text">Tener 1 Bitcoin completo hoy es como haber comprado una manzana en Manhattan en 1800</p>
+            <p className="quote-secondary">El club de los &quot;whole-coiners&quot; (personas con 1+ BTC) es más exclusivo que el club de millonarios.</p>
           </div>
 
-          <h3>El Rainbow Chart: siempre sube, y ahora está en descuento</h3>
+          <h3>El Rainbow Chart: siempre sube, y ahora está en oportunidad</h3>
           <p>El &quot;Rainbow Chart&quot; es una herramienta visual que muestra el precio histórico de Bitcoin en bandas de colores. <span className="highlight">En 16 años de historia, Bitcoin SIEMPRE ha subido cuando miras períodos de 4+ años.</span> Las bandas muestran si está &quot;caro&quot; o &quot;barato&quot; relativo a su tendencia histórica.</p>
 
-          {/* Rainbow Chart Visual */}
-          <div className="rainbow-chart">
+          {/* Rainbow Chart - Embedded from blockchaincenter.net */}
+          <div className="rainbow-chart-embed">
             <div className="rainbow-header">
               <span className="rainbow-title">Bitcoin Rainbow Chart</span>
-              <span className="rainbow-subtitle">Precio histórico vs. bandas de valoración</span>
+              <span className="rainbow-subtitle">Precio histórico en escala logarítmica</span>
             </div>
-            <div className="rainbow-bands">
-              <div className="rainbow-band fire"><span>🔥 Burbuja máxima</span></div>
-              <div className="rainbow-band red"><span>FOMO intenso</span></div>
-              <div className="rainbow-band orange"><span>Vendedores tomando ganancias</span></div>
-              <div className="rainbow-band yellow"><span>¿Está caro?</span></div>
-              <div className="rainbow-band lightgreen"><span>HODL</span></div>
-              <div className="rainbow-band green"><span>Todavía barato</span></div>
-              <div className="rainbow-band cyan"><span>Acumular</span></div>
-              <div className="rainbow-band blue"><span>COMPRAR</span></div>
-              <div className="rainbow-band darkblue current"><span>🎯 DESCUENTO MÁXIMO ← Estamos aquí (Feb 2026)</span></div>
+            <div className="rainbow-iframe-container">
+              <iframe
+                src="https://www.blockchaincenter.net/static/rainbow-chart.html"
+                title="Bitcoin Rainbow Chart"
+                className="rainbow-iframe"
+                loading="lazy"
+              />
+            </div>
+            <div className="rainbow-legend">
+              <div className="legend-item"><span className="dot fire"></span>Burbuja máxima</div>
+              <div className="legend-item"><span className="dot red"></span>FOMO intenso</div>
+              <div className="legend-item"><span className="dot orange"></span>Toma de ganancias</div>
+              <div className="legend-item"><span className="dot yellow"></span>¿Está caro?</div>
+              <div className="legend-item"><span className="dot green"></span>HODL / Todavía barato</div>
+              <div className="legend-item"><span className="dot cyan"></span>Acumular</div>
+              <div className="legend-item current"><span className="dot blue"></span>Comprar ← Estamos aquí</div>
             </div>
             <div className="rainbow-footer">
-              <div className="rainbow-note">
-                <strong>Lectura actual:</strong> Bitcoin está en la banda azul oscuro — &quot;Basically a Fire Sale&quot; (Liquidación total).
-                Históricamente, comprar en esta zona ha generado retornos de <strong>300-1000%</strong> en los siguientes 2-3 años.
-              </div>
+              <strong>Lectura actual:</strong> Bitcoin (~$97K) está en la zona azul/verde — &quot;Todavía barato&quot; según su tendencia histórica.
+              Históricamente, comprar en esta zona ha generado retornos de <strong>200-500%</strong> en los siguientes 2-3 años.
             </div>
           </div>
 
-          <div className="problem-card" style={{ borderLeftColor: '#3b82f6' }}>
-            <div className="stat">
-              <div className="stat-number" style={{ color: '#3b82f6' }}>~$97K</div>
-              <div className="stat-text"><strong>Precio actual de Bitcoin</strong> — en zona de &quot;descuento extremo&quot; según el Rainbow Chart.</div>
+          <div className="stats-card info">
+            <div className="stat-row">
+              <div className="stat-number info">~$97K</div>
+              <div className="stat-text"><strong>Precio actual de Bitcoin</strong> — en zona de oportunidad según el Rainbow Chart.</div>
             </div>
-            <div className="stat">
-              <div className="stat-number" style={{ color: '#22c55e' }}>$300K+</div>
+            <div className="stat-row">
+              <div className="stat-number success">$200K+</div>
               <div className="stat-text"><strong>Precio proyectado</strong> para cuando Bitcoin entre en zona amarilla/naranja (1-2 años).</div>
             </div>
           </div>
 
-          <p>Mira la historia: cada vez que Bitcoin ha estado en la zona azul (como ahora), los que compraron y esperaron 3-4 años multiplicaron su inversión. <span className="highlight">No es &quot;timing perfecto&quot; — es que el activo más escaso del mundo sigue siendo incomprendido por la mayoría.</span></p>
+          <p>Mira la historia: cada vez que Bitcoin ha estado en la zona azul/verde (como ahora), los que compraron y esperaron 3-4 años multiplicaron su inversión. <span className="highlight">No es &quot;timing perfecto&quot; — es que el activo más escaso del mundo sigue siendo incomprendido por la mayoría.</span></p>
 
-          <div className="solution-card" style={{ textAlign: 'center' }}>
-            <p style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '1.1rem', color: '#1a3a2a', marginBottom: '8px' }}>El mejor momento para plantar un árbol fue hace 20 años.</p>
-            <p style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '1.3rem', color: '#2d5a3f', fontStyle: 'italic', marginBottom: 0 }}>El segundo mejor momento es hoy.</p>
+          <div className="quote-card">
+            <p className="quote-text">El mejor momento para plantar un árbol fue hace 20 años.</p>
+            <p className="quote-secondary">El segundo mejor momento es hoy.</p>
           </div>
 
           <h3>¿Cuánto podría crecer el capital?</h3>
@@ -417,57 +420,46 @@ function FamiliaContent() {
           <h3>¿Y si necesitamos plata?</h3>
           <p>En vez de vender (y perder 27% en impuestos + perder la posición), pedimos prestado contra lo que tenemos:</p>
 
-          <div className="bbd-flow">
-            <div className="bbd-step">
-              <div className="bbd-line">
-                <div className="bbd-dot" style={{ background: '#1a3a2a' }}>1</div>
-                <div className="bbd-connector"></div>
-              </div>
-              <div className="bbd-content">
-                <h4>Invertimos el capital</h4>
-                <p>Ejemplo: 2 Bitcoin a $65,000 USD cada uno = $130,000 USD total.</p>
+          <div className="timeline">
+            <div className="timeline-step" data-step="1">
+              <div className="timeline-content">
+                <h4 className="timeline-title">Invertimos el capital</h4>
+                <p className="timeline-desc">Ejemplo: 2 Bitcoin a $65,000 USD cada uno = $130,000 USD total.</p>
               </div>
             </div>
-            <div className="bbd-step">
-              <div className="bbd-line">
-                <div className="bbd-dot" style={{ background: '#7fa98a' }}>2</div>
-                <div className="bbd-connector"></div>
-              </div>
-              <div className="bbd-content">
-                <h4>Bitcoin sube con el tiempo</h4>
-                <p>En 3 años vale $500,000 cada uno. Ahora tenemos $1,000,000 USD. No vendemos nada.</p>
+            <div className="timeline-step" data-step="2">
+              <div className="timeline-content">
+                <h4 className="timeline-title">Bitcoin sube con el tiempo</h4>
+                <p className="timeline-desc">En 3 años vale $500,000 cada uno. Ahora tenemos $1,000,000 USD. No vendemos nada.</p>
               </div>
             </div>
-            <div className="bbd-step">
-              <div className="bbd-line">
-                <div className="bbd-dot" style={{ background: '#c5a55a' }}>3</div>
-                <div className="bbd-connector"></div>
-              </div>
-              <div className="bbd-content">
-                <h4>¿Necesitas plata? Pedimos prestado</h4>
-                <p>El banco presta encantado porque tenemos $1M de respaldo. Pagamos intereses bajos, no pagamos impuestos, y seguimos dueños de todo.</p>
+            <div className="timeline-step" data-step="3">
+              <div className="timeline-content">
+                <h4 className="timeline-title">¿Necesitas plata? Pedimos prestado</h4>
+                <p className="timeline-desc">El banco presta encantado porque tenemos $1M de respaldo. Pagamos intereses bajos, no pagamos impuestos, y seguimos dueños de todo.</p>
               </div>
             </div>
           </div>
 
           <h3>¿Quién puede pedir prestado?</h3>
-          <div className="borrow-cards">
-            <div className="borrow-card">
+
+          <div className="persona-grid">
+            <div className="persona-card">
               <div className="emoji">👩</div>
               <div className="name">María</div>
-              <div className="access low">Acceso limitado</div>
+              <div className="badge low">Acceso limitado</div>
               <div className="detail">Difícil acceder a créditos personales.</div>
             </div>
-            <div className="borrow-card">
+            <div className="persona-card">
               <div className="emoji">👨‍💼</div>
               <div className="name">Franco</div>
-              <div className="access high">Buen acceso</div>
+              <div className="badge high">Buen acceso</div>
               <div className="detail">Sueldo estable, historial crediticio, líneas de crédito.</div>
             </div>
-            <div className="borrow-card">
+            <div className="persona-card">
               <div className="emoji">🏢</div>
               <div className="name">Los Álamos Capital</div>
-              <div className="access high">Mejor acceso</div>
+              <div className="badge high">Mejor acceso</div>
               <div className="detail">Créditos empresariales y productos financieros especiales.</div>
             </div>
           </div>
@@ -483,7 +475,7 @@ function FamiliaContent() {
           <p>Bitcoin puede bajar 50% temporalmente. La palabra clave es <strong>temporalmente</strong> — siempre se ha recuperado si esperas 4+ años. Y tenemos protecciones:</p>
 
           <div className="safety-box">
-            <div className="safety-items">
+            <div className="safety-grid">
               <div className="safety-item">
                 <div className="icon">🛡️</div>
                 <div className="title">Colchón para la abuela</div>
@@ -509,7 +501,7 @@ function FamiliaContent() {
 
           <p><strong>Impuestos:</strong> El capital está limpio y documentado. Como la estrategia es no vender sino pedir prestado contra los activos, minimizamos impuestos futuros.</p>
 
-          <div className="need-cards">
+          <div className="need-grid">
             <div className="need-card">
               <div className="number">1</div>
               <div className="title">Paciencia</div>
