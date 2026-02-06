@@ -264,6 +264,10 @@
   margin-bottom: 16px;
 }
 
+.tesla-tesis .ark-section p strong {
+  color: #fbbf24;
+}
+
 .tesla-tesis .ark-section p:last-of-type {
   margin-bottom: 0;
 }
