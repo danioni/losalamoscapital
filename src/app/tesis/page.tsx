@@ -62,17 +62,25 @@ export default function TesisPage() {
               <span className="tesis-arrow">→</span>
             </Link>
 
-            {/* Próximamente */}
-            <div className="tesis-card coming-soon">
+            {/* Tesla */}
+            <Link href="/tesis/tesla" className="tesis-card">
               <div className="tesis-icon">🚗</div>
               <div className="tesis-info">
                 <h3>Tesla</h3>
-                <p className="tesis-tagline">Próximamente</p>
+                <p className="tesis-tagline">El experimento más grande del mundo</p>
                 <p className="tesis-summary">
-                  Energía, autos que se manejan solos, inteligencia artificial, y fábricas propias.
+                  Conducción autónoma con millones de autos recolectando datos.
+                  Integración vertical. Robots en el futuro.
                 </p>
+                <div className="tesis-meta">
+                  <span className="conviction high">Convicción Alta</span>
+                  <span className="horizon">Horizonte: 5-10 años</span>
+                </div>
               </div>
-            </div>
+              <span className="tesis-arrow">→</span>
+            </Link>
+
+            {/* Próximamente */}
 
             <div className="tesis-card coming-soon">
               <div className="tesis-icon">🏛️</div>
