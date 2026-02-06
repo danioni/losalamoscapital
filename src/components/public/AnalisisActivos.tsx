@@ -7,6 +7,7 @@ interface AssetData {
   name: string;
   ticker: string;
   type: "company" | "commodity" | "crypto" | "index";
+  sector: string;
   inceptionDate: string;
   inceptionLabel: string;
   startPrice: number;
@@ -33,227 +34,79 @@ const ASSETS: AssetData[] = (() => {
   const yearsSince = (d: string) =>
     (now.getTime() - new Date(d).getTime()) / (365.25 * 24 * 60 * 60 * 1000);
 
-  const raw = [
-    {
-      name: "Gold",
-      ticker: "XAU",
-      type: "commodity" as const,
-      inceptionDate: "1971-08-15",
-      inceptionLabel: "Ago 1971",
-      startPrice: 35,
-      startPriceLabel: "$35/oz",
-      currentPrice: 4800,
-      currentPriceLabel: "$4,800/oz",
-      marketCap: "$19.4T",
-      marketCapSort: 19400,
-      note: "Precio libre desde Nixon Shock",
-    },
-    {
-      name: "Apple",
-      ticker: "AAPL",
-      type: "company" as const,
-      inceptionDate: "1980-12-12",
-      inceptionLabel: "Dic 1980",
-      startPrice: 0.1,
-      startPriceLabel: "$0.10 (adj)",
-      currentPrice: 272.36,
-      currentPriceLabel: "$272.36",
-      marketCap: "$4.0T",
-      marketCapSort: 4000,
-    },
-    {
-      name: "NVIDIA",
-      ticker: "NVDA",
-      type: "company" as const,
-      inceptionDate: "1999-01-22",
-      inceptionLabel: "Ene 1999",
-      startPrice: 0.04,
-      startPriceLabel: "$0.04 (adj)",
-      currentPrice: 189.21,
-      currentPriceLabel: "$189.21",
-      marketCap: "$4.5T",
-      marketCapSort: 4500,
-    },
-    {
-      name: "Alphabet",
-      ticker: "GOOGL",
-      type: "company" as const,
-      inceptionDate: "2004-08-19",
-      inceptionLabel: "Ago 2004",
-      startPrice: 1.27,
-      startPriceLabel: "$1.27 (adj)",
-      currentPrice: 210,
-      currentPriceLabel: "$210",
-      marketCap: "$3.8T",
-      marketCapSort: 3800,
-    },
-    {
-      name: "Microsoft",
-      ticker: "MSFT",
-      type: "company" as const,
-      inceptionDate: "1986-03-13",
-      inceptionLabel: "Mar 1986",
-      startPrice: 0.07,
-      startPriceLabel: "$0.07 (adj)",
-      currentPrice: 399,
-      currentPriceLabel: "$399",
-      marketCap: "$2.9T",
-      marketCapSort: 2900,
-    },
-    {
-      name: "Amazon",
-      ticker: "AMZN",
-      type: "company" as const,
-      inceptionDate: "1997-05-15",
-      inceptionLabel: "May 1997",
-      startPrice: 0.075,
-      startPriceLabel: "$0.075 (adj)",
-      currentPrice: 233.1,
-      currentPriceLabel: "$233.10",
-      marketCap: "$2.5T",
-      marketCapSort: 2500,
-    },
-    {
-      name: "Bitcoin",
-      ticker: "BTC",
-      type: "crypto" as const,
-      inceptionDate: "2013-01-01",
-      inceptionLabel: "Ene 2013",
-      startPrice: 13.3,
-      startPriceLabel: "$13.30",
-      currentPrice: 62000,
-      currentPriceLabel: "$62,000",
-      marketCap: "$1.2T",
-      marketCapSort: 1200,
-      note: "Desde precio significativo en exchanges",
-    },
-    {
-      name: "TSMC",
-      ticker: "TSM",
-      type: "company" as const,
-      inceptionDate: "1997-10-08",
-      inceptionLabel: "Oct 1997",
-      startPrice: 1.17,
-      startPriceLabel: "$1.17 (adj)",
-      currentPrice: 205,
-      currentPriceLabel: "$205",
-      marketCap: "$1.8T",
-      marketCapSort: 1800,
-    },
-    {
-      name: "Meta",
-      ticker: "META",
-      type: "company" as const,
-      inceptionDate: "2012-05-18",
-      inceptionLabel: "May 2012",
-      startPrice: 38,
-      startPriceLabel: "$38.00",
-      currentPrice: 669.26,
-      currentPriceLabel: "$669.26",
-      marketCap: "$1.7T",
-      marketCapSort: 1700,
-    },
-    {
-      name: "Saudi Aramco",
-      ticker: "2222.SR",
-      type: "company" as const,
-      inceptionDate: "2019-12-11",
-      inceptionLabel: "Dic 2019",
-      startPrice: 32,
-      startPriceLabel: "32 SAR",
-      currentPrice: 25.6,
-      currentPriceLabel: "25.60 SAR",
-      marketCap: "$1.65T",
-      marketCapSort: 1650,
-      note: "Precios en SAR",
-    },
-    {
-      name: "Silver",
-      ticker: "XAG",
-      type: "commodity" as const,
-      inceptionDate: "1971-08-15",
-      inceptionLabel: "Ago 1971",
-      startPrice: 1.39,
-      startPriceLabel: "$1.39/oz",
-      currentPrice: 75,
-      currentPriceLabel: "$75/oz",
-      marketCap: "$1.6T",
-      marketCapSort: 1600,
-      note: "Incluye toda la plata sobre tierra",
-    },
-    {
-      name: "Broadcom",
-      ticker: "AVGO",
-      type: "company" as const,
-      inceptionDate: "2009-08-06",
-      inceptionLabel: "Ago 2009",
-      startPrice: 1.53,
-      startPriceLabel: "$1.53 (adj)",
-      currentPrice: 230,
-      currentPriceLabel: "$230",
-      marketCap: "$1.47T",
-      marketCapSort: 1470,
-    },
-    {
-      name: "Tesla",
-      ticker: "TSLA",
-      type: "company" as const,
-      inceptionDate: "2010-06-29",
-      inceptionLabel: "Jun 2010",
-      startPrice: 1.13,
-      startPriceLabel: "$1.13 (adj)",
-      currentPrice: 397.21,
-      currentPriceLabel: "$397.21",
-      marketCap: "$1.27T",
-      marketCapSort: 1270,
-    },
-    {
-      name: "Berkshire Hathaway",
-      ticker: "BRK.A",
-      type: "company" as const,
-      inceptionDate: "1965-05-10",
-      inceptionLabel: "May 1965",
-      startPrice: 18,
-      startPriceLabel: "$18",
-      currentPrice: 710000,
-      currentPriceLabel: "$710,000",
-      marketCap: "$1.09T",
-      marketCapSort: 1090,
-      note: "Era Buffett desde 1965",
-    },
-    {
-      name: "S&P 500",
-      ticker: "SPX",
-      type: "index" as const,
-      inceptionDate: "1957-03-04",
-      inceptionLabel: "Mar 1957",
-      startPrice: 44.06,
-      startPriceLabel: "44.06",
-      currentPrice: 6000,
-      currentPriceLabel: "6,000",
-      marketCap: "Benchmark",
-      marketCapSort: 0,
-      note: "Referencia (sin dividendos)",
-    },
+  // [name, ticker, type, sector, inceptionDate, inceptionLabel, startPrice, startPriceLabel, currentPrice, currentPriceLabel, marketCap, marketCapSort, note?]
+  type R = [string, string, "company"|"commodity"|"crypto"|"index", string, string, string, number, string, number, string, string, number, string?];
+  const d: R[] = [
+    // Commodities & Crypto
+    ["Gold", "XAU", "commodity", "Commodity", "1971-08-15", "Ago 1971", 35, "$35/oz", 4800, "$4,800/oz", "$19.4T", 19400, "Precio libre desde Nixon Shock"],
+    ["Silver", "XAG", "commodity", "Commodity", "1971-08-15", "Ago 1971", 1.39, "$1.39/oz", 75, "$75/oz", "$1.6T", 1600, "Incluye toda la plata sobre tierra"],
+    ["Bitcoin", "BTC", "crypto", "Crypto", "2013-01-01", "Ene 2013", 13.3, "$13.30", 62000, "$62,000", "$1.2T", 1200, "Desde precio significativo en exchanges"],
+    // Benchmark
+    ["S&P 500", "SPX", "index", "Indice", "1957-03-04", "Mar 1957", 44.06, "44.06", 6000, "6,000", "Benchmark", 0, "Referencia (sin dividendos)"],
+    // Top 50 companies by market cap (Feb 6, 2026 — companiesmarketcap.com)
+    ["NVIDIA", "NVDA", "company", "Semiconductores", "1999-01-22", "Ene 1999", 0.04, "$0.04 (adj)", 185.14, "$185.14", "$4.51T", 4507],
+    ["Apple", "AAPL", "company", "Tech", "1980-12-12", "Dic 1980", 0.10, "$0.10 (adj)", 277.92, "$277.92", "$4.08T", 4084],
+    ["Alphabet", "GOOGL", "company", "Tech", "2004-08-19", "Ago 2004", 1.27, "$1.27 (adj)", 322.89, "$322.89", "$3.91T", 3906],
+    ["Microsoft", "MSFT", "company", "Tech", "1986-03-13", "Mar 1986", 0.07, "$0.07 (adj)", 399.78, "$399.78", "$2.97T", 2971],
+    ["Amazon", "AMZN", "company", "E-Commerce", "1997-05-15", "May 1997", 0.075, "$0.075 (adj)", 206.96, "$206.96", "$2.21T", 2212],
+    ["TSMC", "TSM", "company", "Semiconductores", "1997-10-08", "Oct 1997", 1.17, "$1.17 (adj)", 348.61, "$348.61", "$1.81T", 1808],
+    ["Meta", "META", "company", "Tech", "2012-05-18", "May 2012", 38, "$38.00", 658, "$658", "$1.66T", 1664],
+    ["Saudi Aramco", "2222.SR", "company", "Energía", "2019-12-11", "Dic 2019", 32, "32 SAR", 25.60, "25.60 SAR", "$1.65T", 1650, "Precios en SAR"],
+    ["Broadcom", "AVGO", "company", "Semiconductores", "2009-08-06", "Ago 2009", 1.53, "$1.53 (adj)", 333.28, "$333.28", "$1.58T", 1580],
+    ["Tesla", "TSLA", "company", "Automotriz", "2010-06-29", "Jun 2010", 1.13, "$1.13 (adj)", 413.85, "$413.85", "$1.55T", 1552],
+    ["Berkshire Hathaway", "BRK.B", "company", "Financiero", "1965-05-10", "May 1965", 0.012, "$0.012 (adj)", 505.84, "$505.84", "$1.09T", 1091, "Era Buffett desde 1965"],
+    ["Walmart", "WMT", "company", "Retail", "1970-10-01", "Oct 1970", 0.006, "$0.006 (adj)", 130.89, "$130.89", "$1.04T", 1043],
+    ["Eli Lilly", "LLY", "company", "Pharma", "1952-01-01", "Ene 1952", 0.085, "$0.085 (adj)", 1057, "$1,057", "$947B", 947],
+    ["JPMorgan Chase", "JPM", "company", "Financiero", "1969-03-05", "Mar 1969", 0.52, "$0.52 (adj)", 323.13, "$323.13", "$880B", 880],
+    ["Samsung", "005930.KS", "company", "Semiconductores", "1975-06-11", "Jun 1975", 0.05, "$0.05 (adj)", 108.42, "$108.42", "$725B", 725, "Precios en USD (ADR equiv.)"],
+    ["Tencent", "TCEHY", "company", "Tech", "2004-06-16", "Jun 2004", 0.07, "$0.07 (adj)", 71.22, "$71.22", "$642B", 642],
+    ["Visa", "V", "company", "Pagos", "2008-03-19", "Mar 2008", 11, "$11 (adj)", 329.96, "$329.96", "$636B", 636],
+    ["Exxon Mobil", "XOM", "company", "Energía", "1920-01-01", "Ene 1920", 0.001, "$0.001 (adj)", 149.12, "$149.12", "$629B", 629, "Standard Oil legacy"],
+    ["Johnson & Johnson", "JNJ", "company", "Pharma", "1944-09-24", "Sep 1944", 0.025, "$0.025 (adj)", 240.61, "$240.61", "$580B", 580],
+    ["ASML", "ASML", "company", "Semiconductores", "1995-03-14", "Mar 1995", 0.55, "$0.55 (adj)", 1411, "$1,411", "$548B", 548],
+    ["Mastercard", "MA", "company", "Pagos", "2006-05-25", "May 2006", 3.90, "$3.90 (adj)", 545.74, "$545.74", "$488B", 488],
+    ["Costco", "COST", "company", "Retail", "1985-12-01", "Dic 1985", 2.50, "$2.50 (adj)", 998.12, "$998.12", "$443B", 443],
+    ["Micron", "MU", "company", "Semiconductores", "1984-06-01", "Jun 1984", 0.07, "$0.07 (adj)", 393.65, "$393.65", "$443B", 443],
+    ["Bank of America", "BAC", "company", "Financiero", "1973-01-02", "Ene 1973", 0.08, "$0.08 (adj)", 56.52, "$56.52", "$413B", 413],
+    ["Oracle", "ORCL", "company", "Tech", "1986-03-12", "Mar 1986", 0.03, "$0.03 (adj)", 140.86, "$140.86", "$405B", 405],
+    ["AbbVie", "ABBV", "company", "Pharma", "2013-01-02", "Ene 2013", 35.23, "$35.23", 224.38, "$224.38", "$397B", 397],
+    ["Alibaba", "BABA", "company", "E-Commerce", "2014-09-19", "Sep 2014", 68, "$68", 161.90, "$161.90", "$387B", 387],
+    ["Home Depot", "HD", "company", "Retail", "1981-09-29", "Sep 1981", 0.03, "$0.03 (adj)", 385.20, "$385.20", "$383B", 383],
+    ["Procter & Gamble", "PG", "company", "Consumo", "1890-01-01", "Ene 1890", 0.0005, "$0.0005 (adj)", 159.10, "$159.10", "$372B", 372, "Cotiza desde siglo XIX"],
+    ["Roche", "ROG.SW", "company", "Pharma", "1956-05-01", "May 1956", 0.15, "$0.15 (adj)", 459.69, "$459.69", "$366B", 366, "Precios en CHF"],
+    ["Chevron", "CVX", "company", "Energía", "1921-06-01", "Jun 1921", 0.001, "$0.001 (adj)", 180.34, "$180.34", "$361B", 361],
+    ["Netflix", "NFLX", "company", "Tech", "2002-05-23", "May 2002", 0.054, "$0.054 (adj)", 81.27, "$81.27", "$345B", 345],
+    ["Coca-Cola", "KO", "company", "Consumo", "1919-09-05", "Sep 1919", 0.00002, "$0.00002 (adj)", 78.92, "$78.92", "$340B", 340, "Split-adjusted desde 1919"],
+    ["General Electric", "GE", "company", "Industrial", "1892-04-15", "Abr 1892", 0.008, "$0.008 (adj)", 321.88, "$321.88", "$340B", 340, "Reestructurada 2024"],
+    ["Caterpillar", "CAT", "company", "Industrial", "1929-12-02", "Dic 1929", 0.07, "$0.07 (adj)", 724.18, "$724.18", "$339B", 339],
+    ["AMD", "AMD", "company", "Semiconductores", "1972-09-27", "Sep 1972", 0.05, "$0.05 (adj)", 206.84, "$206.84", "$337B", 337],
+    ["Cisco", "CSCO", "company", "Tech", "1990-02-16", "Feb 1990", 0.04, "$0.04 (adj)", 84.60, "$84.60", "$334B", 334],
+    ["Palantir", "PLTR", "company", "Tech / IA", "2020-09-30", "Sep 2020", 9.50, "$9.50", 135.38, "$135.38", "$323B", 323],
+    ["Toyota", "TM", "company", "Automotriz", "1949-05-01", "May 1949", 0.01, "$0.01 (adj)", 244.69, "$244.69", "$320B", 320, "Precios en USD (ADR)"],
+    ["LVMH", "MC.PA", "company", "Lujo", "1987-06-01", "Jun 1987", 0.35, "$0.35 (adj)", 633.96, "$633.96", "$315B", 315, "Precios en EUR"],
+    ["HSBC", "HSBC", "company", "Financiero", "1991-01-01", "Ene 1991", 2.50, "$2.50 (adj)", 89.38, "$89.38", "$307B", 307],
+    ["Merck", "MRK", "company", "Pharma", "1946-01-01", "Ene 1946", 0.015, "$0.015 (adj)", 121.87, "$121.87", "$304B", 304],
+    ["Novartis", "NVS", "company", "Pharma", "1996-12-20", "Dic 1996", 12.50, "$12.50 (adj)", 156.25, "$156.25", "$302B", 302],
+    ["AstraZeneca", "AZN", "company", "Pharma", "1999-04-06", "Abr 1999", 14, "$14 (adj)", 193.58, "$193.58", "$300B", 300],
+    ["Wells Fargo", "WFC", "company", "Financiero", "1978-01-01", "Ene 1978", 0.05, "$0.05 (adj)", 94.32, "$94.32", "$296B", 296],
   ];
+
+  const raw = d.map(([name, ticker, type, sector, inceptionDate, inceptionLabel, startPrice, startPriceLabel, currentPrice, currentPriceLabel, marketCap, marketCapSort, note]) => ({
+    name, ticker, type, sector, inceptionDate, inceptionLabel, startPrice, startPriceLabel, currentPrice, currentPriceLabel, marketCap, marketCapSort, note,
+  }));
 
   // 5-year-ago prices (Feb 2021, adjusted for splits)
   const prices5yAgo: Record<string, number> = {
-    XAU: 1810,
-    AAPL: 134,
-    NVDA: 13.2,
-    GOOGL: 100,
-    MSFT: 232,
-    AMZN: 162.5,
-    BTC: 46000,
-    TSM: 130,
-    META: 265,
-    "2222.SR": 34.5,
-    XAG: 27,
-    AVGO: 47.5,
-    TSLA: 55.8,
-    "BRK.A": 370000,
-    SPX: 3886,
+    XAU: 1810, XAG: 27, BTC: 46000, SPX: 3886,
+    NVDA: 13.2, AAPL: 134, GOOGL: 100, MSFT: 232, AMZN: 162.5,
+    TSM: 130, META: 265, "2222.SR": 34.5, AVGO: 47.5, TSLA: 55.8,
+    "BRK.B": 230, WMT: 72, LLY: 210, JPM: 140, "005930.KS": 72,
+    TCEHY: 82, V: 210, XOM: 46, JNJ: 165, ASML: 580,
+    MA: 340, COST: 360, MU: 80, BAC: 33, ORCL: 60,
+    ABBV: 105, BABA: 265, HD: 270, PG: 130, "ROG.SW": 300,
+    CVX: 88, NFLX: 24.4, KO: 50, GE: 105, CAT: 190,
+    AMD: 87, CSCO: 45, PLTR: 27, TM: 160, "MC.PA": 320,
+    HSBC: 28, MRK: 76, NVS: 90, AZN: 50, WFC: 32,
   };
 
   return raw.map((a, i) => {
@@ -379,7 +232,7 @@ export function AnalisisActivos() {
             fontWeight: 300,
           }}
         >
-          Análisis comparativo de rendimiento compuesto (CAGR) de los 15 activos
+          Análisis comparativo de rendimiento compuesto (CAGR) de los 50 activos
           con mayor capitalización de mercado. Datos al 6 de febrero de 2026.
         </p>
       </section>
@@ -562,12 +415,12 @@ export function AnalisisActivos() {
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.82rem" }}>
             <thead>
               <tr style={{ borderBottom: "1px solid rgba(45, 106, 79, 0.3)" }}>
-                {["#", "Activo", "Tipo", "Market Cap", "IPO / Inicio", "Precio Inicio", "Precio Actual", "Años", "CAGR Histórico", "CAGR 5 Años"].map((h) => (
+                {["#", "Activo", "Sector", "Market Cap", "IPO / Inicio", "Precio Inicio", "Precio Actual", "Años", "CAGR Histórico", "CAGR 5 Años"].map((h) => (
                   <th
                     key={h}
                     style={{
                       padding: "0.75rem 0.5rem",
-                      textAlign: h === "#" || h === "Activo" || h === "Tipo" ? "left" : "right",
+                      textAlign: h === "#" || h === "Activo" || h === "Sector" ? "left" : "right",
                       color: "#5a6e63",
                       fontWeight: 600,
                       fontSize: "0.7rem",
@@ -615,9 +468,10 @@ export function AnalisisActivos() {
                           border: `1px solid ${getTypeColor(asset.type)}33`,
                           color: getTypeColor(asset.type),
                           background: `${getTypeColor(asset.type)}15`,
+                          whiteSpace: "nowrap",
                         }}
                       >
-                        {getTypeLabel(asset.type)}
+                        {asset.sector}
                       </span>
                     </td>
                     <td style={{ padding: "0.65rem 0.5rem", textAlign: "right", fontFamily: "var(--font-mono)", color: "#e8efe6", fontSize: "0.8rem" }}>
@@ -654,27 +508,37 @@ export function AnalisisActivos() {
         <h3 style={{ fontFamily: "var(--font-display)", fontSize: "1.3rem", color: "#e8efe6", marginBottom: "1.25rem" }}>
           Observaciones Clave
         </h3>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }} className="allocation-grid-responsive">
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem" }} className="stats-grid-responsive">
           {[
             {
-              title: "Bitcoin: Rey del CAGR Histórico",
-              text: "Desde $13 en 2013, Bitcoin mantiene el mayor CAGR histórico entre todos los activos, aunque su reciente caída desde $126K muestra la volatilidad inherente del activo.",
-              color: "#a78bfa",
-            },
-            {
-              title: "Gold: El Rally de 2025-2026",
-              text: "El oro pasó de $2,000 a casi $5,000/oz en un rally histórico, impulsado por incertidumbre geopolítica y compras de bancos centrales. Su CAGR de 5 años se disparó.",
-              color: "#d4a373",
-            },
-            {
-              title: "NVIDIA: Momentum de la IA",
-              text: "El semiconductor más valioso del mundo con $4.5T de market cap. Su CAGR de 5 años supera el 70%, impulsado por la demanda insaciable de GPUs para IA.",
+              title: "Semiconductores Dominan el Top 50",
+              text: "NVIDIA, TSMC, Broadcom, ASML, Samsung, Micron y AMD suman más de $9T de market cap. El sector de chips es el gran ganador de la era IA, con CAGRs de 5 años excepcionales.",
               color: "#52b788",
             },
             {
-              title: "Berkshire: 60 Años Compounding",
-              text: "De $18 a $710,000 por acción. Buffett demostró que ~18% anual sostenido por 60 años crea una de las mayores fortunas de la historia.",
+              title: "Gold: El Rally de 2025-2026",
+              text: "El oro pasó de $1,800 a $4,800/oz en un rally histórico, impulsado por incertidumbre geopolítica y compras de bancos centrales. Sigue siendo el activo más valioso del mundo con $19.4T.",
+              color: "#d4a373",
+            },
+            {
+              title: "Bitcoin: CAGR Histórico Insuperable",
+              text: "Desde $13 en 2013, Bitcoin mantiene el mayor CAGR histórico entre todos los activos analizados. Su caída reciente desde $126K a $62K muestra la volatilidad inherente del activo.",
+              color: "#a78bfa",
+            },
+            {
+              title: "Pharma: Resiliencia Centenaria",
+              text: "Eli Lilly, J&J, Roche, Merck, Novartis y AstraZeneca representan más de $3T combinados. Sus CAGRs históricos de +10-13% por décadas muestran el poder del compounding en salud.",
               color: "#95d5b2",
+            },
+            {
+              title: "Los Centenarios: PG, KO, GE, XOM",
+              text: "Empresas con 100+ años cotizando. Procter & Gamble desde 1890 y Coca-Cola desde 1919 demuestran que incluso modestos CAGRs del 9-13% generan retornos astronómicos con suficiente tiempo.",
+              color: "#d4a373",
+            },
+            {
+              title: "Palantir: El Outlier Reciente",
+              text: "Con solo 5 años cotizando, Palantir ya alcanza $323B de market cap. Su CAGR de 5 años es de los más altos del top 50, impulsado por contratos de defensa e IA.",
+              color: "#a78bfa",
             },
           ].map((obs) => (
             <div
