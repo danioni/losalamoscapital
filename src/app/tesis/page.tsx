@@ -26,14 +26,14 @@ export default function TesisPage() {
         <section>
           <h2>Nuestra Filosofía</h2>
           <p>
-            Cada inversión debe tener una <strong>tesis clara</strong>: un argumento
-            fundamentado de por qué creemos que el activo va a apreciarse en el tiempo.
-            Si no podemos articularlo, no invertimos.
+            Cada inversión debe tener una <strong>razón clara</strong>: un argumento
+            sólido de por qué creemos que va a subir de valor con el tiempo.
+            Si no podemos explicarlo, no invertimos.
           </p>
           <p>
-            Buscamos activos con <strong>ventajas estructurales</strong> — características
-            inherentes que los hacen valiosos independientemente del ciclo de mercado.
-            No especulamos, construimos.
+            Buscamos activos con <strong>ventajas de fondo</strong> — características
+            propias que los hacen valiosos sin importar si el mercado está arriba o abajo.
+            No apostamos, construimos.
           </p>
         </section>
 
@@ -51,8 +51,8 @@ export default function TesisPage() {
                 <h3>Bitcoin</h3>
                 <p className="tesis-tagline">La salida del sistema</p>
                 <p className="tesis-summary">
-                  Independencia financiera absoluta. Autocustodia, resistencia a censura,
-                  portabilidad global. El único activo que realmente posees.
+                  Libertad financiera total. Lo guardas tú, nadie lo puede bloquear,
+                  lo llevas a cualquier parte. El único activo que realmente es tuyo.
                 </p>
                 <div className="tesis-meta">
                   <span className="conviction high">Convicción Alta</span>
@@ -69,7 +69,7 @@ export default function TesisPage() {
                 <h3>Tesla</h3>
                 <p className="tesis-tagline">Próximamente</p>
                 <p className="tesis-summary">
-                  Energía, autonomía, IA, y manufactura integrada.
+                  Energía, autos que se manejan solos, inteligencia artificial, y fábricas propias.
                 </p>
               </div>
             </div>
@@ -77,7 +77,7 @@ export default function TesisPage() {
             <div className="tesis-card coming-soon">
               <div className="tesis-icon">🏛️</div>
               <div className="tesis-info">
-                <h3>Magnificent 7</h3>
+                <h3>Las 7 Magníficas</h3>
                 <p className="tesis-tagline">Próximamente</p>
                 <p className="tesis-summary">
                   Las empresas que definen la economía moderna.
@@ -91,7 +91,7 @@ export default function TesisPage() {
                 <h3>Redes de Pago</h3>
                 <p className="tesis-tagline">Próximamente</p>
                 <p className="tesis-summary">
-                  Efecto red en acción: Visa, Mastercard, y el flujo del dinero.
+                  Mientras más gente las usa, más valen: Visa, Mastercard, y el flujo del dinero.
                 </p>
               </div>
             </div>
@@ -105,9 +105,9 @@ export default function TesisPage() {
           <div className="disclaimer-box">
             <h3>⚠️ Importante</h3>
             <p>
-              Estas tesis representan nuestra visión personal y no constituyen
-              asesoría financiera. Cada inversor debe hacer su propia investigación
-              y evaluar su tolerancia al riesgo antes de invertir.
+              Estas explicaciones representan nuestra visión personal y no son
+              consejos financieros. Cada persona debe investigar por su cuenta
+              y entender cuánto riesgo puede tolerar antes de invertir.
             </p>
           </div>
         </section>

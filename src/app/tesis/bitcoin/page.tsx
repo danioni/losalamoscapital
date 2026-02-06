@@ -45,7 +45,7 @@ export default function BitcoinTesisPage() {
             </div>
             <div className="summary-card">
               <span className="summary-label">Riesgo Principal</span>
-              <p>Volatilidad a corto plazo</p>
+              <p>Sube y baja mucho a corto plazo</p>
             </div>
           </div>
         </section>
@@ -57,9 +57,9 @@ export default function BitcoinTesisPage() {
           <h2>La Tesis</h2>
           <p className="lead">
             Bitcoin es <strong>la salida</strong>. En un mundo donde los gobiernos pueden
-            congelar cuentas, los bancos pueden quebrar, y las monedas se devalúan
+            congelar cuentas, los bancos pueden quebrar, y las monedas pierden valor
             constantemente, Bitcoin ofrece algo que ningún otro activo puede:
-            <strong> soberanía financiera real</strong>.
+            <strong> libertad financiera real</strong>.
           </p>
 
           <div className="quote-block">
@@ -76,18 +76,18 @@ export default function BitcoinTesisPage() {
           <div className="pillar">
             <div className="pillar-number">01</div>
             <div className="pillar-content">
-              <h3>Autocustodia</h3>
-              <p className="pillar-tagline">Tus llaves, tu dinero</p>
+              <h3>Tú lo Guardas</h3>
+              <p className="pillar-tagline">Tu clave, tu dinero</p>
               <p>
-                Con Bitcoin, tú controlas tus fondos directamente. No hay banco que
+                Con Bitcoin, tú controlas tu dinero directamente. No hay banco que
                 pueda negar un retiro, no hay institución que pueda &ldquo;congelar tu cuenta
-                mientras investigan&rdquo;. Si tienes las llaves privadas, el Bitcoin es tuyo.
+                mientras investigan&rdquo;. Si tienes la clave, el Bitcoin es tuyo.
                 Punto.
               </p>
               <p>
-                Esto es fundamentalmente diferente a cualquier otro activo. Tus acciones
-                están en un broker, tu dinero en un banco, tus propiedades en un registro
-                público. Todo depende de terceros. Bitcoin no.
+                Esto es muy diferente a cualquier otro activo. Tus acciones
+                están en una corredora, tu dinero en un banco, tus propiedades en un registro
+                público. Todo depende de otros. Bitcoin no.
               </p>
             </div>
           </div>
@@ -95,7 +95,7 @@ export default function BitcoinTesisPage() {
           <div className="pillar">
             <div className="pillar-number">02</div>
             <div className="pillar-content">
-              <h3>Resistencia a Censura</h3>
+              <h3>Imposible de Bloquear</h3>
               <p className="pillar-tagline">Nadie puede congelar tu cuenta</p>
               <p>
                 En el sistema tradicional, un juez, un banco, o incluso un error
@@ -103,9 +103,9 @@ export default function BitcoinTesisPage() {
                 esto en Argentina, Venezuela, Grecia, Chipre, Canadá, Rusia...
               </p>
               <p>
-                Bitcoin opera en una red descentralizada global. No hay un punto central
-                que atacar, no hay un CEO que pueda ser presionado, no hay un servidor
-                que apagar. <strong>Tu transacción se procesa si pagas la comisión de red</strong>.
+                Bitcoin funciona en una red mundial sin dueño. No hay una oficina central
+                que atacar, no hay un jefe que pueda ser presionado, no hay un computador central
+                que apagar. <strong>Tu pago se procesa si pagas la comisión</strong>.
                 Nadie puede impedirlo.
               </p>
             </div>
@@ -122,7 +122,7 @@ export default function BitcoinTesisPage() {
                 no hay límites de efectivo, no hay confiscación posible.
               </p>
               <p>
-                En un mundo cada vez más incierto geopolíticamente, la capacidad de
+                En un mundo cada vez más incierto, la capacidad de
                 mover tu riqueza sin restricciones no es un lujo — es un seguro de vida.
               </p>
             </div>
@@ -135,13 +135,13 @@ export default function BitcoinTesisPage() {
               <p className="pillar-tagline">No necesitas banco ni aprobación</p>
               <p>
                 Para abrir una cuenta bancaria necesitas documentos, aprobación,
-                historial crediticio. Para usar Bitcoin solo necesitas un smartphone.
+                historial de crédito. Para usar Bitcoin solo necesitas un teléfono.
                 Nadie te pide permiso, nadie puede negarte el acceso.
               </p>
               <p>
-                Esto es especialmente poderoso para los 1.7 mil millones de personas
-                en el mundo sin acceso bancario. Pero también para cualquiera que
-                valore no depender de la gracia de una institución.
+                Esto es especialmente importante para los 1.700 millones de personas
+                en el mundo sin acceso a bancos. Pero también para cualquiera que
+                valore no depender de la buena voluntad de una institución.
               </p>
             </div>
           </div>
@@ -154,24 +154,24 @@ export default function BitcoinTesisPage() {
           <h2>¿Por Qué Bitcoin Como Dinero?</h2>
 
           <p className="lead">
-            Existen miles de criptomonedas. Para <strong>dinero duro</strong>, solo una
-            importa. Las demás tienen otros casos de uso válidos — DeFi, smart contracts,
-            infraestructura — pero ninguna compite con Bitcoin como reserva de valor.
+            Existen miles de criptomonedas. Como <strong>dinero</strong>, solo una
+            importa. Las demás sirven para otras cosas — finanzas automáticas, contratos
+            digitales, infraestructura — pero ninguna compite con Bitcoin para guardar valor.
           </p>
 
           <div className="why-bitcoin-grid">
             <div className="why-card">
               <div className="why-icon">💰</div>
-              <h3>100% Monetario</h3>
+              <h3>100% Dinero</h3>
               <p>
                 Bitcoin es el único activo cuyo valor es <strong>puramente monetario</strong>.
-                No tiene otro uso. El oro se usa en joyería e industria. Las acciones
-                dependen de earnings. Las propiedades de su ubicación.
+                No tiene otro uso. El oro se usa en joyas e industria. Las acciones
+                dependen de las ganancias de empresas. Las propiedades de su ubicación.
               </p>
               <p>
                 Bitcoin existe solo para ser dinero. Todo su valor viene de sus
-                propiedades monetarias: escasez, portabilidad, divisibilidad,
-                durabilidad, verificabilidad. Nada más. Nada menos.
+                propiedades como dinero: es escaso, portable, divisible,
+                duradero, y verificable. Nada más. Nada menos.
               </p>
             </div>
 
@@ -181,34 +181,34 @@ export default function BitcoinTesisPage() {
               <p>
                 En un mundo donde todo cambia según conveniencia política,
                 Bitcoin es <strong>inmutable por diseño</strong>. Las reglas son las reglas.
-                21 millones. Cada 10 minutos un bloque. Cada 4 años el halving.
+                21 millones. Cada 10 minutos se crea un nuevo registro. Cada 4 años se reduce la emisión a la mitad.
               </p>
               <p>
-                Esta rigidez no es un bug — es la feature principal. Cuando la única
+                Esta rigidez no es un defecto — es la característica principal. Cuando la única
                 constante es el cambio, un sistema que no puede cambiar tiene valor infinito.
               </p>
             </div>
 
             <div className="why-card featured">
               <div className="why-icon">⚖️</div>
-              <h3>Lanzamiento Justo</h3>
+              <h3>Nació Justo</h3>
               <p>
                 Bitcoin empezó como un experimento que se <strong>regalaba</strong>.
-                Los primeros años existían &ldquo;faucets&rdquo; donde cualquiera podía
-                obtener bitcoins gratis. No hubo ICO, no hubo pre-mine, no hubo
-                inversores privilegiados.
+                Los primeros años existían páginas donde cualquiera podía
+                obtener bitcoins gratis. No hubo venta anticipada, no hubo
+                inversionistas privilegiados.
               </p>
               <p>
-                Satoshi Nakamoto, su creador, <strong>desapareció</strong>. No hay CEO,
+                Satoshi Nakamoto, su creador, <strong>desapareció</strong>. No hay jefe,
                 no hay fundación que pueda cambiar las reglas, no hay equipo con
-                tokens para vender. Compara esto con cualquier otra cripto: todas
-                tienen fundadores enriqueciéndose, VCs con tokens bloqueados,
-                equipos que pueden modificar el protocolo.
+                monedas para vender. Compara esto con cualquier otra criptomoneda: todas
+                tienen fundadores enriqueciéndose, inversionistas con monedas reservadas,
+                equipos que pueden modificar las reglas.
               </p>
               <p>
                 Bitcoin es el único dinero digital que nació sin dueño. Y sigue
                 siendo justo: las reglas son iguales para todos, transparentes,
-                verificables. <strong>El que lo entiende y adopta primero tiene
+                verificables. <strong>El que lo entiende y lo adopta primero tiene
                 ventaja</strong> — no por privilegio, sino por mérito. Así debería
                 funcionar el dinero.
               </p>
@@ -225,12 +225,13 @@ export default function BitcoinTesisPage() {
           <div className="feature-grid">
             <div className="feature-card">
               <div className="feature-icon">🏦</div>
-              <h3>El Mejor Colateral del Mundo</h3>
+              <h3>La Mejor Garantía del Mundo</h3>
               <p>
-                Bitcoin es el colateral perfecto: líquido 24/7, verificable al instante,
-                no tiene riesgo de contraparte, y no se puede falsificar. No hay que
-                confiar en auditores, no hay que esperar horarios bancarios, no hay
-                que negociar valuaciones.
+                Bitcoin es la garantía perfecta para pedir préstamos: se puede vender
+                las 24 horas del día, se verifica al instante, no depende de que nadie
+                cumpla su palabra, y no se puede falsificar. No hay que confiar en
+                auditores, no hay que esperar horarios de banco, no hay que negociar
+                cuánto vale.
               </p>
               <p>
                 Por esto, cada vez más instituciones aceptan Bitcoin como garantía
@@ -241,15 +242,15 @@ export default function BitcoinTesisPage() {
 
             <div className="feature-card">
               <div className="feature-icon">⚙️</div>
-              <h3>Programable</h3>
+              <h3>Se Puede Programar</h3>
               <p>
                 Bitcoin puede quedar programado. Puedes crear herencias que se ejecutan
-                automáticamente, pagos que se liberan bajo condiciones específicas,
-                o vaults con múltiples firmas que requieren aprobación familiar.
+                automáticamente, pagos que se liberan cuando se cumplen ciertas condiciones,
+                o cajas fuertes que requieren la aprobación de varios familiares para abrirse.
               </p>
               <p>
-                No necesitas abogados, notarios, ni confiar en que un banco ejecute
-                tus instrucciones. El código es la ley, y se ejecuta sin intermediarios.
+                No necesitas abogados, notarios, ni confiar en que un banco siga
+                tus instrucciones. Las reglas se cumplen automáticamente, sin intermediarios.
               </p>
             </div>
           </div>
@@ -299,9 +300,9 @@ export default function BitcoinTesisPage() {
 
           <div className="risks-grid">
             <div className="risk-card">
-              <h4>Volatilidad</h4>
+              <h4>Sube y Baja Mucho</h4>
               <p>
-                Bitcoin puede caer 50-80% en correcciones. Esto ha pasado múltiples
+                Bitcoin puede caer 50-80% en sus correcciones. Esto ha pasado múltiples
                 veces y probablemente pase de nuevo. Si no puedes tolerar ver tu
                 inversión en rojo por meses o años, Bitcoin no es para ti.
               </p>
@@ -309,23 +310,23 @@ export default function BitcoinTesisPage() {
             <div className="risk-card">
               <h4>Regulación</h4>
               <p>
-                Los gobiernos podrían dificultar (aunque no prohibir efectivamente)
-                el uso de Bitcoin. China lo ha intentado sin éxito. EEUU ha optado
-                por regularlo, legitimándolo.
+                Los gobiernos podrían dificultar (aunque no prohibir realmente)
+                el uso de Bitcoin. China lo ha intentado sin éxito. Estados Unidos ha optado
+                por regularlo, lo que lo hace más legítimo.
               </p>
             </div>
             <div className="risk-card">
-              <h4>Custodia</h4>
+              <h4>Guardar las Claves</h4>
               <p>
-                Si pierdes tus llaves, pierdes tu Bitcoin. La autocustodia requiere
+                Si pierdes tus claves, pierdes tu Bitcoin. Guardarlo tú mismo requiere
                 responsabilidad. Esto es tanto una fortaleza como un riesgo.
               </p>
             </div>
             <div className="risk-card">
-              <h4>Tecnológico</h4>
+              <h4>Tecnología</h4>
               <p>
-                Aunque la red ha funcionado sin fallas mayores por 15 años, siempre
-                existe un riesgo técnico residual. Es bajo pero no es cero.
+                Aunque la red ha funcionado sin fallas importantes por 15 años, siempre
+                existe un riesgo técnico. Es bajo pero no es cero.
               </p>
             </div>
           </div>
@@ -338,7 +339,7 @@ export default function BitcoinTesisPage() {
           <h2>Nuestra Posición</h2>
           <div className="conclusion-box">
             <p>
-              Bitcoin no es un get-rich-quick scheme. Es una <strong>tecnología de libertad
+              Bitcoin no es un esquema para hacerse rico rápido. Es una <strong>herramienta de libertad
               financiera</strong> que existe independientemente de cualquier gobierno,
               banco, o institución.
             </p>
