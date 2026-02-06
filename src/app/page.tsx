@@ -130,16 +130,8 @@ export default async function Home() {
   return (
     <>
       <Header />
-      <div
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-          padding: "0 2rem",
-          position: "relative",
-          zIndex: 1,
-        }}
-      >
-        <Hero />
+      <Hero />
+      <div className="main-container">
         <StatsGrid metrics={metrics} />
         <PerformanceChart data={chartData} lastUpdated={lastUpdated} />
         <PortfolioAllocation data={allocation} />

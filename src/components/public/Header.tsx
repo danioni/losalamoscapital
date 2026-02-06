@@ -14,7 +14,7 @@ export function Header() {
     <header
       style={{
         borderBottom: "1px solid rgba(45, 106, 79, 0.2)",
-        padding: "1.5rem 0",
+        padding: "1rem 0",
         backdropFilter: "blur(20px)",
         position: "sticky",
         top: 0,
@@ -23,8 +23,9 @@ export function Header() {
       }}
     >
       <div
+        className="header-inner"
         style={{
-          maxWidth: "1200px",
+          maxWidth: "1400px",
           margin: "0 auto",
           padding: "0 2rem",
           display: "flex",
@@ -33,26 +34,30 @@ export function Header() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          <Logo style={{ width: "36px", height: "36px" }} />
+          <Logo style={{ width: "32px", height: "32px", flexShrink: 0 }} />
           <div>
             <h1
+              className="header-logo-text"
               style={{
                 fontFamily: "var(--font-display)",
-                fontSize: "1.35rem",
+                fontSize: "1.25rem",
                 fontWeight: 400,
                 letterSpacing: "0.02em",
                 color: "#e8efe6",
+                lineHeight: 1.2,
               }}
             >
               Los Álamos Capital
             </h1>
             <span
+              className="header-subtitle"
               style={{
-                fontSize: "0.7rem",
+                fontSize: "0.65rem",
                 fontWeight: 500,
-                letterSpacing: "0.15em",
+                letterSpacing: "0.12em",
                 textTransform: "uppercase",
                 color: "#40916c",
+                display: "block",
               }}
             >
               Investment Track Record

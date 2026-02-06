@@ -71,7 +71,7 @@ body::before {
 /* ═══ HERO CINEMATIC STYLES ═══ */
 .hero-section {
   position: relative;
-  min-height: 70vh;
+  min-height: 80vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,7 +87,7 @@ body::before {
 .hero-vignette {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at center, transparent 30%, rgba(10, 15, 13, 0.5) 70%, rgba(10, 15, 13, 0.9) 100%);
+  background: radial-gradient(ellipse at center, transparent 20%, rgba(10, 15, 13, 0.4) 60%, rgba(10, 15, 13, 0.9) 100%);
   z-index: 1;
 }
 
@@ -185,49 +185,62 @@ body::before {
   z-index: 10;
   text-align: center;
   padding: 2rem;
+  max-width: 900px;
 }
 
 .hero-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.4rem 1rem;
-  border: 1px solid rgba(45, 106, 79, 0.2);
+  padding: 0.5rem 1.25rem;
+  border: 1px solid rgba(45, 106, 79, 0.3);
   border-radius: 100px;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 500;
   color: #95d5b2;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  margin-bottom: 2rem;
-  background: rgba(82, 183, 136, 0.15);
+  margin-bottom: 2.5rem;
+  background: rgba(82, 183, 136, 0.12);
+  backdrop-filter: blur(10px);
 }
 
 .hero-badge-dot {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   background: #52b788;
   border-radius: 50%;
   animation: pulse 2s infinite;
+  box-shadow: 0 0 10px rgba(82, 183, 136, 0.5);
 }
 
 .hero-title {
   font-family: var(--font-display);
-  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
   font-weight: 400;
-  line-height: 1.15;
-  margin-bottom: 1.25rem;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
   color: #e8efe6;
-  text-shadow: 0 2px 40px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 4px 60px rgba(0, 0, 0, 0.5);
 }
 
 .hero-subtitle {
-  font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+  font-size: clamp(1rem, 2vw, 1.25rem);
   color: #8a9e93;
-  max-width: 540px;
+  max-width: 600px;
   margin: 0 auto;
   font-weight: 300;
-  text-shadow: 0 1px 20px rgba(0, 0, 0, 0.3);
+  line-height: 1.7;
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* ═══ MAIN CONTAINER ═══ */
+.main-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 1;
 }
 
 /* ═══ ANIMATIONS ═══ */
@@ -298,29 +311,94 @@ textarea:focus {
   box-shadow: 0 0 0 2px rgba(82, 183, 136, 0.2);
 }
 
-/* Fix date input color scheme for dark mode */
 input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(0.7);
 }
 
-/* Select dropdown styling */
 select option {
   background: var(--color-bg-card);
   color: var(--color-text-primary);
 }
 
-/* ═══ RESPONSIVE UTILITIES ═══ */
-@media (max-width: 1024px) {
-  .admin-stats-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
+/* ═══ ULTRAWIDE SCREENS (2560px+) ═══ */
+@media (min-width: 2560px) {
+  .main-container {
+    max-width: 1800px;
+    padding: 0 4rem;
   }
 
-  .admin-actions-grid {
-    grid-template-columns: 1fr !important;
+  .hero-section {
+    min-height: 70vh;
+  }
+
+  .hero-title {
+    font-size: 5.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.4rem;
+    max-width: 700px;
+  }
+
+  .hero-badge {
+    font-size: 0.9rem;
+    padding: 0.6rem 1.5rem;
+  }
+
+  .stats-grid-responsive {
+    gap: 2px !important;
+  }
+
+  .stat-card-value {
+    font-size: 2.5rem !important;
+  }
+
+  .section-title {
+    font-size: 2rem !important;
+  }
+
+  .method-grid-responsive {
+    gap: 2rem !important;
+  }
+
+  .allocation-grid-responsive {
+    gap: 2rem !important;
   }
 }
 
-@media (max-width: 768px) {
+/* ═══ LARGE DESKTOP (1440px - 2559px) ═══ */
+@media (min-width: 1440px) and (max-width: 2559px) {
+  .main-container {
+    max-width: 1400px;
+  }
+
+  .hero-section {
+    min-height: 75vh;
+  }
+}
+
+/* ═══ DESKTOP (1024px - 1439px) ═══ */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .main-container {
+    max-width: 1200px;
+    padding: 0 2rem;
+  }
+}
+
+/* ═══ TABLET (768px - 1023px) ═══ */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .main-container {
+    padding: 0 1.5rem;
+  }
+
+  .hero-section {
+    min-height: 65vh;
+  }
+
+  .hero-content {
+    padding: 1.5rem;
+  }
+
   .stats-grid-responsive {
     grid-template-columns: repeat(2, 1fr) !important;
   }
@@ -331,6 +409,7 @@ select option {
 
   .method-grid-responsive {
     grid-template-columns: 1fr !important;
+    gap: 1rem !important;
   }
 
   .decision-card-responsive {
@@ -338,20 +417,244 @@ select option {
     gap: 0.75rem !important;
   }
 
-  .hero-title-responsive {
-    font-size: 2.2rem !important;
+  .nav-responsive {
+    display: none !important;
+  }
+}
+
+/* ═══ MOBILE LANDSCAPE (480px - 767px) ═══ */
+@media (min-width: 480px) and (max-width: 767px) {
+  .main-container {
+    padding: 0 1.25rem;
+  }
+
+  .hero-section {
+    min-height: 60vh;
+  }
+
+  .hero-content {
+    padding: 1rem;
+  }
+
+  .hero-badge {
+    font-size: 0.65rem;
+    padding: 0.35rem 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .stats-grid-responsive {
+    grid-template-columns: repeat(2, 1fr) !important;
+    margin: 2rem 0 !important;
+  }
+
+  .allocation-grid-responsive {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  .method-grid-responsive {
+    grid-template-columns: 1fr !important;
+  }
+
+  .decision-card-responsive {
+    grid-template-columns: 1fr !important;
+    padding: 1rem !important;
   }
 
   .nav-responsive {
     display: none !important;
   }
 
-  .admin-stats-grid {
-    grid-template-columns: 1fr !important;
+  .header-logo-text {
+    font-size: 1.1rem !important;
+  }
+
+  .header-subtitle {
+    font-size: 0.6rem !important;
+  }
+}
+
+/* ═══ MOBILE PORTRAIT (< 480px) ═══ */
+@media (max-width: 479px) {
+  .main-container {
+    padding: 0 1rem;
   }
 
   .hero-section {
-    min-height: 60vh;
+    min-height: 55vh;
+  }
+
+  .hero-content {
+    padding: 0.75rem;
+  }
+
+  .hero-badge {
+    font-size: 0.55rem;
+    padding: 0.3rem 0.6rem;
+    margin-bottom: 1.25rem;
+    letter-spacing: 0.05em;
+  }
+
+  .hero-badge-dot {
+    width: 5px;
+    height: 5px;
+  }
+
+  .hero-title {
+    font-size: 1.75rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+  }
+
+  .hero-subtitle {
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  .stats-grid-responsive {
+    grid-template-columns: 1fr !important;
+    margin: 1.5rem 0 !important;
+  }
+
+  .stat-card-inner {
+    padding: 1.25rem !important;
+  }
+
+  .stat-card-value {
+    font-size: 1.5rem !important;
+  }
+
+  .stat-card-label {
+    font-size: 0.65rem !important;
+  }
+
+  .allocation-grid-responsive {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+
+  .allocation-bar-container {
+    padding: 1.25rem !important;
+  }
+
+  .alloc-bar-bg {
+    width: 80px !important;
+  }
+
+  .method-grid-responsive {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+
+  .method-card {
+    padding: 1.25rem !important;
+  }
+
+  .decision-card-responsive {
+    grid-template-columns: 1fr !important;
+    padding: 1rem !important;
+    gap: 0.5rem !important;
+  }
+
+  .decision-tag {
+    align-self: flex-start;
+  }
+
+  .section-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.25rem !important;
+  }
+
+  .section-title {
+    font-size: 1.25rem !important;
+  }
+
+  .section-subtitle {
+    font-size: 0.7rem !important;
+  }
+
+  .nav-responsive {
+    display: none !important;
+  }
+
+  .header-inner {
+    padding: 0 1rem !important;
+  }
+
+  .header-logo-text {
+    font-size: 1rem !important;
+  }
+
+  .header-subtitle {
+    font-size: 0.55rem !important;
+    letter-spacing: 0.1em !important;
+  }
+
+  .footer-text {
+    font-size: 0.65rem !important;
+  }
+
+  .disclaimer-inner {
+    padding: 1.25rem !important;
+  }
+
+  .disclaimer-text {
+    font-size: 0.7rem !important;
+  }
+
+  /* Reduce leaf animation on mobile for performance */
+  .hero-leaves {
+    display: none;
+  }
+
+  /* Simplify grain on mobile */
+  .hero-grain {
+    opacity: 0.02;
+  }
+}
+
+/* ═══ TOUCH DEVICE OPTIMIZATIONS ═══ */
+@media (hover: none) and (pointer: coarse) {
+  /* Larger touch targets */
+  .nav-responsive a {
+    padding: 0.5rem;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Disable hover effects that don't work well on touch */
+  .method-card:hover,
+  .decision-card-responsive:hover {
+    transform: none !important;
+  }
+}
+
+/* ═══ REDUCED MOTION ═══ */
+@media (prefers-reduced-motion: reduce) {
+  .hero-grain,
+  .hero-leaves,
+  .hero-light-flicker {
+    animation: none !important;
+  }
+
+  .animate-fade-up {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  .hero-badge-dot {
+    animation: none !important;
   }
 }
 
@@ -378,4 +681,25 @@ select option {
 ::selection {
   background: rgba(82, 183, 136, 0.3);
   color: #e8efe6;
+}
+
+/* ═══ PRINT STYLES ═══ */
+@media print {
+  .hero-bg-layers,
+  .hero-grain,
+  .hero-leaves,
+  .hero-light-flicker,
+  .hero-vignette,
+  .hero-haze-bottom {
+    display: none !important;
+  }
+
+  body::before {
+    display: none !important;
+  }
+
+  .hero-section {
+    min-height: auto;
+    padding: 2rem 0;
+  }
 }
