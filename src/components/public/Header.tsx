@@ -8,6 +8,7 @@ const navLinks = [
   { href: "#decisions", label: "Decisiones" },
   { href: "#methodology", label: "Metodología" },
   { href: "/tesis", label: "Tesis" },
+  { href: "/analisis", label: "Análisis" },
 ];
 
 export function Header() {

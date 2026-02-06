@@ -8,3 +8,4 @@ export { Methodology } from "./Methodology";
 export { Disclaimer } from "./Disclaimer";
 export { Footer } from "./Footer";
 export { Logo } from "./Logo";
+export { AnalisisActivos } from "./AnalisisActivos";
