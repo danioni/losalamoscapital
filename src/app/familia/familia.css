@@ -674,16 +674,22 @@
 .familia-page .rainbow-iframe-container {
   position: relative;
   width: 100%;
-  height: 400px;
+  /* Aspect ratio container to fit the chart properly */
+  aspect-ratio: 16 / 9;
   border-radius: var(--radius-md);
   overflow: hidden;
   background: #f9f6f0;
 }
 
 .familia-page .rainbow-iframe {
-  width: 100%;
-  height: 100%;
+  /* Scale up the iframe and reposition to crop out the UI elements */
+  position: absolute;
+  width: 140%;
+  height: 140%;
+  top: -5%;
+  left: -20%;
   border: none;
+  pointer-events: none; /* Make it non-interactive since it's cropped */
 }
 
 .familia-page .rainbow-legend {
@@ -741,7 +747,14 @@
 
 @media (max-width: 640px) {
   .familia-page .rainbow-iframe-container {
-    height: 300px;
+    aspect-ratio: 4 / 3; /* Taller aspect ratio on mobile */
+  }
+
+  .familia-page .rainbow-iframe {
+    width: 180%;
+    height: 180%;
+    top: -10%;
+    left: -40%;
   }
 
   .familia-page .rainbow-legend {
