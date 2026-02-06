@@ -168,6 +168,67 @@
 }
 
 /* ========================================
+   Why Bitcoin
+   ======================================== */
+.bitcoin-tesis .why-bitcoin-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.bitcoin-tesis .why-card {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.bitcoin-tesis .why-card.featured {
+  background: linear-gradient(145deg, #1a1a18 0%, #2d2d28 100%);
+  color: white;
+}
+
+.bitcoin-tesis .why-icon {
+  font-size: 2rem;
+  margin-bottom: 16px;
+}
+
+.bitcoin-tesis .why-card h3 {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 1.35rem;
+  color: #1a1a18;
+  margin-bottom: 16px;
+  font-weight: 400;
+}
+
+.bitcoin-tesis .why-card.featured h3 {
+  color: #f7931a;
+}
+
+.bitcoin-tesis .why-card p {
+  font-size: 0.95rem;
+  margin-bottom: 16px;
+  line-height: 1.7;
+}
+
+.bitcoin-tesis .why-card.featured p {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.bitcoin-tesis .why-card p:last-child {
+  margin-bottom: 0;
+}
+
+.bitcoin-tesis .why-card strong {
+  color: #1a1a18;
+}
+
+.bitcoin-tesis .why-card.featured strong {
+  color: white;
+}
+
+/* ========================================
    Features
    ======================================== */
 .bitcoin-tesis .feature-grid {

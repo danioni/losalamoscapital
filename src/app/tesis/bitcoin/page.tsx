@@ -149,6 +149,73 @@ export default function BitcoinTesisPage() {
 
         <div className="divider">◆ ◆ ◆</div>
 
+        {/* Por qué Bitcoin */}
+        <section>
+          <h2>¿Por Qué Bitcoin y No Otro Cripto?</h2>
+
+          <p className="lead">
+            Existen miles de criptomonedas. Solo una importa. Y no es por accidente.
+          </p>
+
+          <div className="why-bitcoin-grid">
+            <div className="why-card">
+              <div className="why-icon">💰</div>
+              <h3>100% Monetario</h3>
+              <p>
+                Bitcoin es el único activo cuyo valor es <strong>puramente monetario</strong>.
+                No tiene otro uso. El oro se usa en joyería e industria. Las acciones
+                dependen de earnings. Las propiedades de su ubicación.
+              </p>
+              <p>
+                Bitcoin existe solo para ser dinero. Todo su valor viene de sus
+                propiedades monetarias: escasez, portabilidad, divisibilidad,
+                durabilidad, verificabilidad. Nada más. Nada menos.
+              </p>
+            </div>
+
+            <div className="why-card">
+              <div className="why-icon">🔒</div>
+              <h3>El Valor de No Cambiar</h3>
+              <p>
+                En un mundo donde todo cambia según conveniencia política,
+                Bitcoin es <strong>inmutable por diseño</strong>. Las reglas son las reglas.
+                21 millones. Cada 10 minutos un bloque. Cada 4 años el halving.
+              </p>
+              <p>
+                Esta rigidez no es un bug — es la feature principal. Cuando la única
+                constante es el cambio, un sistema que no puede cambiar tiene valor infinito.
+              </p>
+            </div>
+
+            <div className="why-card featured">
+              <div className="why-icon">⚖️</div>
+              <h3>Lanzamiento Justo</h3>
+              <p>
+                Bitcoin empezó como un experimento que se <strong>regalaba</strong>.
+                Los primeros años existían &ldquo;faucets&rdquo; donde cualquiera podía
+                obtener bitcoins gratis. No hubo ICO, no hubo pre-mine, no hubo
+                inversores privilegiados.
+              </p>
+              <p>
+                Satoshi Nakamoto, su creador, <strong>desapareció</strong>. No hay CEO,
+                no hay fundación que pueda cambiar las reglas, no hay equipo con
+                tokens para vender. Compara esto con cualquier otra cripto: todas
+                tienen fundadores enriqueciéndose, VCs con tokens bloqueados,
+                equipos que pueden modificar el protocolo.
+              </p>
+              <p>
+                Bitcoin es el único dinero digital que nació sin dueño. Y sigue
+                siendo justo: las reglas son iguales para todos, transparentes,
+                verificables. <strong>El que lo entiende y adopta primero tiene
+                ventaja</strong> — no por privilegio, sino por mérito. Así debería
+                funcionar el dinero.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <div className="divider">◆ ◆ ◆</div>
+
         {/* Colateral y Programabilidad */}
         <section>
           <h2>Propiedades Únicas</h2>
