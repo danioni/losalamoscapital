@@ -340,26 +340,26 @@ function FamiliaContent() {
             </div>
             <div className="rainbow-legend">
               <div className="legend-item"><span className="dot fire"></span>Burbuja máxima</div>
-              <div className="legend-item"><span className="dot red"></span>FOMO intenso</div>
+              <div className="legend-item"><span className="dot red"></span>Euforia / Vender</div>
               <div className="legend-item"><span className="dot orange"></span>Toma de ganancias</div>
               <div className="legend-item"><span className="dot yellow"></span>¿Está caro?</div>
-              <div className="legend-item"><span className="dot green"></span>HODL / Todavía barato</div>
+              <div className="legend-item"><span className="dot green"></span>Mantener</div>
               <div className="legend-item"><span className="dot cyan"></span>Acumular</div>
               <div className="legend-item current"><span className="dot blue"></span>Comprar ← Estamos aquí</div>
             </div>
             <div className="rainbow-footer">
-              <strong>Lectura actual:</strong> Bitcoin (~$97K) está en la zona azul/verde — &quot;Todavía barato&quot; según su tendencia histórica.
+              <strong>Lectura actual:</strong> Bitcoin (~$65K) está en la zona verde/azul — &quot;Todavía barato&quot; según su tendencia histórica.
               Históricamente, comprar en esta zona ha generado retornos de <strong>200-500%</strong> en los siguientes 2-3 años.
             </div>
           </div>
 
           <div className="stats-card info">
             <div className="stat-row">
-              <div className="stat-number info">~$97K</div>
+              <div className="stat-number info">~$65K</div>
               <div className="stat-text"><strong>Precio actual de Bitcoin</strong> — en zona de oportunidad según el Rainbow Chart.</div>
             </div>
             <div className="stat-row">
-              <div className="stat-number success">$200K+</div>
+              <div className="stat-number success">$150K+</div>
               <div className="stat-text"><strong>Precio proyectado</strong> para cuando Bitcoin entre en zona amarilla/naranja (1-2 años).</div>
             </div>
           </div>
