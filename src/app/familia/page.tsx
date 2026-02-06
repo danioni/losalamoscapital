@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 
-const CORRECT_PIN = '1234';
+const CORRECT_PIN = '8955';
 
 export default function FamiliaPage() {
   const [pin, setPin] = useState('');
