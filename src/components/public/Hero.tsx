@@ -38,7 +38,7 @@ export function Hero() {
       <div className="hero-content">
         <div className="hero-badge animate-fade-up">
           <span className="hero-badge-dot" />
-          Track Record Público · Transparencia Total
+          Historial Público · Transparencia Total
         </div>
 
         <h1 className="hero-title animate-fade-up animate-delay-1">
@@ -48,7 +48,7 @@ export function Hero() {
         </h1>
 
         <p className="hero-subtitle animate-fade-up animate-delay-2">
-          Gestión de inversiones con track record público y transparencia
+          Gestión de inversiones con historial público y transparencia
           absoluta. Cada decisión documentada, cada resultado verificable.
         </p>
       </div>

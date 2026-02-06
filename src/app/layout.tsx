@@ -23,14 +23,14 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Los Álamos Capital — Track Record de Inversiones",
+    default: "Los Álamos Capital — Historial de Inversiones",
     template: "%s | Los Álamos Capital",
   },
   description:
-    "Track record público de inversiones de Los Álamos SpA. Transparencia total en gestión de inversiones familiares. Rendimiento, portafolio y decisiones de inversión.",
+    "Historial público de inversiones de Los Álamos SpA. Transparencia total en gestión de inversiones familiares. Rendimiento, portafolio y decisiones de inversión.",
   keywords: [
     "inversiones",
-    "track record",
+    "historial de inversiones",
     "transparencia",
     "Los Álamos",
     "Chile",
@@ -47,9 +47,9 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Los Álamos Capital — Track Record de Inversiones",
+    title: "Los Álamos Capital — Historial de Inversiones",
     description:
-      "Track record público de inversiones con transparencia absoluta. Donde hay álamos, hay raíces.",
+      "Historial público de inversiones con transparencia absoluta. Donde hay álamos, hay raíces.",
     url: "https://losalamoscapital.com",
     siteName: "Los Álamos Capital",
     locale: "es_CL",
@@ -59,15 +59,15 @@ export const metadata: Metadata = {
         url: "/og-image.svg",
         width: 1200,
         height: 630,
-        alt: "Los Álamos Capital - Track Record Público de Inversiones",
+        alt: "Los Álamos Capital - Historial Público de Inversiones",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Los Álamos Capital — Track Record de Inversiones",
+    title: "Los Álamos Capital — Historial de Inversiones",
     description:
-      "Track record público de inversiones con transparencia absoluta. Donde hay álamos, hay raíces.",
+      "Historial público de inversiones con transparencia absoluta. Donde hay álamos, hay raíces.",
     images: ["/twitter-image.svg"],
   },
   robots: {

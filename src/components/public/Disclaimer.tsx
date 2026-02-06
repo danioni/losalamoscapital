@@ -34,14 +34,19 @@ export function Disclaimer() {
             lineHeight: 1.7,
           }}
         >
-          Los Álamos Capital es un track record de inversiones familiares
-          publicado con fines informativos y de transparencia. Este sitio no
-          constituye asesoría financiera, recomendación de inversión, ni oferta
-          de valores. Rendimientos pasados no garantizan resultados futuros.
-          Toda inversión conlleva riesgo de pérdida parcial o total del capital
-          invertido. Antes de tomar decisiones de inversión, consulte con un
-          asesor financiero calificado. Los Álamos SpA no se encuentra regulada
-          por la Comisión para el Mercado Financiero (CMF) de Chile.
+          Los Álamos Capital es un registro personal de inversiones familiares
+          publicado con fines exclusivamente informativos y de transparencia interna.
+          <strong style={{ color: '#6b7f72' }}> Este sitio NO constituye asesoría financiera, recomendación de inversión,
+          oferta de valores, ni servicio de gestión de activos para terceros.</strong> El
+          contenido representa únicamente opiniones familiares y decisiones personales de
+          inversión — no debe ser interpretado como consejo financiero aplicable a ninguna
+          otra persona o situación. No solicitamos ni aceptamos capital de terceros.
+          Rendimientos pasados no garantizan resultados futuros. Toda inversión conlleva
+          riesgo de pérdida parcial o total del capital. Antes de tomar cualquier decisión
+          de inversión, consulte con un asesor financiero debidamente acreditado.
+          Los Álamos Capital SpA NO se encuentra regulada ni supervisada por la Comisión
+          para el Mercado Financiero (CMF) de Chile ni por ningún otro organismo regulador.
+          La información se proporciona &quot;tal cual&quot; sin garantías de ningún tipo.
         </p>
       </div>
     </div>

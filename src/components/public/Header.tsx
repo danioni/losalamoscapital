@@ -60,7 +60,7 @@ export function Header() {
                 display: "block",
               }}
             >
-              Investment Track Record
+              Historial de Inversiones
             </span>
           </div>
         </div>
