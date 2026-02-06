@@ -5,15 +5,15 @@ import { useState } from "react";
 const methodologyItems = [
   {
     number: "01 — FILOSOFÍA",
-    title: "Inversión con convicción",
+    title: "Concentración extrema",
     description:
-      "Concentración en las mejores ideas. Portafolio compacto con posiciones de alta convicción respaldadas por análisis fundamental riguroso. Preferimos conocer profundamente pocos activos que diversificar sin criterio.",
+      "Dos activos centrales: Tesla (TSLA) como posición principal en equities y Bitcoin (BTC) como activo central off-system. Preferimos conocer profundamente pocos activos y tener alta convicción, en vez de diversificar sin criterio.",
   },
   {
-    number: "02 — GESTIÓN DE RIESGO",
-    title: "Preservar para crecer",
+    number: "02 — ESTRUCTURA",
+    title: "Stocks + Off-System",
     description:
-      "Reglas claras de sizing por posición. Nunca más del 25% en un solo activo. Stop-losses definidos antes de cada entrada. El objetivo es maximizar el retorno ajustado por riesgo, no el retorno absoluto.",
+      "El portafolio se divide en dos mundos: activos dentro del sistema financiero tradicional (acciones) y activos fuera de él (crypto, commodities). Cada mundo tiene su tesis propia, su horizonte temporal, y su lógica de sizing.",
   },
   {
     number: "03 — TRANSPARENCIA",
