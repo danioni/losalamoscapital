@@ -151,10 +151,12 @@ export default function BitcoinTesisPage() {
 
         {/* Por qué Bitcoin */}
         <section>
-          <h2>¿Por Qué Bitcoin y No Otro Cripto?</h2>
+          <h2>¿Por Qué Bitcoin Como Dinero?</h2>
 
           <p className="lead">
-            Existen miles de criptomonedas. Solo una importa. Y no es por accidente.
+            Existen miles de criptomonedas. Para <strong>dinero duro</strong>, solo una
+            importa. Las demás tienen otros casos de uso válidos — DeFi, smart contracts,
+            infraestructura — pero ninguna compite con Bitcoin como reserva de valor.
           </p>
 
           <div className="why-bitcoin-grid">
