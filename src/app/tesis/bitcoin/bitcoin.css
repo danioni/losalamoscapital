@@ -16,13 +16,20 @@
     radial-gradient(ellipse 50% 30% at 70% 80%, rgba(247, 147, 26, 0.1) 0%, transparent 40%) !important;
 }
 
+.bitcoin-tesis .hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .bitcoin-tesis .back-nav {
-  display: inline-block;
+  display: block;
   color: rgba(255, 255, 255, 0.6);
   text-decoration: none;
   font-size: 0.85rem;
   margin-bottom: 32px;
   transition: color 0.2s;
+  align-self: flex-start;
 }
 
 .bitcoin-tesis .back-nav:hover {
