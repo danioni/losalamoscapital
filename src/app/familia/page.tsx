@@ -345,11 +345,12 @@ function FamiliaContent() {
               <div className="legend-item"><span className="dot yellow"></span>¿Está caro?</div>
               <div className="legend-item"><span className="dot green"></span>Mantener</div>
               <div className="legend-item"><span className="dot cyan"></span>Acumular</div>
-              <div className="legend-item current"><span className="dot blue"></span>Comprar ← Estamos aquí</div>
+              <div className="legend-item"><span className="dot blue"></span>Comprar</div>
+              <div className="legend-item current"><span className="dot purple"></span>Liquidación ← Estamos aquí</div>
             </div>
             <div className="rainbow-footer">
-              <strong>Lectura actual:</strong> Bitcoin (~$65K) está en la zona verde/azul — &quot;Buen momento para comprar&quot; según su tendencia histórica.
-              Históricamente, comprar en esta zona ha generado retornos de <strong>200-500%</strong> en los siguientes 2-3 años.
+              <strong>Lectura actual:</strong> Bitcoin (~$65K) está en la zona azul/violeta — &quot;Liquidación total&quot; según su tendencia histórica.
+              Históricamente, comprar en esta zona ha generado retornos de <strong>300-1000%</strong> en los siguientes 2-3 años.
             </div>
           </div>
 

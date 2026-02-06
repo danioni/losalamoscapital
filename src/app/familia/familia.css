@@ -727,6 +727,7 @@
 .familia-page .rainbow-legend .dot.green { background: #16a34a; }
 .familia-page .rainbow-legend .dot.cyan { background: #0891b2; }
 .familia-page .rainbow-legend .dot.blue { background: #2563eb; }
+.familia-page .rainbow-legend .dot.purple { background: #7c3aed; }
 
 .familia-page .rainbow-chart-embed .rainbow-footer {
   margin-top: var(--space-md);
