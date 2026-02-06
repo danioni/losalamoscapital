@@ -5,16 +5,22 @@ export function Hero() {
     <section className="hero-section">
       {/* Cinematic Background Layers */}
       <div className="hero-bg-layers">
-        {/* Vignette */}
+        {/* Aurora/ambient light effect */}
+        <div className="hero-aurora" />
+
+        {/* Light rays through trees */}
+        <div className="hero-rays" />
+
+        {/* Deep vignette */}
         <div className="hero-vignette" />
 
-        {/* Light flicker - golden hour shimmer */}
+        {/* Golden hour light */}
         <div className="hero-light-flicker" />
 
         {/* Film grain */}
         <div className="hero-grain" />
 
-        {/* Animated leaves */}
+        {/* Floating particles */}
         <div className="hero-leaves">
           <div className="leaf leaf-1" />
           <div className="leaf leaf-2" />
@@ -23,7 +29,8 @@ export function Hero() {
           <div className="leaf leaf-5" />
         </div>
 
-        {/* Haze bottom */}
+        {/* Haze effects */}
+        <div className="hero-haze-top" />
         <div className="hero-haze-bottom" />
       </div>
 

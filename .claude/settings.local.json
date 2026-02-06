@@ -23,7 +23,8 @@
       "Bash(git merge:*)",
       "Bash(git checkout:*)",
       "Bash(git fetch:*)",
-      "Bash(gh repo list:*)"
+      "Bash(gh repo list:*)",
+      "WebFetch(domain:www.losalamoscapital.com)"
     ]
   }
 }
