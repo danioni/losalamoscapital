@@ -117,6 +117,87 @@
   color: #1a3a2a;
 }
 
+/* Responsive PIN Gate */
+@media (max-width: 400px) {
+  .pin-gate {
+    padding: 16px;
+  }
+
+  .pin-container {
+    padding: 32px 24px;
+    border-radius: 20px;
+  }
+
+  .pin-logo {
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+  }
+
+  .pin-title {
+    font-size: 1.3rem;
+  }
+
+  .pin-subtitle {
+    font-size: 0.85rem;
+    margin-bottom: 24px;
+  }
+
+  .pin-dots {
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .pin-dot {
+    width: 14px;
+    height: 14px;
+  }
+
+  .pin-keypad {
+    gap: 10px;
+    max-width: 230px;
+  }
+
+  .pin-key {
+    width: 64px;
+    height: 64px;
+    font-size: 1.3rem;
+  }
+
+  .pin-key.action {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 340px) {
+  .pin-container {
+    padding: 24px 16px;
+  }
+
+  .pin-keypad {
+    gap: 8px;
+    max-width: 200px;
+  }
+
+  .pin-key {
+    width: 56px;
+    height: 56px;
+    font-size: 1.2rem;
+  }
+}
+
+/* Keyboard hint for desktop */
+.pin-keyboard-hint {
+  font-size: 0.75rem;
+  color: #999;
+  margin-top: 16px;
+}
+
+@media (max-width: 768px) {
+  .pin-keyboard-hint {
+    display: none;
+  }
+}
+
 .pin-error-msg {
   color: #c45c4a;
   font-size: 0.85rem;

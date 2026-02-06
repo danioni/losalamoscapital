@@ -19,6 +19,51 @@ export default function FamiliaPage() {
     }
   }, []);
 
+  // Handle keyboard input for PIN
+  useEffect(() => {
+    if (isAuthenticated) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Handle number keys (both main keyboard and numpad)
+      if (/^[0-9]$/.test(e.key)) {
+        e.preventDefault();
+        if (pin.length < 4) {
+          setPin(prev => prev + e.key);
+          setError(false);
+        }
+      }
+      // Handle backspace
+      else if (e.key === 'Backspace') {
+        e.preventDefault();
+        setPin(prev => prev.slice(0, -1));
+        setError(false);
+      }
+      // Handle delete/clear
+      else if (e.key === 'Delete' || e.key === 'Escape') {
+        e.preventDefault();
+        setPin('');
+        setError(false);
+      }
+      // Handle enter to submit
+      else if (e.key === 'Enter' && pin.length === 4) {
+        e.preventDefault();
+        if (pin === CORRECT_PIN) {
+          setIsAuthenticated(true);
+          sessionStorage.setItem('familia-auth', 'true');
+          setError(false);
+        } else {
+          setError(true);
+          setShake(true);
+          setPin('');
+          setTimeout(() => setShake(false), 500);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isAuthenticated, pin]);
+
   const handlePinSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (pin === CORRECT_PIN) {
@@ -111,6 +156,9 @@ export default function FamiliaPage() {
 
         <p className="pin-error-msg">
           {error ? 'PIN incorrecto. Intenta de nuevo.' : ''}
+        </p>
+        <p className="pin-keyboard-hint">
+          También puedes usar el teclado
         </p>
       </div>
     </div>
