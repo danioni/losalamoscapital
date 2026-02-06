@@ -308,16 +308,24 @@
   color: #9fc4a8;
 }
 
-.tesis-page .back-link {
+.tesis-page .footer-nav {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  margin-bottom: 24px;
+}
+
+.tesis-page .back-link,
+.tesis-page .next-link {
   display: inline-block;
   color: white;
   text-decoration: none;
   font-size: 0.95rem;
-  margin-bottom: 16px;
   transition: opacity 0.2s;
 }
 
-.tesis-page .back-link:hover {
+.tesis-page .back-link:hover,
+.tesis-page .next-link:hover {
   opacity: 0.8;
 }
 

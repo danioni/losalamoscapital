@@ -367,7 +367,8 @@ export default function TeslaTesisPage() {
       {/* Footer */}
       <footer className="footer">
         <div className="footer-nav">
-          <Link href="/tesis" className="back-link">← Volver a Tesis</Link>
+          <Link href="/tesis/bitcoin" className="back-link">← Bitcoin</Link>
+          <Link href="/tesis" className="next-link">Todas las Tesis →</Link>
         </div>
         <p className="company">Los Álamos Capital</p>
       </footer>
