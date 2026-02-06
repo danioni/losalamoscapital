@@ -265,6 +265,25 @@ export function AnalisisActivos() {
           Análisis comparativo de rendimiento compuesto (CAGR) de los 50 activos
           con mayor capitalización de mercado. Datos al 6 de febrero de 2026.
         </p>
+        <div
+          className="animate-fade-up animate-delay-3"
+          style={{
+            display: "inline-block",
+            marginTop: "1.5rem",
+            padding: "0.6rem 1.25rem",
+            background: "rgba(224, 122, 95, 0.08)",
+            border: "1px solid rgba(224, 122, 95, 0.2)",
+            borderRadius: "8px",
+            fontSize: "0.72rem",
+            color: "#e07a5f",
+            fontWeight: 500,
+            letterSpacing: "0.02em",
+            maxWidth: "600px",
+          }}
+        >
+          Este análisis es exclusivamente informativo y educativo. NO constituye asesoría financiera,
+          recomendación de inversión, ni oferta de valores. Los rendimientos pasados no garantizan resultados futuros.
+        </div>
       </section>
 
       {/* Key insights cards */}
@@ -679,7 +698,7 @@ export function AnalisisActivos() {
           border: "1px solid rgba(45, 106, 79, 0.2)",
           borderRadius: "12px",
           padding: "1.5rem",
-          marginBottom: "2rem",
+          marginBottom: "1.5rem",
         }}
       >
         <h4 style={{ fontFamily: "var(--font-display)", fontSize: "1rem", color: "#e8efe6", marginBottom: "0.75rem" }}>
@@ -692,11 +711,48 @@ export function AnalisisActivos() {
           <p style={{ marginBottom: "0.5rem" }}>
             <strong style={{ color: "#95d5b2" }}>Precios ajustados</strong> por splits. Los precios de IPO reflejan el valor ajustado por todas las divisiones de acciones posteriores.
           </p>
-          <p style={{ marginBottom: "0.5rem" }}>
+          <p>
             <strong style={{ color: "#95d5b2" }}>Solo apreciación de precio</strong>. No incluye dividendos reinvertidos. El retorno total sería mayor para acciones que pagan dividendos.
           </p>
+        </div>
+      </section>
+
+      {/* Legal disclaimer */}
+      <section
+        style={{
+          background: "rgba(224, 122, 95, 0.05)",
+          border: "1px solid rgba(224, 122, 95, 0.15)",
+          borderRadius: "12px",
+          padding: "1.5rem",
+          marginBottom: "2rem",
+        }}
+      >
+        <h4 style={{ fontFamily: "var(--font-display)", fontSize: "1rem", color: "#e07a5f", marginBottom: "0.75rem" }}>
+          Aviso Legal — Disclaimer
+        </h4>
+        <div style={{ fontSize: "0.75rem", color: "#8a9e93", lineHeight: 1.8 }}>
+          <p style={{ marginBottom: "0.6rem" }}>
+            <strong style={{ color: "#e07a5f" }}>Este contenido es exclusivamente informativo y educativo.</strong>{" "}
+            NO constituye asesoría financiera, recomendación de inversión, oferta de valores, servicio de gestión de activos
+            para terceros, ni ningún tipo de consejo financiero personalizado.
+          </p>
+          <p style={{ marginBottom: "0.6rem" }}>
+            Los datos presentados representan un análisis histórico de precios públicos. Los <strong style={{ color: "#e07a5f" }}>rendimientos
+            pasados no garantizan ni son indicativos de resultados futuros</strong>. Toda inversión conlleva riesgo de pérdida
+            parcial o total del capital invertido.
+          </p>
+          <p style={{ marginBottom: "0.6rem" }}>
+            La información no debe ser interpretada como una recomendación de compra o venta de ningún activo mencionado.
+            Antes de tomar cualquier decisión de inversión, consulte con un asesor financiero debidamente acreditado que
+            conozca su situación personal y tolerancia al riesgo.
+          </p>
+          <p style={{ marginBottom: "0.6rem" }}>
+            Los Álamos Capital SpA NO se encuentra regulada ni supervisada por la Comisión para el Mercado Financiero (CMF) de Chile
+            ni por ningún otro organismo regulador. No solicitamos ni aceptamos capital de terceros.
+          </p>
           <p>
-            <strong style={{ color: "#95d5b2" }}>Disclaimer</strong>: Este análisis es informativo. No constituye asesoría de inversión. Los rendimientos pasados no garantizan resultados futuros.
+            La información se proporciona &quot;tal cual&quot; sin garantías de ningún tipo respecto a su exactitud,
+            integridad o vigencia. Los precios y datos de mercado pueden contener inexactitudes y están sujetos a cambios sin previo aviso.
           </p>
         </div>
       </section>
