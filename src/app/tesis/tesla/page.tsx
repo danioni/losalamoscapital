@@ -57,8 +57,13 @@ export default function TeslaTesisPage() {
         <section>
           <h2>La Tesis</h2>
           <p className="lead">
-            Tesla tiene algo que ninguna otra empresa tiene: <strong>millones de autos
-            en las calles, recolectando datos de manejo real</strong>. Cada Tesla es un
+            Tesla tiene un <strong>posicionamiento único en el mercado de autos eléctricos</strong>.
+            No llegaron primero por casualidad — construyeron la marca, la tecnología, y la
+            infraestructura que los convirtió en el líder indiscutible del mercado.
+          </p>
+          <p className="lead">
+            Pero lo más importante es lo que están construyendo para el futuro: <strong>millones
+            de autos en las calles, recolectando datos de manejo real</strong>. Cada Tesla es un
             sensor móvil que alimenta su inteligencia artificial. Mientras más autos
             venden, más inteligente se vuelve el sistema.
           </p>
