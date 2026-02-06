@@ -339,7 +339,7 @@ function FamiliaContent() {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="https://www.blockchaincenter.net/wp-content/uploads/2025/02/rainbow_chart_10y_log.png"
+                src="/rainbow-chart.png"
                 alt="Bitcoin Rainbow Chart - Precio histórico con bandas de colores"
                 className="rainbow-image"
               />
