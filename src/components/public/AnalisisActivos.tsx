@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 interface AssetData {
   rank: number;
@@ -122,7 +122,10 @@ const ASSETS: AssetData[] = (() => {
   });
 })();
 
-type SortKey = "marketCap" | "cagrInception" | "cagr5y" | "years";
+type SortKey = "marketCap" | "cagrInception" | "cagr5y" | "years" | "name" | "sector";
+type SortDir = "asc" | "desc";
+
+const SECTORS = Array.from(new Set(ASSETS.map((a) => a.sector))).sort();
 
 function getTypeColor(type: string) {
   switch (type) {
@@ -152,27 +155,54 @@ function formatCAGR(value: number) {
 
 export function AnalisisActivos() {
   const [sortBy, setSortBy] = useState<SortKey>("marketCap");
+  const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [hoveredRow, setHoveredRow] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sectorFilter, setSectorFilter] = useState<string>("all");
 
-  const sorted = [...ASSETS].sort((a, b) => {
-    switch (sortBy) {
-      case "marketCap": return b.marketCapSort - a.marketCapSort;
-      case "cagrInception": return b.cagrInception - a.cagrInception;
-      case "cagr5y": return b.cagr5y - a.cagr5y;
-      case "years": return b.years - a.years;
-      default: return 0;
+  const handleSort = (key: SortKey) => {
+    if (sortBy === key) {
+      setSortDir((d) => (d === "desc" ? "asc" : "desc"));
+    } else {
+      setSortBy(key);
+      setSortDir("desc");
     }
-  });
+  };
+
+  const filtered = useMemo(() => {
+    let result = ASSETS;
+    if (sectorFilter !== "all") {
+      result = result.filter((a) => a.sector === sectorFilter);
+    }
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(
+        (a) =>
+          a.name.toLowerCase().includes(q) ||
+          a.ticker.toLowerCase().includes(q) ||
+          a.sector.toLowerCase().includes(q)
+      );
+    }
+    return result;
+  }, [sectorFilter, searchQuery]);
+
+  const sorted = useMemo(() => {
+    const dir = sortDir === "desc" ? 1 : -1;
+    return [...filtered].sort((a, b) => {
+      switch (sortBy) {
+        case "marketCap": return (b.marketCapSort - a.marketCapSort) * dir;
+        case "cagrInception": return (b.cagrInception - a.cagrInception) * dir;
+        case "cagr5y": return (b.cagr5y - a.cagr5y) * dir;
+        case "years": return (b.years - a.years) * dir;
+        case "name": return a.name.localeCompare(b.name) * dir;
+        case "sector": return a.sector.localeCompare(b.sector) * dir;
+        default: return 0;
+      }
+    });
+  }, [filtered, sortBy, sortDir]);
 
   const topCAGR = [...ASSETS].sort((a, b) => b.cagrInception - a.cagrInception).slice(0, 5);
   const top5y = [...ASSETS].sort((a, b) => b.cagr5y - a.cagr5y).slice(0, 5);
-
-  const sortButtons: { key: SortKey; label: string }[] = [
-    { key: "marketCap", label: "Market Cap" },
-    { key: "cagrInception", label: "CAGR Histórico" },
-    { key: "cagr5y", label: "CAGR 5 Años" },
-    { key: "years", label: "Antigüedad" },
-  ];
 
   return (
     <div>
@@ -383,58 +413,135 @@ export function AnalisisActivos() {
 
       {/* Full table */}
       <section style={{ marginBottom: "3rem" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem", flexWrap: "wrap", gap: "0.75rem" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem", flexWrap: "wrap", gap: "0.75rem" }}>
           <h3 style={{ fontFamily: "var(--font-display)", fontSize: "1.3rem", color: "#e8efe6" }}>
             Tabla Completa
           </h3>
-          <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-            {sortButtons.map((btn) => (
-              <button
-                key={btn.key}
-                onClick={() => setSortBy(btn.key)}
-                style={{
-                  padding: "0.35rem 0.85rem",
-                  borderRadius: "100px",
-                  border: sortBy === btn.key ? "1px solid #52b788" : "1px solid rgba(45, 106, 79, 0.2)",
-                  background: sortBy === btn.key ? "rgba(82, 183, 136, 0.15)" : "transparent",
-                  color: sortBy === btn.key ? "#95d5b2" : "#8a9e93",
-                  fontSize: "0.75rem",
-                  fontWeight: 500,
-                  cursor: "pointer",
-                  transition: "all 0.2s",
-                  letterSpacing: "0.02em",
-                }}
-              >
-                {btn.label}
-              </button>
-            ))}
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.72rem", color: "#5a6e63" }}>
+            {sorted.length} de {ASSETS.length} activos
+          </span>
+        </div>
+
+        {/* Search & Filter bar */}
+        <div style={{ display: "flex", gap: "0.75rem", marginBottom: "1rem", flexWrap: "wrap", alignItems: "center" }}>
+          <div style={{ position: "relative", flex: "1 1 250px", maxWidth: "350px" }}>
+            <span style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", color: "#5a6e63", fontSize: "0.8rem", pointerEvents: "none" }}>
+              &#x1F50D;
+            </span>
+            <input
+              type="text"
+              placeholder="Buscar activo, ticker o sector..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "0.5rem 0.75rem 0.5rem 2.25rem",
+                background: "#111a16",
+                border: "1px solid rgba(45, 106, 79, 0.25)",
+                borderRadius: "8px",
+                color: "#e8efe6",
+                fontSize: "0.8rem",
+                outline: "none",
+                fontFamily: "inherit",
+              }}
+            />
           </div>
+          <select
+            value={sectorFilter}
+            onChange={(e) => setSectorFilter(e.target.value)}
+            style={{
+              padding: "0.5rem 0.75rem",
+              background: "#111a16",
+              border: "1px solid rgba(45, 106, 79, 0.25)",
+              borderRadius: "8px",
+              color: sectorFilter === "all" ? "#8a9e93" : "#95d5b2",
+              fontSize: "0.8rem",
+              cursor: "pointer",
+              fontFamily: "inherit",
+              minWidth: "160px",
+            }}
+          >
+            <option value="all">Todos los sectores</option>
+            {SECTORS.map((s) => (
+              <option key={s} value={s}>{s}</option>
+            ))}
+          </select>
+          {(searchQuery || sectorFilter !== "all") && (
+            <button
+              onClick={() => { setSearchQuery(""); setSectorFilter("all"); }}
+              style={{
+                padding: "0.45rem 0.85rem",
+                borderRadius: "8px",
+                border: "1px solid rgba(224, 122, 95, 0.3)",
+                background: "rgba(224, 122, 95, 0.1)",
+                color: "#e07a5f",
+                fontSize: "0.75rem",
+                fontWeight: 500,
+                cursor: "pointer",
+                transition: "all 0.2s",
+              }}
+            >
+              Limpiar filtros
+            </button>
+          )}
         </div>
 
         <div style={{ overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.82rem" }}>
             <thead>
               <tr style={{ borderBottom: "1px solid rgba(45, 106, 79, 0.3)" }}>
-                {["#", "Activo", "Sector", "Market Cap", "IPO / Inicio", "Precio Inicio", "Precio Actual", "Años", "CAGR Histórico", "CAGR 5 Años"].map((h) => (
+                {([
+                  { label: "#", key: null, align: "left" },
+                  { label: "Activo", key: "name" as SortKey, align: "left" },
+                  { label: "Sector", key: "sector" as SortKey, align: "left" },
+                  { label: "Market Cap", key: "marketCap" as SortKey, align: "right" },
+                  { label: "IPO / Inicio", key: null, align: "right" },
+                  { label: "Precio Inicio", key: null, align: "right" },
+                  { label: "Precio Actual", key: null, align: "right" },
+                  { label: "Años", key: "years" as SortKey, align: "right" },
+                  { label: "CAGR Histórico", key: "cagrInception" as SortKey, align: "right" },
+                  { label: "CAGR 5 Años", key: "cagr5y" as SortKey, align: "right" },
+                ] as const).map((col) => (
                   <th
-                    key={h}
+                    key={col.label}
+                    onClick={col.key ? () => handleSort(col.key!) : undefined}
                     style={{
                       padding: "0.75rem 0.5rem",
-                      textAlign: h === "#" || h === "Activo" || h === "Sector" ? "left" : "right",
-                      color: "#5a6e63",
+                      textAlign: col.align as "left" | "right",
+                      color: sortBy === col.key ? "#95d5b2" : "#5a6e63",
                       fontWeight: 600,
                       fontSize: "0.7rem",
                       textTransform: "uppercase",
                       letterSpacing: "0.1em",
                       whiteSpace: "nowrap",
+                      cursor: col.key ? "pointer" : "default",
+                      userSelect: "none",
+                      transition: "color 0.2s",
                     }}
                   >
-                    {h}
+                    {col.label}
+                    {col.key && sortBy === col.key && (
+                      <span style={{ marginLeft: "0.3rem", fontSize: "0.6rem" }}>
+                        {sortDir === "desc" ? "\u25BC" : "\u25B2"}
+                      </span>
+                    )}
+                    {col.key && sortBy !== col.key && (
+                      <span style={{ marginLeft: "0.3rem", fontSize: "0.6rem", opacity: 0.3 }}>
+                        {"\u25BC"}
+                      </span>
+                    )}
                   </th>
                 ))}
               </tr>
             </thead>
             <tbody>
+              {sorted.length === 0 && (
+                <tr>
+                  <td colSpan={10} style={{ padding: "2rem", textAlign: "center", color: "#5a6e63", fontStyle: "italic" }}>
+                    No se encontraron activos con los filtros seleccionados.
+                  </td>
+                </tr>
+              )}
               {sorted.map((asset, i) => {
                 const cagrI = formatCAGR(asset.cagrInception);
                 const cagr5 = formatCAGR(asset.cagr5y);
@@ -461,6 +568,7 @@ export function AnalisisActivos() {
                     </td>
                     <td style={{ padding: "0.65rem 0.5rem" }}>
                       <span
+                        onClick={() => setSectorFilter(asset.sector)}
                         style={{
                           fontSize: "0.65rem",
                           padding: "0.15rem 0.5rem",
@@ -469,6 +577,8 @@ export function AnalisisActivos() {
                           color: getTypeColor(asset.type),
                           background: `${getTypeColor(asset.type)}15`,
                           whiteSpace: "nowrap",
+                          cursor: "pointer",
+                          transition: "all 0.2s",
                         }}
                       >
                         {asset.sector}
