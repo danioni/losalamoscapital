@@ -754,3 +754,147 @@
     text-align: center;
   }
 }
+
+/* Rainbow Chart Styles */
+.familia-page .rainbow-chart {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 32px;
+  margin: 40px 0;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+.familia-page .rainbow-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.familia-page .rainbow-title {
+  display: block;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.3rem;
+  color: var(--forest);
+  margin-bottom: 4px;
+}
+
+.familia-page .rainbow-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
+.familia-page .rainbow-bands {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.familia-page .rainbow-band {
+  padding: 12px 16px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  transition: transform 0.2s;
+}
+
+.familia-page .rainbow-band:hover {
+  transform: scaleX(1.01);
+}
+
+.familia-page .rainbow-band.fire {
+  background: linear-gradient(90deg, #7c2d12, #dc2626);
+}
+
+.familia-page .rainbow-band.red {
+  background: linear-gradient(90deg, #dc2626, #ef4444);
+}
+
+.familia-page .rainbow-band.orange {
+  background: linear-gradient(90deg, #ea580c, #f97316);
+}
+
+.familia-page .rainbow-band.yellow {
+  background: linear-gradient(90deg, #ca8a04, #eab308);
+  color: #1a1a1a;
+  text-shadow: none;
+}
+
+.familia-page .rainbow-band.lightgreen {
+  background: linear-gradient(90deg, #65a30d, #84cc16);
+  color: #1a1a1a;
+  text-shadow: none;
+}
+
+.familia-page .rainbow-band.green {
+  background: linear-gradient(90deg, #16a34a, #22c55e);
+}
+
+.familia-page .rainbow-band.cyan {
+  background: linear-gradient(90deg, #0891b2, #06b6d4);
+}
+
+.familia-page .rainbow-band.blue {
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+}
+
+.familia-page .rainbow-band.darkblue {
+  background: linear-gradient(90deg, #1e3a8a, #1d4ed8);
+}
+
+.familia-page .rainbow-band.current {
+  padding: 16px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  animation: pulse-glow 2s ease-in-out infinite;
+  position: relative;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: inset 0 0 20px rgba(255,255,255,0.1);
+  }
+  50% {
+    box-shadow: inset 0 0 30px rgba(255,255,255,0.25);
+  }
+}
+
+.familia-page .rainbow-footer {
+  margin-top: 20px;
+}
+
+.familia-page .rainbow-note {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.familia-page .rainbow-note strong {
+  color: #93c5fd;
+}
+
+@media (max-width: 640px) {
+  .familia-page .rainbow-chart {
+    padding: 20px 16px;
+  }
+
+  .familia-page .rainbow-band {
+    padding: 10px 12px;
+    font-size: 0.75rem;
+  }
+
+  .familia-page .rainbow-band.current {
+    padding: 12px;
+    font-size: 0.8rem;
+  }
+
+  .familia-page .rainbow-note {
+    padding: 16px;
+    font-size: 0.85rem;
+  }
+}

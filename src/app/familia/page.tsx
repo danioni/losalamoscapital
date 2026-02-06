@@ -322,6 +322,52 @@ function FamiliaContent() {
             <p style={{ fontSize: '0.9rem', color: '#6b6560', marginBottom: 0 }}>El club de los &quot;whole-coiners&quot; (personas con 1+ BTC) es más exclusivo que el club de millonarios.</p>
           </div>
 
+          <h3>El Rainbow Chart: siempre sube, y ahora está en descuento</h3>
+          <p>El &quot;Rainbow Chart&quot; es una herramienta visual que muestra el precio histórico de Bitcoin en bandas de colores. <span className="highlight">En 16 años de historia, Bitcoin SIEMPRE ha subido cuando miras períodos de 4+ años.</span> Las bandas muestran si está &quot;caro&quot; o &quot;barato&quot; relativo a su tendencia histórica.</p>
+
+          {/* Rainbow Chart Visual */}
+          <div className="rainbow-chart">
+            <div className="rainbow-header">
+              <span className="rainbow-title">Bitcoin Rainbow Chart</span>
+              <span className="rainbow-subtitle">Precio histórico vs. bandas de valoración</span>
+            </div>
+            <div className="rainbow-bands">
+              <div className="rainbow-band fire"><span>🔥 Burbuja máxima</span></div>
+              <div className="rainbow-band red"><span>FOMO intenso</span></div>
+              <div className="rainbow-band orange"><span>Vendedores tomando ganancias</span></div>
+              <div className="rainbow-band yellow"><span>¿Está caro?</span></div>
+              <div className="rainbow-band lightgreen"><span>HODL</span></div>
+              <div className="rainbow-band green"><span>Todavía barato</span></div>
+              <div className="rainbow-band cyan"><span>Acumular</span></div>
+              <div className="rainbow-band blue"><span>COMPRAR</span></div>
+              <div className="rainbow-band darkblue current"><span>🎯 DESCUENTO MÁXIMO ← Estamos aquí (Feb 2026)</span></div>
+            </div>
+            <div className="rainbow-footer">
+              <div className="rainbow-note">
+                <strong>Lectura actual:</strong> Bitcoin está en la banda azul oscuro — &quot;Basically a Fire Sale&quot; (Liquidación total).
+                Históricamente, comprar en esta zona ha generado retornos de <strong>300-1000%</strong> en los siguientes 2-3 años.
+              </div>
+            </div>
+          </div>
+
+          <div className="problem-card" style={{ borderLeftColor: '#3b82f6' }}>
+            <div className="stat">
+              <div className="stat-number" style={{ color: '#3b82f6' }}>~$97K</div>
+              <div className="stat-text"><strong>Precio actual de Bitcoin</strong> — en zona de &quot;descuento extremo&quot; según el Rainbow Chart.</div>
+            </div>
+            <div className="stat">
+              <div className="stat-number" style={{ color: '#22c55e' }}>$300K+</div>
+              <div className="stat-text"><strong>Precio proyectado</strong> para cuando Bitcoin entre en zona amarilla/naranja (1-2 años).</div>
+            </div>
+          </div>
+
+          <p>Mira la historia: cada vez que Bitcoin ha estado en la zona azul (como ahora), los que compraron y esperaron 3-4 años multiplicaron su inversión. <span className="highlight">No es &quot;timing perfecto&quot; — es que el activo más escaso del mundo sigue siendo incomprendido por la mayoría.</span></p>
+
+          <div className="solution-card" style={{ textAlign: 'center' }}>
+            <p style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '1.1rem', color: '#1a3a2a', marginBottom: '8px' }}>El mejor momento para plantar un árbol fue hace 20 años.</p>
+            <p style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '1.3rem', color: '#2d5a3f', fontStyle: 'italic', marginBottom: 0 }}>El segundo mejor momento es hoy.</p>
+          </div>
+
           <h3>¿Cuánto podría crecer la herencia?</h3>
           <p>Con una inversión de $150 millones del tata:</p>
 
