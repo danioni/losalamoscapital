@@ -28,8 +28,24 @@ export default function FamiliaPage() {
       if (/^[0-9]$/.test(e.key)) {
         e.preventDefault();
         if (pin.length < 4) {
-          setPin(prev => prev + e.key);
+          const newPin = pin + e.key;
+          setPin(newPin);
           setError(false);
+
+          // Auto-submit when 4 digits entered
+          if (newPin.length === 4) {
+            if (newPin === CORRECT_PIN) {
+              setIsAuthenticated(true);
+              sessionStorage.setItem('familia-auth', 'true');
+            } else {
+              setError(true);
+              setShake(true);
+              setTimeout(() => {
+                setPin('');
+                setShake(false);
+              }, 500);
+            }
+          }
         }
       }
       // Handle backspace
@@ -43,20 +59,6 @@ export default function FamiliaPage() {
         e.preventDefault();
         setPin('');
         setError(false);
-      }
-      // Handle enter to submit
-      else if (e.key === 'Enter' && pin.length === 4) {
-        e.preventDefault();
-        if (pin === CORRECT_PIN) {
-          setIsAuthenticated(true);
-          sessionStorage.setItem('familia-auth', 'true');
-          setError(false);
-        } else {
-          setError(true);
-          setShake(true);
-          setPin('');
-          setTimeout(() => setShake(false), 500);
-        }
       }
     };
 
@@ -80,8 +82,24 @@ export default function FamiliaPage() {
 
   const handleDigitClick = (digit: string) => {
     if (pin.length < 4) {
-      setPin(prev => prev + digit);
+      const newPin = pin + digit;
+      setPin(newPin);
       setError(false);
+
+      // Auto-submit when 4 digits entered
+      if (newPin.length === 4) {
+        if (newPin === CORRECT_PIN) {
+          setIsAuthenticated(true);
+          sessionStorage.setItem('familia-auth', 'true');
+        } else {
+          setError(true);
+          setShake(true);
+          setTimeout(() => {
+            setPin('');
+            setShake(false);
+          }, 500);
+        }
+      }
     }
   };
 
