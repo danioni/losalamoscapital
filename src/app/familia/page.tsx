@@ -324,116 +324,19 @@ function FamiliaContent() {
           <h3>El Rainbow Chart: siempre sube, y ahora está en oportunidad</h3>
           <p>El &quot;Rainbow Chart&quot; es una herramienta visual que muestra el precio histórico de Bitcoin en bandas de colores. <span className="highlight">En 16 años de historia, Bitcoin SIEMPRE ha subido cuando miras períodos de 4+ años.</span> Las bandas muestran si está &quot;caro&quot; o &quot;barato&quot; relativo a su tendencia histórica.</p>
 
-          {/* Rainbow Chart - Custom built with SVG */}
-          <div className="rainbow-chart-custom">
+          {/* Rainbow Chart - Embedded from blockchaincenter.net */}
+          <div className="rainbow-chart-embed">
             <div className="rainbow-header">
               <span className="rainbow-title">Bitcoin Rainbow Chart</span>
-              <span className="rainbow-subtitle">Precio histórico en escala logarítmica (2012-2026)</span>
+              <span className="rainbow-subtitle">Precio histórico en escala logarítmica</span>
             </div>
 
-            <div className="rainbow-visual">
-              {/* Y-axis labels */}
-              <div className="rainbow-y-axis">
-                <span>$1M</span>
-                <span>$100K</span>
-                <span>$10K</span>
-                <span>$1K</span>
-                <span>$100</span>
-              </div>
-
-              {/* Chart area with rainbow bands as SVG */}
-              <div className="rainbow-chart-area">
-                <svg viewBox="0 0 400 280" preserveAspectRatio="none" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
-                  {/* Rainbow bands - logarithmic growth pattern */}
-                  <defs>
-                    <linearGradient id="bandFire" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#991b1b" />
-                      <stop offset="100%" stopColor="#b91c1c" />
-                    </linearGradient>
-                    <linearGradient id="bandRed" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#b91c1c" />
-                      <stop offset="100%" stopColor="#dc2626" />
-                    </linearGradient>
-                    <linearGradient id="bandOrange" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#dc2626" />
-                      <stop offset="100%" stopColor="#ea580c" />
-                    </linearGradient>
-                    <linearGradient id="bandYellow" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#ea580c" />
-                      <stop offset="100%" stopColor="#ca8a04" />
-                    </linearGradient>
-                    <linearGradient id="bandGreen" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#ca8a04" />
-                      <stop offset="100%" stopColor="#16a34a" />
-                    </linearGradient>
-                    <linearGradient id="bandCyan" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#16a34a" />
-                      <stop offset="100%" stopColor="#0891b2" />
-                    </linearGradient>
-                    <linearGradient id="bandBlue" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#0891b2" />
-                      <stop offset="100%" stopColor="#2563eb" />
-                    </linearGradient>
-                    <linearGradient id="bandPurple" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#2563eb" />
-                      <stop offset="100%" stopColor="#7c3aed" />
-                    </linearGradient>
-                  </defs>
-
-                  {/* Band paths - curved rainbow bands that rise over time */}
-                  <path d="M0 280 Q100 240 200 140 T400 0 L400 0 L0 180 Z" fill="url(#bandFire)" opacity="0.95" />
-                  <path d="M0 280 Q100 250 200 160 T400 30 L400 0 Q300 100 200 140 Q100 240 0 280" fill="url(#bandRed)" opacity="0.95" />
-                  <path d="M0 280 Q100 260 200 180 T400 60 L400 30 Q300 120 200 160 Q100 250 0 280" fill="url(#bandOrange)" opacity="0.95" />
-                  <path d="M0 280 Q100 268 200 200 T400 90 L400 60 Q300 140 200 180 Q100 260 0 280" fill="url(#bandYellow)" opacity="0.95" />
-                  <path d="M0 280 Q100 274 200 218 T400 120 L400 90 Q300 160 200 200 Q100 268 0 280" fill="url(#bandGreen)" opacity="0.95" />
-                  <path d="M0 280 Q100 278 200 235 T400 150 L400 120 Q300 180 200 218 Q100 274 0 280" fill="url(#bandCyan)" opacity="0.95" />
-                  <path d="M0 280 Q100 280 200 250 T400 180 L400 150 Q300 200 200 235 Q100 278 0 280" fill="url(#bandBlue)" opacity="0.95" />
-                  <path d="M0 280 Q100 280 200 265 T400 210 L400 180 Q300 220 200 250 Q100 280 0 280" fill="url(#bandPurple)" opacity="0.95" />
-
-                  {/* Price line - Bitcoin historical price pattern */}
-                  <path
-                    d="M 5 275
-                       C 15 270, 25 260, 35 255
-                       C 45 245, 50 220, 55 235
-                       C 60 250, 65 245, 75 230
-                       C 85 200, 95 170, 105 190
-                       C 115 210, 120 195, 130 175
-                       C 140 150, 150 125, 160 145
-                       C 170 165, 175 150, 185 140
-                       C 195 125, 205 105, 215 120
-                       C 225 140, 235 125, 250 115
-                       C 265 100, 280 80, 295 95
-                       C 310 115, 320 105, 335 100
-                       C 350 90, 365 100, 380 115
-                       C 390 130, 395 145, 400 155"
-                    fill="none"
-                    stroke="#1a1a1a"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-
-                  {/* Current price dot */}
-                  <circle cx="380" cy="115" r="6" fill="white" stroke="#1a1a1a" strokeWidth="2.5" />
-                </svg>
-
-                {/* Current price label */}
-                <div className="current-price-marker" style={{ right: '3%', bottom: '55%' }}>
-                  <div className="marker-label">~$65K<br/>Hoy</div>
-                </div>
-              </div>
-
-              {/* X-axis labels */}
-              <div className="rainbow-x-axis">
-                <span>2012</span>
-                <span>2014</span>
-                <span>2016</span>
-                <span>2018</span>
-                <span>2020</span>
-                <span>2022</span>
-                <span>2024</span>
-                <span>2026</span>
-              </div>
+            <div className="rainbow-iframe-wrapper">
+              <iframe
+                src="https://www.blockchaincenter.net/en/bitcoin-rainbow-chart/"
+                className="rainbow-iframe-full"
+                title="Bitcoin Rainbow Chart"
+              />
             </div>
 
             <div className="rainbow-legend">
