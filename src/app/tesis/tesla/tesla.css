@@ -175,6 +175,32 @@
 }
 
 /* ========================================
+   Margins Box
+   ======================================== */
+.tesla-tesis .margins-box {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  margin-top: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  border-left: 4px solid #22c55e;
+}
+
+.tesla-tesis .margins-box p {
+  font-size: 0.95rem;
+  margin-bottom: 16px;
+  line-height: 1.7;
+}
+
+.tesla-tesis .margins-box p:last-child {
+  margin-bottom: 0;
+}
+
+.tesla-tesis .margins-box strong {
+  color: #1a1a18;
+}
+
+/* ========================================
    Business Grid
    ======================================== */
 .tesla-tesis .business-grid {

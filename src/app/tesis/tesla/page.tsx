@@ -147,6 +147,37 @@ export default function TeslaTesisPage() {
 
         <div className="divider">◆ ◆ ◆</div>
 
+        {/* Márgenes */}
+        <section>
+          <h2>Márgenes Superiores</h2>
+
+          <p>
+            Tesla gana más dinero por cada auto que vende que casi cualquier otro
+            fabricante. ¿Por qué? Porque <strong>no depende de otros</strong>.
+          </p>
+
+          <div className="margins-box">
+            <p>
+              La mayoría de los fabricantes de autos compran miles de piezas de
+              cientos de proveedores. Cada proveedor quiere su margen de ganancia.
+              Tesla diseña y fabrica sus propias baterías, motores, software, y
+              chips — las partes más valiosas del auto.
+            </p>
+            <p>
+              <strong>Resultado:</strong> mientras otros fabricantes de autos
+              tienen márgenes de 5-10%, Tesla ha llegado a tener márgenes sobre 20%.
+              Menos intermediarios = más ganancia por auto.
+            </p>
+            <p>
+              Esto también significa que pueden bajar precios cuando quieren
+              (para ganar mercado) y seguir siendo rentables. La competencia no
+              tiene ese lujo.
+            </p>
+          </div>
+        </section>
+
+        <div className="divider">◆ ◆ ◆</div>
+
         {/* El Negocio Hoy */}
         <section>
           <h2>El Negocio Hoy</h2>
