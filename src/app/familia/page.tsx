@@ -191,7 +191,7 @@ function FamiliaContent() {
         <div className="hero-content">
           <div className="tagline">Donde hay álamos, hay raíces</div>
           <h1>Los Álamos Capital</h1>
-          <div className="subtitle">La herencia del tata, trabajando para las próximas generaciones</div>
+          <div className="subtitle">Nuestro capital familiar, trabajando para las próximas generaciones</div>
           <div className="for-mama">Preparado con cariño para María Henríquez</div>
         </div>
       </div>
@@ -209,7 +209,7 @@ function FamiliaContent() {
 
           <p>Las vueltas son las que dejan. No el sueldo, no el ahorro quieto en el banco — <span className="highlight">las vueltas.</span> Poner la plata a trabajar, que genere más, y volver a invertir. Eso hizo el tata toda su vida.</p>
           <p>Y nos dejó dos encargos: cuidar a la abuela, y cuidar lo que construyó. Los Álamos Capital existe para cumplir los dos.</p>
-          <p>Ahora esa herencia está en nuestras manos. Y la pregunta es simple: ¿qué haría el tata? La respuesta ya la sabemos — lo mismo que hizo siempre. Ponerla a trabajar, con cabeza, con paciencia, pensando en el largo plazo. Para la abuela, para ti, para el Lucianito, para los que vengan.</p>
+          <p>Ahora ese capital está en nuestras manos. Y la pregunta es simple: ¿qué haría el tata? La respuesta ya la sabemos — lo mismo que hizo siempre. Ponerlo a trabajar, con cabeza, con paciencia, pensando en el largo plazo. Para la abuela, para ti, para el Lucianito, para los que vengan.</p>
         </section>
 
         <div className="divider">· · ·</div>
@@ -218,7 +218,7 @@ function FamiliaContent() {
         <section>
           <h2>Los Álamos Capital</h2>
           <p>Los álamos tienen raíces profundas — se sostienen en las tormentas y crecen alto cuando les das tiempo. Por eso elegimos ese nombre para nuestra empresa familiar: tuya y mía, 50/50, transparente, profesional.</p>
-          <p>Pero primero, ¿por qué mover la plata? Porque la herencia del tata está en un fondo mutuo de Itaú que en realidad <strong>pierde valor</strong>:</p>
+          <p>Pero primero, ¿por qué mover la plata? Porque parte del capital estaba en un fondo mutuo de Itaú que en realidad <strong>pierde valor</strong>:</p>
 
           <div className="problem-card">
             <div className="stat">
@@ -231,7 +231,7 @@ function FamiliaContent() {
             </div>
             <div className="stat">
               <div className="stat-number" style={{ color: '#c45c4a' }}>-1%</div>
-              <div className="stat-text"><strong>Resultado real</strong> — la herencia se achica cada año sin que nadie la toque.</div>
+              <div className="stat-text"><strong>Resultado real</strong> — el capital se achica cada año sin que nadie lo toque.</div>
             </div>
           </div>
 
@@ -368,8 +368,8 @@ function FamiliaContent() {
             <p style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '1.3rem', color: '#2d5a3f', fontStyle: 'italic', marginBottom: 0 }}>El segundo mejor momento es hoy.</p>
           </div>
 
-          <h3>¿Cuánto podría crecer la herencia?</h3>
-          <p>Con una inversión de $150 millones del tata:</p>
+          <h3>¿Cuánto podría crecer el capital?</h3>
+          <p>Con el capital actual de Los Álamos:</p>
 
           <div className="scenarios">
             <div className="scenario green">
@@ -424,7 +424,7 @@ function FamiliaContent() {
                 <div className="bbd-connector"></div>
               </div>
               <div className="bbd-content">
-                <h4>Invertimos la herencia</h4>
+                <h4>Invertimos el capital</h4>
                 <p>Ejemplo: 2 Bitcoin a $65,000 USD cada uno = $130,000 USD total.</p>
               </div>
             </div>
@@ -507,7 +507,7 @@ function FamiliaContent() {
             </div>
           </div>
 
-          <p><strong>Impuestos:</strong> El impuesto a la herencia ya se pagó cuando recibiste la plata del tata. El capital está limpio. Y como la estrategia es no vender sino pedir prestado, minimizamos impuestos futuros.</p>
+          <p><strong>Impuestos:</strong> El capital está limpio y documentado. Como la estrategia es no vender sino pedir prestado contra los activos, minimizamos impuestos futuros.</p>
 
           <div className="need-cards">
             <div className="need-card">
