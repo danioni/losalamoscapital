@@ -1,8 +1,44 @@
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="32" height="32" rx="6" fill="#0a0f0d"/>
-  <path d="M16 4 C12.4 9.3, 7.1 12.4, 7.1 19.5 C7.1 24.8, 11.3 28, 16 28 C20.7 28, 24.9 24.8, 24.9 19.5 C24.9 12.4, 19.6 9.3, 16 4Z" fill="none" stroke="#2d6a4f" stroke-width="1.5"/>
-  <path d="M16 7.1 C13.5 11.5, 9.5 14.2, 9.5 19.5 C9.5 23, 12.4 25.8, 16 25.8 C19.6 25.8, 22.5 23, 22.5 19.5 C22.5 14.2, 18.5 11.5, 16 7.1Z" fill="rgba(45,106,79,0.3)" stroke="#40916c" stroke-width="1"/>
-  <line x1="16" y1="12.4" x2="16" y2="24.9" stroke="#52b788" stroke-width="1" opacity="0.7"/>
-  <line x1="12.4" y1="17.8" x2="16" y2="14.2" stroke="#52b788" stroke-width="0.8" opacity="0.5"/>
-  <line x1="19.6" y1="18.7" x2="16" y2="15.1" stroke="#52b788" stroke-width="0.8" opacity="0.5"/>
+  <!-- Background with subtle gradient -->
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0d1912"/>
+      <stop offset="100%" stop-color="#0a0f0d"/>
+    </linearGradient>
+    <linearGradient id="groundGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1b4332"/>
+      <stop offset="100%" stop-color="#0d1912"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="32" height="32" rx="6" fill="url(#bgGrad)"/>
+
+  <!-- Ground/horizon line -->
+  <path d="M0 24 Q8 22, 16 23 Q24 24, 32 22 L32 32 L0 32 Z" fill="url(#groundGrad)" opacity="0.6"/>
+
+  <!-- Row of stylized poplar trees (álamos) - characteristic tall narrow shape -->
+  <!-- Tree 1 - far left, small -->
+  <path d="M5 24 L5 14 Q5 10, 6 8 Q7 10, 7 14 L7 24 Z" fill="#2d6a4f" opacity="0.5"/>
+
+  <!-- Tree 2 - left -->
+  <path d="M9 24 L9 11 Q9 6, 10.5 4 Q12 6, 12 11 L12 24 Z" fill="#2d6a4f" opacity="0.7"/>
+
+  <!-- Tree 3 - center left, tallest -->
+  <path d="M13 24 L13 8 Q13 3, 15 2 Q17 3, 17 8 L17 24 Z" fill="#40916c"/>
+
+  <!-- Tree 4 - center right -->
+  <path d="M18 24 L18 9 Q18 4, 19.5 3 Q21 4, 21 9 L21 24 Z" fill="#2d6a4f" opacity="0.8"/>
+
+  <!-- Tree 5 - right -->
+  <path d="M22 24 L22 12 Q22 7, 23.5 5 Q25 7, 25 12 L25 24 Z" fill="#2d6a4f" opacity="0.6"/>
+
+  <!-- Tree 6 - far right, small -->
+  <path d="M26 24 L26 15 Q26 11, 27 9 Q28 11, 28 15 L28 24 Z" fill="#2d6a4f" opacity="0.4"/>
+
+  <!-- Subtle light glow behind center trees -->
+  <ellipse cx="16" cy="20" rx="6" ry="4" fill="#52b788" opacity="0.15"/>
+
+  <!-- Small accent - distant house silhouette -->
+  <rect x="14" y="22" width="4" height="2.5" fill="#1b4332" opacity="0.5"/>
+  <path d="M13.5 22 L16 20 L18.5 22 Z" fill="#1b4332" opacity="0.5"/>
 </svg>
