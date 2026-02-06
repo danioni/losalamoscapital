@@ -1171,24 +1171,44 @@
   color: var(--text-muted);
 }
 
-/* Wrapper to crop the iframe - hide title and legend from source */
-.familia-page .rainbow-iframe-wrapper {
+/* Image with link to interactive chart */
+.familia-page .rainbow-image-link {
+  display: block;
   position: relative;
   width: 100%;
-  height: 450px;
-  overflow: hidden;
   border-radius: var(--radius-md);
+  overflow: hidden;
   background: #f8f9fa;
 }
 
-.familia-page .rainbow-iframe-full {
-  position: absolute;
+.familia-page .rainbow-image {
   width: 100%;
-  height: 800px;
-  border: none;
-  /* Crop: move up to hide title, the wrapper clips the bottom legend */
-  top: -120px;
+  height: auto;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.familia-page .rainbow-image-link:hover .rainbow-image {
+  transform: scale(1.02);
+}
+
+.familia-page .rainbow-image-overlay {
+  position: absolute;
+  bottom: 0;
   left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+  color: white;
+  padding: var(--space-lg) var(--space-md) var(--space-md);
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.familia-page .rainbow-image-link:hover .rainbow-image-overlay {
+  opacity: 1;
 }
 
 .familia-page .rainbow-chart-embed .rainbow-legend {
@@ -1252,15 +1272,6 @@
 @media (max-width: 640px) {
   .familia-page .rainbow-chart-embed { padding: var(--space-md); }
 
-  .familia-page .rainbow-iframe-wrapper {
-    height: 320px;
-  }
-
-  .familia-page .rainbow-iframe-full {
-    height: 600px;
-    top: -90px;
-  }
-
   .familia-page .rainbow-chart-embed .rainbow-legend {
     gap: var(--space-xs) var(--space-sm);
     padding: var(--space-sm);
@@ -1273,5 +1284,10 @@
   .familia-page .rainbow-chart-embed .dot {
     width: 10px;
     height: 10px;
+  }
+
+  .familia-page .rainbow-image-overlay {
+    opacity: 1;
+    font-size: 0.75rem;
   }
 }

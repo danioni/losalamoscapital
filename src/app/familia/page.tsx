@@ -324,20 +324,29 @@ function FamiliaContent() {
           <h3>El Rainbow Chart: siempre sube, y ahora está en oportunidad</h3>
           <p>El &quot;Rainbow Chart&quot; es una herramienta visual que muestra el precio histórico de Bitcoin en bandas de colores. <span className="highlight">En 16 años de historia, Bitcoin SIEMPRE ha subido cuando miras períodos de 4+ años.</span> Las bandas muestran si está &quot;caro&quot; o &quot;barato&quot; relativo a su tendencia histórica.</p>
 
-          {/* Rainbow Chart - Embedded from blockchaincenter.net */}
+          {/* Rainbow Chart - Image link to source */}
           <div className="rainbow-chart-embed">
             <div className="rainbow-header">
               <span className="rainbow-title">Bitcoin Rainbow Chart</span>
               <span className="rainbow-subtitle">Precio histórico en escala logarítmica</span>
             </div>
 
-            <div className="rainbow-iframe-wrapper">
-              <iframe
-                src="https://www.blockchaincenter.net/en/bitcoin-rainbow-chart/"
-                className="rainbow-iframe-full"
-                title="Bitcoin Rainbow Chart"
+            <a
+              href="https://www.blockchaincenter.net/en/bitcoin-rainbow-chart/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rainbow-image-link"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://www.blockchaincenter.net/wp-content/uploads/2025/02/rainbow_chart_10y_log.png"
+                alt="Bitcoin Rainbow Chart - Precio histórico con bandas de colores"
+                className="rainbow-image"
               />
-            </div>
+              <span className="rainbow-image-overlay">
+                Ver gráfico interactivo →
+              </span>
+            </a>
 
             <div className="rainbow-legend">
               <div className="legend-item"><span className="dot fire"></span>Burbuja máxima</div>
