@@ -272,6 +272,56 @@ function FamiliaContent() {
             </div>
           </div>
 
+          <h3>Lo más escaso que existe</h3>
+          <p>Para entender Bitcoin, hay que entender la escasez. <span className="highlight">Solo existirán 21 millones de Bitcoin. Punto.</span> No 21 millones &quot;por ahora&quot; — 21 millones para siempre. Es matemáticamente imposible crear más.</p>
+
+          <div className="solution-card">
+            <div className="stat">
+              <div className="stat-number" style={{ color: '#c5a55a' }}>59M+</div>
+              <div className="stat-text"><strong>Millonarios en dólares</strong> en el mundo hoy. Y creciendo cada año.</div>
+            </div>
+            <div className="stat">
+              <div className="stat-number" style={{ color: '#1a3a2a' }}>21M</div>
+              <div className="stat-text"><strong>Bitcoin que existirán</strong> — para siempre. Nunca habrá más.</div>
+            </div>
+          </div>
+
+          <p>Piénsalo así: <strong>hay más millonarios en el mundo que Bitcoin disponibles.</strong> Si cada millonario quisiera tener aunque sea 1 Bitcoin completo, no alcanzaría para todos. Y eso sin contar empresas, fondos, gobiernos...</p>
+
+          <div className="scenarios" style={{ marginTop: '24px', marginBottom: '24px' }}>
+            <div className="scenario gold">
+              <div className="scenario-icon">🥇</div>
+              <div className="scenario-text">
+                <div className="name">Oro</div>
+                <div className="detail">Se sigue minando ~3,000 toneladas al año. La oferta crece ~1.5% anual.</div>
+              </div>
+              <div className="scenario-result" style={{ fontSize: '1rem', color: '#999' }}>∞</div>
+            </div>
+            <div className="scenario blue">
+              <div className="scenario-icon">💵</div>
+              <div className="scenario-text">
+                <div className="name">Dólares</div>
+                <div className="detail">La Fed imprime cuando quiere. En 2020 imprimió 40% más dólares.</div>
+              </div>
+              <div className="scenario-result" style={{ fontSize: '1rem', color: '#999' }}>∞</div>
+            </div>
+            <div className="scenario green">
+              <div className="scenario-icon">₿</div>
+              <div className="scenario-text">
+                <div className="name">Bitcoin</div>
+                <div className="detail">Máximo 21 millones. Matemáticamente imposible crear más.</div>
+              </div>
+              <div className="scenario-result">21M</div>
+            </div>
+          </div>
+
+          <p>El oro fue el dinero definitivo durante 5,000 años porque era escaso y difícil de falsificar. <span className="highlight">Bitcoin es más escaso que el oro, imposible de falsificar, y además se puede enviar por internet.</span> Es el dinero definitivo del siglo XXI.</p>
+
+          <div className="solution-card" style={{ textAlign: 'center', borderLeftColor: '#c5a55a' }}>
+            <p style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '1.3rem', color: '#1a3a2a', fontStyle: 'italic', marginBottom: '12px' }}>&quot;Tener 1 Bitcoin completo hoy es como haber comprado una manzana en Manhattan en 1800&quot;</p>
+            <p style={{ fontSize: '0.9rem', color: '#6b6560', marginBottom: 0 }}>El club de los &quot;whole-coiners&quot; (personas con 1+ BTC) es más exclusivo que el club de millonarios.</p>
+          </div>
+
           <h3>¿Cuánto podría crecer la herencia?</h3>
           <p>Con una inversión de $150 millones del tata:</p>
 
