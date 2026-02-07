@@ -1,6 +1,38 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Link from "next/link";
+
+// ─── Types ───────────────────────────────────────────────────────────────────
+
+interface Fundamentals {
+  trailingPE: number | null;
+  forwardPE: number | null;
+  dividendYield: number | null;
+  revenueGrowth: number | null;
+  epsGrowth: number | null;
+  fiftyTwoWeekHigh: number | null;
+  fiftyTwoWeekLow: number | null;
+}
+
+interface LivePrices {
+  [ticker: string]: {
+    price: number;
+    priceLabel: string;
+    marketCap: number;
+    marketCapLabel: string;
+  };
+}
+
+interface LiveFundamentals {
+  [ticker: string]: Fundamentals;
+}
+
+interface ProyeccionesProps {
+  livePrices?: LivePrices;
+  liveFundamentals?: LiveFundamentals;
+  lastUpdated?: string | null;
+}
 
 interface AssetProjection {
   rank: number;
@@ -14,33 +46,30 @@ interface AssetProjection {
   marketCapSort: number;
   cagrHistorico: number;
   cagr5y: number;
+  // Fundamentals (live)
+  trailingPE: number | null;
+  forwardPE: number | null;
+  dividendYield: number | null;
+  epsGrowth: number | null;
+  fiftyTwoWeekHigh: number | null;
+  fiftyTwoWeekLow: number | null;
+  pctFrom52wHigh: number | null;
   // Projected CAGRs
   cagrConservador: number;
   cagrBase: number;
   cagrOptimista: number;
-  // Projected prices at 5 years
+  // Model factor count (how many live data points fed the model)
+  factorCount: number;
+  // Projected prices
   price5yConservador: number;
   price5yBase: number;
   price5yOptimista: number;
-  // Projected prices at 10 years
   price10yConservador: number;
   price10yBase: number;
   price10yOptimista: number;
 }
 
-interface LivePrices {
-  [ticker: string]: {
-    price: number;
-    priceLabel: string;
-    marketCap: number;
-    marketCapLabel: string;
-  };
-}
-
-interface ProyeccionesProps {
-  livePrices?: LivePrices;
-  lastUpdated?: string | null;
-}
+// ─── Utilities ───────────────────────────────────────────────────────────────
 
 function projectPrice(current: number, cagr: number, years: number): number {
   return current * Math.pow(1 + cagr / 100, years);
@@ -65,13 +94,129 @@ function calcCAGR(start: number, end: number, years: number): number {
   return (Math.pow(end / start, 1 / years) - 1) * 100;
 }
 
-function buildProjections(livePrices?: LivePrices): AssetProjection[] {
+function clamp(v: number, min: number, max: number) {
+  return Math.max(min, Math.min(max, v));
+}
+
+function round1(v: number) {
+  return Math.round(v * 10) / 10;
+}
+
+// ─── Multi-Factor Projection Model ──────────────────────────────────────────
+//
+// The model adjusts the base CAGR extrapolation using live fundamentals:
+//
+// 1. P/E Valuation Adjustment:
+//    - If Forward P/E < Trailing P/E → earnings growth expected → bonus
+//    - If Forward P/E > 40 (expensive) → penalty on base/optimista
+//    - If Forward P/E < 15 (cheap) → bonus on conservador
+//
+// 2. EPS Growth:
+//    - Directly feeds into base scenario as a forward-looking signal
+//
+// 3. Dividend Yield:
+//    - Added to total return in all scenarios
+//
+// 4. 52-Week Position:
+//    - Near 52w low → conservative is less pessimistic
+//    - Near 52w high → optimistic is moderated
+
+function computeProjectedCAGR(
+  cagrHist: number,
+  cagr5y: number,
+  fund: Fundamentals | null,
+  currentPrice: number,
+): { conservador: number; base: number; optimista: number; factorCount: number } {
+  // Start with pure CAGR model
+  let conservador = cagrHist * 0.7;
+  let base = cagrHist * 0.4 + cagr5y * 0.6;
+  let optimista = cagr5y;
+
+  let factorCount = 2; // CAGR hist + CAGR 5y always available
+
+  if (!fund) return { conservador: round1(conservador), base: round1(base), optimista: round1(optimista), factorCount };
+
+  // ── P/E Valuation adjustment ──
+  if (fund.forwardPE != null && fund.forwardPE > 0) {
+    factorCount++;
+    // Expensive (P/E > 35): penalize base/optimista by up to -3%
+    // Cheap (P/E < 15): boost conservador by up to +2%
+    if (fund.forwardPE > 35) {
+      const penalty = clamp((fund.forwardPE - 35) * 0.1, 0, 3);
+      base -= penalty;
+      optimista -= penalty;
+    } else if (fund.forwardPE < 15) {
+      const bonus = clamp((15 - fund.forwardPE) * 0.15, 0, 2);
+      conservador += bonus;
+    }
+
+    // P/E compression signal: forward < trailing means market expects growth
+    if (fund.trailingPE != null && fund.trailingPE > 0) {
+      factorCount++;
+      const peChange = (fund.forwardPE - fund.trailingPE) / fund.trailingPE;
+      // Negative peChange = P/E contracting = bullish
+      if (peChange < -0.1) {
+        const boost = clamp(Math.abs(peChange) * 5, 0, 2);
+        base += boost;
+      } else if (peChange > 0.15) {
+        const drag = clamp(peChange * 3, 0, 2);
+        base -= drag;
+      }
+    }
+  }
+
+  // ── EPS Growth adjustment ──
+  if (fund.epsGrowth != null) {
+    factorCount++;
+    const epsSignal = fund.epsGrowth * 100; // convert to percentage
+    // Blend EPS growth into base: 20% weight
+    base = base * 0.8 + (base + epsSignal * 0.3) * 0.2;
+    // Strong EPS growth boosts optimista
+    if (epsSignal > 15) {
+      optimista += clamp(epsSignal * 0.1, 0, 3);
+    }
+  }
+
+  // ── Dividend Yield — adds to total return ──
+  if (fund.dividendYield != null && fund.dividendYield > 0) {
+    factorCount++;
+    const divPct = fund.dividendYield * 100;
+    conservador += divPct;
+    base += divPct;
+    optimista += divPct;
+  }
+
+  // ── 52-Week Range position ──
+  if (fund.fiftyTwoWeekHigh != null && fund.fiftyTwoWeekLow != null && fund.fiftyTwoWeekHigh > fund.fiftyTwoWeekLow) {
+    factorCount++;
+    const range = fund.fiftyTwoWeekHigh - fund.fiftyTwoWeekLow;
+    const position = (currentPrice - fund.fiftyTwoWeekLow) / range; // 0 = at low, 1 = at high
+    // Near 52w low (position < 0.3): conservador gets a boost
+    if (position < 0.3) {
+      conservador += clamp((0.3 - position) * 5, 0, 2);
+    }
+    // Near 52w high (position > 0.85): optimista gets moderated
+    if (position > 0.85) {
+      optimista -= clamp((position - 0.85) * 8, 0, 2);
+    }
+  }
+
+  return {
+    conservador: round1(conservador),
+    base: round1(base),
+    optimista: round1(optimista),
+    factorCount,
+  };
+}
+
+// ─── Data Builder ────────────────────────────────────────────────────────────
+
+function buildProjections(livePrices?: LivePrices, liveFundamentals?: LiveFundamentals): AssetProjection[] {
   const now = livePrices ? new Date() : new Date("2026-02-06");
   const yearsSince = (d: string) =>
     (now.getTime() - new Date(d).getTime()) / (365.25 * 24 * 60 * 60 * 1000);
 
   type R = [string, string, "company"|"commodity"|"crypto"|"index", string, string, number, number, string, string, number];
-  // [name, ticker, type, sector, inceptionDate, startPrice, currentPrice, currentPriceLabel, marketCap, marketCapSort]
   const d: R[] = [
     ["Gold", "XAU", "commodity", "Commodity", "1971-08-15", 35, 4800, "$4,800/oz", "$19.4T", 19400],
     ["Silver", "XAG", "commodity", "Commodity", "1971-08-15", 1.39, 75, "$75/oz", "$1.6T", 1600],
@@ -146,16 +291,21 @@ function buildProjections(livePrices?: LivePrices): AssetProjection[] {
 
     const years = yearsSince(inceptionDate);
     const p5y = prices5yAgo[ticker] || startPrice;
-    const cagrHistorico = Math.round(calcCAGR(startPrice, price, years) * 10) / 10;
-    const cagr5y = Math.round(calcCAGR(p5y, price, 5) * 10) / 10;
+    const cagrHistorico = round1(calcCAGR(startPrice, price, years));
+    const cagr5y = round1(calcCAGR(p5y, price, 5));
 
-    // --- Projection Models ---
-    // Conservador: historical CAGR reduced 30% (mean reversion)
-    const cagrConservador = Math.round(cagrHistorico * 0.7 * 10) / 10;
-    // Base: weighted average — 40% historical + 60% recent 5y
-    const cagrBase = Math.round((cagrHistorico * 0.4 + cagr5y * 0.6) * 10) / 10;
-    // Optimista: recent 5y CAGR sustained
-    const cagrOptimista = Math.round(cagr5y * 10) / 10;
+    // Get live fundamentals
+    const fund = liveFundamentals?.[ticker] || null;
+
+    // Multi-factor projection
+    const projected = computeProjectedCAGR(cagrHistorico, cagr5y, fund, price);
+
+    // 52-week distance
+    let pctFrom52wHigh: number | null = null;
+    const high52 = fund?.fiftyTwoWeekHigh;
+    if (high52 != null && high52 > 0) {
+      pctFrom52wHigh = round1(((price - high52) / high52) * 100);
+    }
 
     return {
       rank: i + 1,
@@ -166,18 +316,28 @@ function buildProjections(livePrices?: LivePrices): AssetProjection[] {
       marketCapSort: mCapSort,
       cagrHistorico,
       cagr5y,
-      cagrConservador,
-      cagrBase,
-      cagrOptimista,
-      price5yConservador: projectPrice(price, cagrConservador, 5),
-      price5yBase: projectPrice(price, cagrBase, 5),
-      price5yOptimista: projectPrice(price, cagrOptimista, 5),
-      price10yConservador: projectPrice(price, cagrConservador, 10),
-      price10yBase: projectPrice(price, cagrBase, 10),
-      price10yOptimista: projectPrice(price, cagrOptimista, 10),
+      trailingPE: fund?.trailingPE ?? null,
+      forwardPE: fund?.forwardPE ?? null,
+      dividendYield: fund?.dividendYield ?? null,
+      epsGrowth: fund?.epsGrowth ?? null,
+      fiftyTwoWeekHigh: fund?.fiftyTwoWeekHigh ?? null,
+      fiftyTwoWeekLow: fund?.fiftyTwoWeekLow ?? null,
+      pctFrom52wHigh,
+      cagrConservador: projected.conservador,
+      cagrBase: projected.base,
+      cagrOptimista: projected.optimista,
+      factorCount: projected.factorCount,
+      price5yConservador: projectPrice(price, projected.conservador, 5),
+      price5yBase: projectPrice(price, projected.base, 5),
+      price5yOptimista: projectPrice(price, projected.optimista, 5),
+      price10yConservador: projectPrice(price, projected.conservador, 10),
+      price10yBase: projectPrice(price, projected.base, 10),
+      price10yOptimista: projectPrice(price, projected.optimista, 10),
     };
   });
 }
+
+// ─── Rendering helpers ───────────────────────────────────────────────────────
 
 type SortKey = "marketCap" | "cagrBase" | "cagrConservador" | "cagrOptimista" | "name" | "sector";
 type SortDir = "asc" | "desc";
@@ -207,9 +367,18 @@ function scenarioColor(scenario: "conservador" | "base" | "optimista") {
   }
 }
 
-export function ProyeccionesActivos({ livePrices, lastUpdated }: ProyeccionesProps) {
-  const ASSETS = useMemo(() => buildProjections(livePrices), [livePrices]);
+function signalStrength(count: number): { label: string; color: string; dots: number } {
+  if (count >= 6) return { label: "Alta", color: "#52b788", dots: 3 };
+  if (count >= 4) return { label: "Media", color: "#d4a373", dots: 2 };
+  return { label: "Baja", color: "#e07a5f", dots: 1 };
+}
+
+// ─── Component ───────────────────────────────────────────────────────────────
+
+export function ProyeccionesActivos({ livePrices, liveFundamentals, lastUpdated }: ProyeccionesProps) {
+  const ASSETS = useMemo(() => buildProjections(livePrices, liveFundamentals), [livePrices, liveFundamentals]);
   const SECTORS = useMemo(() => Array.from(new Set(ASSETS.map((a) => a.sector))).sort(), [ASSETS]);
+  const hasLiveData = !!liveFundamentals && Object.keys(liveFundamentals).length > 0;
 
   const [sortBy, setSortBy] = useState<SortKey>("cagrBase");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
@@ -218,32 +387,21 @@ export function ProyeccionesActivos({ livePrices, lastUpdated }: ProyeccionesPro
   const [sectorFilter, setSectorFilter] = useState("all");
   const [horizon, setHorizon] = useState<Horizon>("5y");
 
-  // Simulator state
   const [simTicker, setSimTicker] = useState("NVDA");
   const [simAmount, setSimAmount] = useState(10000);
 
   const handleSort = (key: SortKey) => {
-    if (sortBy === key) {
-      setSortDir((d) => (d === "desc" ? "asc" : "desc"));
-    } else {
-      setSortBy(key);
-      setSortDir("desc");
-    }
+    if (sortBy === key) setSortDir((d) => (d === "desc" ? "asc" : "desc"));
+    else { setSortBy(key); setSortDir("desc"); }
   };
 
   const filtered = useMemo(() => {
     let result = ASSETS;
-    if (sectorFilter !== "all") {
-      result = result.filter((a) => a.sector === sectorFilter);
-    }
+    if (sectorFilter !== "all") result = result.filter((a) => a.sector === sectorFilter);
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
-      result = result.filter(
-        (a) =>
-          a.name.toLowerCase().includes(q) ||
-          a.ticker.toLowerCase().includes(q) ||
-          a.sector.toLowerCase().includes(q)
-      );
+      result = result.filter((a) =>
+        a.name.toLowerCase().includes(q) || a.ticker.toLowerCase().includes(q) || a.sector.toLowerCase().includes(q));
     }
     return result;
   }, [ASSETS, sectorFilter, searchQuery]);
@@ -265,7 +423,6 @@ export function ProyeccionesActivos({ livePrices, lastUpdated }: ProyeccionesPro
 
   const topBase = useMemo(() => [...ASSETS].sort((a, b) => b.cagrBase - a.cagrBase).slice(0, 5), [ASSETS]);
 
-  // Simulator
   const simAsset = ASSETS.find((a) => a.ticker === simTicker) || ASSETS[0];
   const simYears = horizon === "5y" ? 5 : 10;
   const simResults = {
@@ -273,233 +430,155 @@ export function ProyeccionesActivos({ livePrices, lastUpdated }: ProyeccionesPro
     base: simAmount * Math.pow(1 + simAsset.cagrBase / 100, simYears),
     optimista: simAmount * Math.pow(1 + simAsset.cagrOptimista / 100, simYears),
   };
+  const simSignal = signalStrength(simAsset.factorCount);
 
   return (
     <div>
-      {/* Hero section */}
+      {/* ── Hero ── */}
       <section style={{ padding: "4rem 0 2rem", textAlign: "center" }}>
-        <div
-          className="animate-fade-up"
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "0.5rem",
-            padding: "0.4rem 1rem",
-            border: "1px solid rgba(167, 139, 250, 0.2)",
-            borderRadius: "100px",
-            fontSize: "0.75rem",
-            fontWeight: 500,
-            color: "#c4b5fd",
-            letterSpacing: "0.08em",
-            textTransform: "uppercase",
-            marginBottom: "2rem",
-            background: "rgba(167, 139, 250, 0.1)",
-          }}
-        >
-          <span
-            className="animate-pulse-dot"
-            style={{
-              width: "6px",
-              height: "6px",
-              background: "#a78bfa",
-              borderRadius: "50%",
-            }}
-          />
+        <div className="animate-fade-up" style={{
+          display: "inline-flex", alignItems: "center", gap: "0.5rem",
+          padding: "0.4rem 1rem", border: "1px solid rgba(167, 139, 250, 0.2)",
+          borderRadius: "100px", fontSize: "0.75rem", fontWeight: 500, color: "#c4b5fd",
+          letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "2rem",
+          background: "rgba(167, 139, 250, 0.1)",
+        }}>
+          <span className="animate-pulse-dot" style={{ width: "6px", height: "6px", background: "#a78bfa", borderRadius: "50%" }} />
           Proyecciones Forward-Looking{lastUpdated ? ` · Datos ${new Date(lastUpdated).toLocaleDateString("es-CL", { day: "numeric", month: "long", year: "numeric" })}` : " · Febrero 2026"}
         </div>
-        <h2
-          className="animate-fade-up animate-delay-1 hero-title-responsive"
-          style={{
-            fontFamily: "var(--font-display)",
-            fontSize: "2.8rem",
-            fontWeight: 400,
-            lineHeight: 1.15,
-            marginBottom: "1rem",
-            color: "#e8efe6",
-          }}
-        >
-          Proyecciones de
-          <br />
-          Rendimiento
+        <h2 className="animate-fade-up animate-delay-1 hero-title-responsive" style={{
+          fontFamily: "var(--font-display)", fontSize: "2.8rem", fontWeight: 400, lineHeight: 1.15,
+          marginBottom: "1rem", color: "#e8efe6",
+        }}>
+          Proyecciones de<br />Rendimiento
         </h2>
-        <p
-          className="animate-fade-up animate-delay-2"
-          style={{
-            fontSize: "1.05rem",
-            color: "#8a9e93",
-            maxWidth: "640px",
-            margin: "0 auto",
-            fontWeight: 300,
-          }}
-        >
-          Estimaciones a 5 y 10 años basadas en tres escenarios cuantitativos derivados
-          del rendimiento histórico y reciente de cada activo.
+        <p className="animate-fade-up animate-delay-2" style={{
+          fontSize: "1.05rem", color: "#8a9e93", maxWidth: "640px", margin: "0 auto", fontWeight: 300,
+        }}>
+          Modelo multi-factor que combina CAGR histórico con datos fundamentales en vivo:
+          P/E ratio, crecimiento de EPS, dividend yield y posición en rango de 52 semanas.
         </p>
-        <div
-          className="animate-fade-up animate-delay-3"
-          style={{
-            display: "inline-block",
-            marginTop: "1.5rem",
-            padding: "0.6rem 1.25rem",
-            background: "rgba(224, 122, 95, 0.08)",
-            border: "1px solid rgba(224, 122, 95, 0.2)",
-            borderRadius: "8px",
-            fontSize: "0.72rem",
-            color: "#e07a5f",
-            fontWeight: 500,
-            letterSpacing: "0.02em",
-            maxWidth: "640px",
-          }}
-        >
-          ESPECULATIVO — Las proyecciones son ejercicios matemáticos basados en datos pasados.
-          NO constituyen predicciones, asesoría financiera ni recomendaciones de inversión.
-          Los rendimientos pasados no garantizan resultados futuros.
+
+        {/* Live data indicator */}
+        <div className="animate-fade-up animate-delay-2" style={{
+          display: "inline-flex", alignItems: "center", gap: "0.5rem", marginTop: "1rem",
+          padding: "0.35rem 0.85rem", borderRadius: "100px",
+          border: `1px solid ${hasLiveData ? "rgba(82, 183, 136, 0.3)" : "rgba(224, 122, 95, 0.3)"}`,
+          background: hasLiveData ? "rgba(82, 183, 136, 0.08)" : "rgba(224, 122, 95, 0.08)",
+          fontSize: "0.7rem", color: hasLiveData ? "#52b788" : "#e07a5f",
+        }}>
+          <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: hasLiveData ? "#52b788" : "#e07a5f" }} />
+          {hasLiveData ? "Datos fundamentales en vivo" : "Usando datos estáticos (sin fundamentals)"}
+        </div>
+
+        <div className="animate-fade-up animate-delay-3" style={{
+          display: "inline-block", marginTop: "1.5rem", padding: "0.6rem 1.25rem",
+          background: "rgba(224, 122, 95, 0.08)", border: "1px solid rgba(224, 122, 95, 0.2)",
+          borderRadius: "8px", fontSize: "0.72rem", color: "#e07a5f", fontWeight: 500,
+          letterSpacing: "0.02em", maxWidth: "640px",
+        }}>
+          ESPECULATIVO — Las proyecciones son ejercicios matemáticos. NO constituyen predicciones,
+          asesoría financiera ni recomendaciones de inversión. Los rendimientos pasados no garantizan resultados futuros.
         </div>
       </section>
 
-      {/* Methodology cards — 3 scenarios */}
-      <section
-        className="animate-fade-up animate-delay-3"
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "1rem",
-          marginBottom: "2.5rem",
-        }}
-      >
+      {/* ── Model factors ── */}
+      <section className="animate-fade-up animate-delay-3 stats-grid-responsive" style={{
+        display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem", marginBottom: "2.5rem",
+      }}>
         {([
-          {
-            label: "Conservador",
-            color: "#d4a373",
-            formula: "CAGR Hist. × 0.70",
-            desc: "Mean reversion: el rendimiento histórico se reduce un 30% para reflejar desaceleración y madurez del activo.",
-          },
-          {
-            label: "Base",
-            color: "#52b788",
-            formula: "(Hist. × 0.4) + (5Y × 0.6)",
-            desc: "Promedio ponderado que combina la tendencia de largo plazo con el momentum reciente de 5 años.",
-          },
-          {
-            label: "Optimista",
-            color: "#a78bfa",
-            formula: "CAGR 5 Años sostenido",
-            desc: "Asume que el rendimiento reciente de 5 años se mantiene. Refleja continuación de momentum actual.",
-          },
-        ] as const).map((scenario) => (
-          <div
-            key={scenario.label}
-            className="stats-grid-responsive"
-            style={{
-              background: "#111a16",
-              border: `1px solid ${scenario.color}33`,
-              borderRadius: "12px",
-              padding: "1.5rem",
-              borderLeft: `3px solid ${scenario.color}`,
-            }}
-          >
-            <div style={{ fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#5a6e63", marginBottom: "0.5rem" }}>
-              Escenario
-            </div>
-            <div style={{ fontFamily: "var(--font-display)", fontSize: "1.3rem", color: scenario.color, marginBottom: "0.35rem" }}>
-              {scenario.label}
-            </div>
-            <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.75rem", color: scenario.color, marginBottom: "0.75rem", opacity: 0.8 }}>
-              {scenario.formula}
-            </div>
-            <p style={{ fontSize: "0.78rem", color: "#8a9e93", lineHeight: 1.5 }}>
-              {scenario.desc}
-            </p>
+          { label: "Conservador", color: "#d4a373",
+            formula: "CAGR×0.70 + Div.Yield",
+            desc: "Mean reversion con boost si P/E bajo o precio cerca de 52w low. Incluye dividendo." },
+          { label: "Base", color: "#52b788",
+            formula: "CAGR blend + P/E adj. + EPS growth + Div",
+            desc: "Combina CAGR histórico y reciente, ajustado por valuación (P/E), crecimiento de EPS y dividendos." },
+          { label: "Optimista", color: "#a78bfa",
+            formula: "CAGR 5Y + EPS boost + Div",
+            desc: "Momentum reciente sostenido, con bonus por crecimiento fuerte de EPS. Moderado si cerca de 52w high." },
+        ] as const).map((s) => (
+          <div key={s.label} style={{
+            background: "#111a16", border: `1px solid ${s.color}33`, borderRadius: "12px",
+            padding: "1.5rem", borderLeft: `3px solid ${s.color}`,
+          }}>
+            <div style={{ fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#5a6e63", marginBottom: "0.5rem" }}>Escenario</div>
+            <div style={{ fontFamily: "var(--font-display)", fontSize: "1.3rem", color: s.color, marginBottom: "0.35rem" }}>{s.label}</div>
+            <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.72rem", color: s.color, marginBottom: "0.75rem", opacity: 0.8 }}>{s.formula}</div>
+            <p style={{ fontSize: "0.78rem", color: "#8a9e93", lineHeight: 1.5 }}>{s.desc}</p>
           </div>
         ))}
       </section>
 
-      {/* Investment Simulator */}
+      {/* ── Simulator ── */}
       <section className="animate-fade-up animate-delay-4" style={{ marginBottom: "3rem" }}>
         <h3 style={{ fontFamily: "var(--font-display)", fontSize: "1.3rem", color: "#e8efe6", marginBottom: "1.25rem" }}>
           Simulador de Inversión
         </h3>
-        <div
-          style={{
-            background: "#111a16",
-            border: "1px solid rgba(45, 106, 79, 0.2)",
-            borderRadius: "12px",
-            padding: "1.5rem",
-          }}
-        >
-          {/* Controls */}
+        <div style={{ background: "#111a16", border: "1px solid rgba(45, 106, 79, 0.2)", borderRadius: "12px", padding: "1.5rem" }}>
           <div style={{ display: "flex", gap: "1rem", marginBottom: "1.5rem", flexWrap: "wrap", alignItems: "flex-end" }}>
             <div style={{ flex: "1 1 200px" }}>
-              <label style={{ display: "block", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#5a6e63", marginBottom: "0.4rem" }}>
-                Activo
-              </label>
-              <select
-                value={simTicker}
-                onChange={(e) => setSimTicker(e.target.value)}
-                style={{
-                  width: "100%",
-                  padding: "0.5rem 0.75rem",
-                  background: "#0a0f0d",
-                  border: "1px solid rgba(45, 106, 79, 0.25)",
-                  borderRadius: "8px",
-                  color: "#e8efe6",
-                  fontSize: "0.85rem",
-                  fontFamily: "inherit",
-                  cursor: "pointer",
-                }}
-              >
-                {ASSETS.map((a) => (
-                  <option key={a.ticker} value={a.ticker}>
-                    {a.ticker} — {a.name}
-                  </option>
-                ))}
+              <label style={{ display: "block", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#5a6e63", marginBottom: "0.4rem" }}>Activo</label>
+              <select value={simTicker} onChange={(e) => setSimTicker(e.target.value)} style={{
+                width: "100%", padding: "0.5rem 0.75rem", background: "#0a0f0d",
+                border: "1px solid rgba(45, 106, 79, 0.25)", borderRadius: "8px",
+                color: "#e8efe6", fontSize: "0.85rem", fontFamily: "inherit", cursor: "pointer",
+              }}>
+                {ASSETS.map((a) => <option key={a.ticker} value={a.ticker}>{a.ticker} — {a.name}</option>)}
               </select>
             </div>
             <div style={{ flex: "0 1 180px" }}>
-              <label style={{ display: "block", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#5a6e63", marginBottom: "0.4rem" }}>
-                Monto (USD)
-              </label>
-              <input
-                type="number"
-                value={simAmount}
-                onChange={(e) => setSimAmount(Math.max(0, Number(e.target.value)))}
-                style={{
-                  width: "100%",
-                  padding: "0.5rem 0.75rem",
-                  background: "#0a0f0d",
-                  border: "1px solid rgba(45, 106, 79, 0.25)",
-                  borderRadius: "8px",
-                  color: "#e8efe6",
-                  fontSize: "0.85rem",
-                  fontFamily: "var(--font-mono)",
-                }}
-              />
+              <label style={{ display: "block", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#5a6e63", marginBottom: "0.4rem" }}>Monto (USD)</label>
+              <input type="number" value={simAmount} onChange={(e) => setSimAmount(Math.max(0, Number(e.target.value)))} style={{
+                width: "100%", padding: "0.5rem 0.75rem", background: "#0a0f0d",
+                border: "1px solid rgba(45, 106, 79, 0.25)", borderRadius: "8px",
+                color: "#e8efe6", fontSize: "0.85rem", fontFamily: "var(--font-mono)",
+              }} />
             </div>
             <div style={{ flex: "0 0 auto" }}>
-              <label style={{ display: "block", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#5a6e63", marginBottom: "0.4rem" }}>
-                Horizonte
-              </label>
+              <label style={{ display: "block", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#5a6e63", marginBottom: "0.4rem" }}>Horizonte</label>
               <div style={{ display: "flex", gap: "0.5rem" }}>
                 {(["5y", "10y"] as Horizon[]).map((h) => (
-                  <button
-                    key={h}
-                    onClick={() => setHorizon(h)}
-                    style={{
-                      padding: "0.5rem 1rem",
-                      borderRadius: "8px",
-                      border: `1px solid ${horizon === h ? "#52b788" : "rgba(45, 106, 79, 0.25)"}`,
-                      background: horizon === h ? "rgba(82, 183, 136, 0.15)" : "transparent",
-                      color: horizon === h ? "#52b788" : "#8a9e93",
-                      fontSize: "0.85rem",
-                      fontWeight: 600,
-                      cursor: "pointer",
-                      fontFamily: "var(--font-mono)",
-                      transition: "all 0.2s",
-                    }}
-                  >
-                    {h === "5y" ? "5 Años" : "10 Años"}
-                  </button>
+                  <button key={h} onClick={() => setHorizon(h)} style={{
+                    padding: "0.5rem 1rem", borderRadius: "8px",
+                    border: `1px solid ${horizon === h ? "#52b788" : "rgba(45, 106, 79, 0.25)"}`,
+                    background: horizon === h ? "rgba(82, 183, 136, 0.15)" : "transparent",
+                    color: horizon === h ? "#52b788" : "#8a9e93", fontSize: "0.85rem", fontWeight: 600,
+                    cursor: "pointer", fontFamily: "var(--font-mono)", transition: "all 0.2s",
+                  }}>{h === "5y" ? "5 Años" : "10 Años"}</button>
                 ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Fundamentals strip for selected asset */}
+          <div style={{
+            display: "flex", gap: "1.5rem", flexWrap: "wrap", marginBottom: "1.25rem",
+            padding: "0.75rem 1rem", background: "#0a0f0d", borderRadius: "8px",
+            border: "1px solid rgba(45, 106, 79, 0.15)",
+          }}>
+            {([
+              { label: "P/E Trailing", value: simAsset.trailingPE != null ? simAsset.trailingPE.toFixed(1) : "—" },
+              { label: "P/E Forward", value: simAsset.forwardPE != null ? simAsset.forwardPE.toFixed(1) : "—" },
+              { label: "Div. Yield", value: simAsset.dividendYield != null ? `${(simAsset.dividendYield * 100).toFixed(2)}%` : "—" },
+              { label: "EPS Growth", value: simAsset.epsGrowth != null ? `${(simAsset.epsGrowth * 100).toFixed(1)}%` : "—" },
+              { label: "vs 52w High", value: simAsset.pctFrom52wHigh != null ? `${simAsset.pctFrom52wHigh}%` : "—" },
+              { label: "Factores", value: `${simAsset.factorCount}/7` },
+            ]).map((item) => (
+              <div key={item.label} style={{ textAlign: "center" }}>
+                <div style={{ fontSize: "0.6rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#5a6e63", marginBottom: "0.2rem" }}>{item.label}</div>
+                <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.8rem", color: "#e8efe6" }}>{item.value}</div>
+              </div>
+            ))}
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: "0.6rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#5a6e63", marginBottom: "0.2rem" }}>Confianza</div>
+              <div style={{ display: "flex", gap: "3px", justifyContent: "center", alignItems: "center" }}>
+                {[1, 2, 3].map((dot) => (
+                  <span key={dot} style={{
+                    width: "6px", height: "6px", borderRadius: "50%",
+                    background: dot <= simSignal.dots ? simSignal.color : "rgba(90, 110, 99, 0.3)",
+                  }} />
+                ))}
+                <span style={{ fontSize: "0.7rem", color: simSignal.color, marginLeft: "0.3rem" }}>{simSignal.label}</span>
               </div>
             </div>
           </div>
@@ -516,25 +595,13 @@ export function ProyeccionesActivos({ livePrices, lastUpdated }: ProyeccionesPro
               const returnPct = simAmount > 0 ? ((finalValue / simAmount - 1) * 100) : 0;
               const color = scenarioColor(s.key);
               return (
-                <div
-                  key={s.key}
-                  style={{
-                    background: "#0a0f0d",
-                    border: `1px solid ${color}33`,
-                    borderRadius: "10px",
-                    padding: "1.25rem",
-                    textAlign: "center",
-                  }}
-                >
-                  <div style={{ fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.1em", color, marginBottom: "0.3rem" }}>
-                    {s.label}
-                  </div>
-                  <div style={{ fontSize: "0.7rem", color: "#5a6e63", marginBottom: "0.75rem" }}>
-                    CAGR: {s.cagr > 0 ? "+" : ""}{s.cagr}%
-                  </div>
-                  <div style={{ fontFamily: "var(--font-display)", fontSize: "1.6rem", color: "#e8efe6", marginBottom: "0.25rem" }}>
-                    {formatUSD(finalValue)}
-                  </div>
+                <div key={s.key} style={{
+                  background: "#0a0f0d", border: `1px solid ${color}33`, borderRadius: "10px",
+                  padding: "1.25rem", textAlign: "center",
+                }}>
+                  <div style={{ fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.1em", color, marginBottom: "0.3rem" }}>{s.label}</div>
+                  <div style={{ fontSize: "0.7rem", color: "#5a6e63", marginBottom: "0.75rem" }}>CAGR: {s.cagr > 0 ? "+" : ""}{s.cagr}%</div>
+                  <div style={{ fontFamily: "var(--font-display)", fontSize: "1.6rem", color: "#e8efe6", marginBottom: "0.25rem" }}>{formatUSD(finalValue)}</div>
                   <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.8rem", color: gain >= 0 ? "#52b788" : "#e07a5f" }}>
                     {gain >= 0 ? "+" : ""}{formatUSD(gain)} ({returnPct >= 0 ? "+" : ""}{returnPct.toFixed(0)}%)
                   </div>
@@ -542,14 +609,13 @@ export function ProyeccionesActivos({ livePrices, lastUpdated }: ProyeccionesPro
               );
             })}
           </div>
-
           <p style={{ fontSize: "0.68rem", color: "#5a6e63", marginTop: "1rem", textAlign: "center", fontStyle: "italic" }}>
             Simulación puramente ilustrativa. No constituye recomendación de inversión.
           </p>
         </div>
       </section>
 
-      {/* Top 5 projected CAGR bars */}
+      {/* ── Top 5 bars ── */}
       <section style={{ marginBottom: "3rem" }}>
         <h3 style={{ fontFamily: "var(--font-display)", fontSize: "1.3rem", color: "#e8efe6", marginBottom: "1.25rem" }}>
           Top 5 — Mejor CAGR Proyectado (Base)
@@ -557,29 +623,26 @@ export function ProyeccionesActivos({ livePrices, lastUpdated }: ProyeccionesPro
         <div style={{ background: "#111a16", border: "1px solid rgba(45, 106, 79, 0.2)", borderRadius: "12px", padding: "1.5rem" }}>
           {topBase.map((asset, i) => {
             const priceTarget = horizon === "5y" ? asset.price5yBase : asset.price10yBase;
+            const sig = signalStrength(asset.factorCount);
             return (
               <div key={asset.ticker} style={{ marginBottom: i < 4 ? "1rem" : 0 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.35rem" }}>
                   <span style={{ fontSize: "0.8rem", color: "#e8efe6" }}>
-                    <span style={{ color: getTypeColor(asset.type), fontFamily: "var(--font-mono)", fontSize: "0.7rem", marginRight: "0.5rem" }}>
-                      {asset.ticker}
-                    </span>
+                    <span style={{ color: getTypeColor(asset.type), fontFamily: "var(--font-mono)", fontSize: "0.7rem", marginRight: "0.5rem" }}>{asset.ticker}</span>
                     {asset.name}
+                    <span style={{ marginLeft: "0.5rem", display: "inline-flex", gap: "2px", verticalAlign: "middle" }}>
+                      {[1, 2, 3].map((dot) => (
+                        <span key={dot} style={{ width: "4px", height: "4px", borderRadius: "50%", background: dot <= sig.dots ? sig.color : "rgba(90, 110, 99, 0.3)", display: "inline-block" }} />
+                      ))}
+                    </span>
                   </span>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.8rem", color: "#52b788" }}>
-                    +{asset.cagrBase}% anual
-                  </span>
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.8rem", color: "#52b788" }}>+{asset.cagrBase}% anual</span>
                 </div>
                 <div style={{ height: "6px", background: "rgba(45, 106, 79, 0.15)", borderRadius: "3px", overflow: "hidden" }}>
-                  <div
-                    style={{
-                      height: "100%",
-                      width: `${Math.min((asset.cagrBase / topBase[0].cagrBase) * 100, 100)}%`,
-                      background: "linear-gradient(90deg, #2d6a4f, #52b788)",
-                      borderRadius: "3px",
-                      transition: "width 1s ease",
-                    }}
-                  />
+                  <div style={{
+                    height: "100%", width: `${Math.min((asset.cagrBase / topBase[0].cagrBase) * 100, 100)}%`,
+                    background: "linear-gradient(90deg, #2d6a4f, #52b788)", borderRadius: "3px", transition: "width 1s ease",
+                  }} />
                 </div>
                 <div style={{ fontSize: "0.65rem", color: "#5a6e63", marginTop: "0.2rem" }}>
                   {asset.currentPriceLabel} hoy → {formatPrice(priceTarget)} proyectado ({horizon === "5y" ? "2031" : "2036"})
@@ -590,100 +653,49 @@ export function ProyeccionesActivos({ livePrices, lastUpdated }: ProyeccionesPro
         </div>
       </section>
 
-      {/* Horizon toggle + Table */}
+      {/* ── Table ── */}
       <section style={{ marginBottom: "3rem" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem", flexWrap: "wrap", gap: "0.75rem" }}>
           <h3 style={{ fontFamily: "var(--font-display)", fontSize: "1.3rem", color: "#e8efe6" }}>
             Tabla de Proyecciones — {horizon === "5y" ? "5 Años (2031)" : "10 Años (2036)"}
           </h3>
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.72rem", color: "#5a6e63" }}>
-            {sorted.length} de {ASSETS.length} activos
-          </span>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.72rem", color: "#5a6e63" }}>{sorted.length} de {ASSETS.length} activos</span>
         </div>
 
-        {/* Search, Filter, Horizon */}
         <div style={{ display: "flex", gap: "0.75rem", marginBottom: "1rem", flexWrap: "wrap", alignItems: "center" }}>
           <div style={{ position: "relative", flex: "1 1 250px", maxWidth: "350px" }}>
-            <span style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", color: "#5a6e63", fontSize: "0.8rem", pointerEvents: "none" }}>
-              &#x1F50D;
-            </span>
-            <input
-              type="text"
-              placeholder="Buscar activo, ticker o sector..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "0.5rem 0.75rem 0.5rem 2.25rem",
-                background: "#111a16",
-                border: "1px solid rgba(45, 106, 79, 0.25)",
-                borderRadius: "8px",
-                color: "#e8efe6",
-                fontSize: "0.8rem",
-                outline: "none",
-                fontFamily: "inherit",
-              }}
-            />
+            <span style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", color: "#5a6e63", fontSize: "0.8rem", pointerEvents: "none" }}>&#x1F50D;</span>
+            <input type="text" placeholder="Buscar activo, ticker o sector..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} style={{
+              width: "100%", padding: "0.5rem 0.75rem 0.5rem 2.25rem", background: "#111a16",
+              border: "1px solid rgba(45, 106, 79, 0.25)", borderRadius: "8px", color: "#e8efe6",
+              fontSize: "0.8rem", outline: "none", fontFamily: "inherit",
+            }} />
           </div>
-          <select
-            value={sectorFilter}
-            onChange={(e) => setSectorFilter(e.target.value)}
-            style={{
-              padding: "0.5rem 0.75rem",
-              background: "#111a16",
-              border: "1px solid rgba(45, 106, 79, 0.25)",
-              borderRadius: "8px",
-              color: sectorFilter === "all" ? "#8a9e93" : "#95d5b2",
-              fontSize: "0.8rem",
-              cursor: "pointer",
-              fontFamily: "inherit",
-              minWidth: "160px",
-            }}
-          >
+          <select value={sectorFilter} onChange={(e) => setSectorFilter(e.target.value)} style={{
+            padding: "0.5rem 0.75rem", background: "#111a16", border: "1px solid rgba(45, 106, 79, 0.25)",
+            borderRadius: "8px", color: sectorFilter === "all" ? "#8a9e93" : "#95d5b2",
+            fontSize: "0.8rem", cursor: "pointer", fontFamily: "inherit", minWidth: "160px",
+          }}>
             <option value="all">Todos los sectores</option>
-            {SECTORS.map((s) => (
-              <option key={s} value={s}>{s}</option>
-            ))}
+            {SECTORS.map((s) => <option key={s} value={s}>{s}</option>)}
           </select>
           <div style={{ display: "flex", gap: "0.4rem" }}>
             {(["5y", "10y"] as Horizon[]).map((h) => (
-              <button
-                key={h}
-                onClick={() => setHorizon(h)}
-                style={{
-                  padding: "0.45rem 0.85rem",
-                  borderRadius: "8px",
-                  border: `1px solid ${horizon === h ? "#52b788" : "rgba(45, 106, 79, 0.25)"}`,
-                  background: horizon === h ? "rgba(82, 183, 136, 0.15)" : "transparent",
-                  color: horizon === h ? "#52b788" : "#8a9e93",
-                  fontSize: "0.75rem",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  fontFamily: "var(--font-mono)",
-                  transition: "all 0.2s",
-                }}
-              >
-                {h === "5y" ? "5 Años" : "10 Años"}
-              </button>
+              <button key={h} onClick={() => setHorizon(h)} style={{
+                padding: "0.45rem 0.85rem", borderRadius: "8px",
+                border: `1px solid ${horizon === h ? "#52b788" : "rgba(45, 106, 79, 0.25)"}`,
+                background: horizon === h ? "rgba(82, 183, 136, 0.15)" : "transparent",
+                color: horizon === h ? "#52b788" : "#8a9e93", fontSize: "0.75rem", fontWeight: 600,
+                cursor: "pointer", fontFamily: "var(--font-mono)", transition: "all 0.2s",
+              }}>{h === "5y" ? "5 Años" : "10 Años"}</button>
             ))}
           </div>
           {(searchQuery || sectorFilter !== "all") && (
-            <button
-              onClick={() => { setSearchQuery(""); setSectorFilter("all"); }}
-              style={{
-                padding: "0.45rem 0.85rem",
-                borderRadius: "8px",
-                border: "1px solid rgba(224, 122, 95, 0.3)",
-                background: "rgba(224, 122, 95, 0.1)",
-                color: "#e07a5f",
-                fontSize: "0.75rem",
-                fontWeight: 500,
-                cursor: "pointer",
-                transition: "all 0.2s",
-              }}
-            >
-              Limpiar filtros
-            </button>
+            <button onClick={() => { setSearchQuery(""); setSectorFilter("all"); }} style={{
+              padding: "0.45rem 0.85rem", borderRadius: "8px", border: "1px solid rgba(224, 122, 95, 0.3)",
+              background: "rgba(224, 122, 95, 0.1)", color: "#e07a5f", fontSize: "0.75rem", fontWeight: 500,
+              cursor: "pointer", transition: "all 0.2s",
+            }}>Limpiar filtros</button>
           )}
         </div>
 
@@ -695,51 +707,30 @@ export function ProyeccionesActivos({ livePrices, lastUpdated }: ProyeccionesPro
                   { label: "#", key: null, align: "left" },
                   { label: "Activo", key: "name" as SortKey, align: "left" },
                   { label: "Sector", key: "sector" as SortKey, align: "left" },
-                  { label: "Precio Actual", key: null, align: "right" },
+                  { label: "Precio", key: null, align: "right" },
+                  { label: "P/E Fwd", key: null, align: "right" },
                   { label: "Conservador", key: "cagrConservador" as SortKey, align: "right" },
                   { label: "Base", key: "cagrBase" as SortKey, align: "right" },
                   { label: "Optimista", key: "cagrOptimista" as SortKey, align: "right" },
-                  { label: `Precio ${horizon === "5y" ? "2031" : "2036"} (Base)`, key: null, align: "right" },
+                  { label: `Precio ${horizon === "5y" ? "2031" : "2036"}`, key: null, align: "right" },
                 ] as const).map((col) => (
-                  <th
-                    key={col.label}
-                    onClick={col.key ? () => handleSort(col.key!) : undefined}
-                    style={{
-                      padding: "0.75rem 0.5rem",
-                      textAlign: col.align as "left" | "right",
-                      color: sortBy === col.key ? "#95d5b2" : "#5a6e63",
-                      fontWeight: 600,
-                      fontSize: "0.7rem",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.1em",
-                      whiteSpace: "nowrap",
-                      cursor: col.key ? "pointer" : "default",
-                      userSelect: "none",
-                      transition: "color 0.2s",
-                    }}
-                  >
+                  <th key={col.label} onClick={col.key ? () => handleSort(col.key!) : undefined} style={{
+                    padding: "0.75rem 0.5rem", textAlign: col.align as "left" | "right",
+                    color: sortBy === col.key ? "#95d5b2" : "#5a6e63", fontWeight: 600,
+                    fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.1em",
+                    whiteSpace: "nowrap", cursor: col.key ? "pointer" : "default",
+                    userSelect: "none", transition: "color 0.2s",
+                  }}>
                     {col.label}
-                    {col.key && sortBy === col.key && (
-                      <span style={{ marginLeft: "0.3rem", fontSize: "0.6rem" }}>
-                        {sortDir === "desc" ? "\u25BC" : "\u25B2"}
-                      </span>
-                    )}
-                    {col.key && sortBy !== col.key && (
-                      <span style={{ marginLeft: "0.3rem", fontSize: "0.6rem", opacity: 0.3 }}>
-                        {"\u25BC"}
-                      </span>
-                    )}
+                    {col.key && sortBy === col.key && <span style={{ marginLeft: "0.3rem", fontSize: "0.6rem" }}>{sortDir === "desc" ? "\u25BC" : "\u25B2"}</span>}
+                    {col.key && sortBy !== col.key && <span style={{ marginLeft: "0.3rem", fontSize: "0.6rem", opacity: 0.3 }}>{"\u25BC"}</span>}
                   </th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {sorted.length === 0 && (
-                <tr>
-                  <td colSpan={8} style={{ padding: "2rem", textAlign: "center", color: "#5a6e63", fontStyle: "italic" }}>
-                    No se encontraron activos con los filtros seleccionados.
-                  </td>
-                </tr>
+                <tr><td colSpan={9} style={{ padding: "2rem", textAlign: "center", color: "#5a6e63", fontStyle: "italic" }}>No se encontraron activos.</td></tr>
               )}
               {sorted.map((asset, i) => {
                 const cC = formatCAGR(asset.cagrConservador);
@@ -748,19 +739,11 @@ export function ProyeccionesActivos({ livePrices, lastUpdated }: ProyeccionesPro
                 const projectedPrice = horizon === "5y" ? asset.price5yBase : asset.price10yBase;
                 const isHovered = hoveredRow === i;
                 return (
-                  <tr
-                    key={asset.ticker}
-                    onMouseEnter={() => setHoveredRow(i)}
-                    onMouseLeave={() => setHoveredRow(null)}
-                    style={{
-                      borderBottom: "1px solid rgba(45, 106, 79, 0.1)",
-                      background: isHovered ? "rgba(45, 106, 79, 0.08)" : "transparent",
-                      transition: "background 0.2s",
-                    }}
-                  >
-                    <td style={{ padding: "0.65rem 0.5rem", color: "#5a6e63", fontFamily: "var(--font-mono)", fontSize: "0.7rem" }}>
-                      {i + 1}
-                    </td>
+                  <tr key={asset.ticker} onMouseEnter={() => setHoveredRow(i)} onMouseLeave={() => setHoveredRow(null)} style={{
+                    borderBottom: "1px solid rgba(45, 106, 79, 0.1)",
+                    background: isHovered ? "rgba(45, 106, 79, 0.08)" : "transparent", transition: "background 0.2s",
+                  }}>
+                    <td style={{ padding: "0.65rem 0.5rem", color: "#5a6e63", fontFamily: "var(--font-mono)", fontSize: "0.7rem" }}>{i + 1}</td>
                     <td style={{ padding: "0.65rem 0.5rem" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                         <span style={{ color: "#e8efe6", fontWeight: 500 }}>{asset.name}</span>
@@ -768,38 +751,20 @@ export function ProyeccionesActivos({ livePrices, lastUpdated }: ProyeccionesPro
                       </div>
                     </td>
                     <td style={{ padding: "0.65rem 0.5rem" }}>
-                      <span
-                        onClick={() => setSectorFilter(asset.sector)}
-                        style={{
-                          fontSize: "0.65rem",
-                          padding: "0.15rem 0.5rem",
-                          borderRadius: "100px",
-                          border: `1px solid ${getTypeColor(asset.type)}33`,
-                          color: getTypeColor(asset.type),
-                          background: `${getTypeColor(asset.type)}15`,
-                          whiteSpace: "nowrap",
-                          cursor: "pointer",
-                          transition: "all 0.2s",
-                        }}
-                      >
-                        {asset.sector}
-                      </span>
+                      <span onClick={() => setSectorFilter(asset.sector)} style={{
+                        fontSize: "0.65rem", padding: "0.15rem 0.5rem", borderRadius: "100px",
+                        border: `1px solid ${getTypeColor(asset.type)}33`, color: getTypeColor(asset.type),
+                        background: `${getTypeColor(asset.type)}15`, whiteSpace: "nowrap", cursor: "pointer", transition: "all 0.2s",
+                      }}>{asset.sector}</span>
                     </td>
-                    <td style={{ padding: "0.65rem 0.5rem", textAlign: "right", fontFamily: "var(--font-mono)", color: "#e8efe6", fontSize: "0.8rem" }}>
-                      {asset.currentPriceLabel}
+                    <td style={{ padding: "0.65rem 0.5rem", textAlign: "right", fontFamily: "var(--font-mono)", color: "#e8efe6", fontSize: "0.8rem" }}>{asset.currentPriceLabel}</td>
+                    <td style={{ padding: "0.65rem 0.5rem", textAlign: "right", fontFamily: "var(--font-mono)", color: "#8a9e93", fontSize: "0.78rem" }}>
+                      {asset.forwardPE != null ? asset.forwardPE.toFixed(1) : "—"}
                     </td>
-                    <td style={{ padding: "0.65rem 0.5rem", textAlign: "right", fontFamily: "var(--font-mono)", fontWeight: 600, color: cC.color }}>
-                      {cC.label}
-                    </td>
-                    <td style={{ padding: "0.65rem 0.5rem", textAlign: "right", fontFamily: "var(--font-mono)", fontWeight: 600, color: cB.color }}>
-                      {cB.label}
-                    </td>
-                    <td style={{ padding: "0.65rem 0.5rem", textAlign: "right", fontFamily: "var(--font-mono)", fontWeight: 600, color: cO.color }}>
-                      {cO.label}
-                    </td>
-                    <td style={{ padding: "0.65rem 0.5rem", textAlign: "right", fontFamily: "var(--font-mono)", color: "#95d5b2", fontSize: "0.8rem" }}>
-                      {formatPrice(projectedPrice)}
-                    </td>
+                    <td style={{ padding: "0.65rem 0.5rem", textAlign: "right", fontFamily: "var(--font-mono)", fontWeight: 600, color: cC.color }}>{cC.label}</td>
+                    <td style={{ padding: "0.65rem 0.5rem", textAlign: "right", fontFamily: "var(--font-mono)", fontWeight: 600, color: cB.color }}>{cB.label}</td>
+                    <td style={{ padding: "0.65rem 0.5rem", textAlign: "right", fontFamily: "var(--font-mono)", fontWeight: 600, color: cO.color }}>{cO.label}</td>
+                    <td style={{ padding: "0.65rem 0.5rem", textAlign: "right", fontFamily: "var(--font-mono)", color: "#95d5b2", fontSize: "0.8rem" }}>{formatPrice(projectedPrice)}</td>
                   </tr>
                 );
               })}
@@ -808,76 +773,70 @@ export function ProyeccionesActivos({ livePrices, lastUpdated }: ProyeccionesPro
         </div>
       </section>
 
-      {/* Methodology */}
-      <section
-        style={{
-          background: "#111a16",
-          border: "1px solid rgba(45, 106, 79, 0.2)",
-          borderRadius: "12px",
-          padding: "1.5rem",
-          marginBottom: "1.5rem",
-        }}
-      >
-        <h4 style={{ fontFamily: "var(--font-display)", fontSize: "1rem", color: "#e8efe6", marginBottom: "0.75rem" }}>
-          Metodología de Proyección
-        </h4>
+      {/* ── Methodology ── */}
+      <section style={{ background: "#111a16", border: "1px solid rgba(45, 106, 79, 0.2)", borderRadius: "12px", padding: "1.5rem", marginBottom: "1.5rem" }}>
+        <h4 style={{ fontFamily: "var(--font-display)", fontSize: "1rem", color: "#e8efe6", marginBottom: "0.75rem" }}>Modelo Multi-Factor</h4>
         <div style={{ fontSize: "0.78rem", color: "#8a9e93", lineHeight: 1.7 }}>
           <p style={{ marginBottom: "0.5rem" }}>
-            <strong style={{ color: "#d4a373" }}>Conservador</strong> = CAGR Histórico × 0.70.
-            Aplica una reducción del 30% para reflejar mean reversion y desaceleración natural a medida que los activos maduran.
+            <strong style={{ color: "#95d5b2" }}>Base</strong>: CAGR ponderado (40% histórico + 60% reciente 5 años).
+            Si datos fundamentales están disponibles, se ajusta por:
+          </p>
+          <p style={{ marginBottom: "0.5rem", paddingLeft: "1rem" }}>
+            <strong style={{ color: "#52b788" }}>P/E Valuation</strong> — Forward P/E &gt; 35 penaliza; &lt; 15 beneficia.
+            P/E en contracción (forward &lt; trailing) indica expectativa de crecimiento.
+          </p>
+          <p style={{ marginBottom: "0.5rem", paddingLeft: "1rem" }}>
+            <strong style={{ color: "#52b788" }}>EPS Growth</strong> — Crecimiento de ganancias por acción
+            (trailing vs forward) se incorpora con 20% de peso en el escenario base.
+          </p>
+          <p style={{ marginBottom: "0.5rem", paddingLeft: "1rem" }}>
+            <strong style={{ color: "#52b788" }}>Dividend Yield</strong> — Se suma al retorno total proyectado
+            en los tres escenarios.
+          </p>
+          <p style={{ marginBottom: "0.5rem", paddingLeft: "1rem" }}>
+            <strong style={{ color: "#52b788" }}>52-Week Range</strong> — Precio cerca del mínimo de 52 semanas
+            mejora el escenario conservador; cerca del máximo modera el optimista.
           </p>
           <p style={{ marginBottom: "0.5rem" }}>
-            <strong style={{ color: "#52b788" }}>Base</strong> = (CAGR Histórico × 0.40) + (CAGR 5 Años × 0.60).
-            Combina la tendencia de largo plazo con el momentum reciente, dando mayor peso al rendimiento más actual.
-          </p>
-          <p style={{ marginBottom: "0.5rem" }}>
-            <strong style={{ color: "#a78bfa" }}>Optimista</strong> = CAGR 5 Años sostenido.
-            Asume que las condiciones favorables recientes continúan durante todo el horizonte de proyección.
+            <strong style={{ color: "#d4a373" }}>Indicador de confianza</strong> — Los puntos muestran cuántos
+            factores están disponibles para cada activo (2-7). Más factores = proyección más informada.
           </p>
           <p>
-            <strong style={{ color: "#95d5b2" }}>Precio Proyectado</strong> = Precio Actual × (1 + CAGR/100) ^ Años.
-            Solo refleja apreciación de precio, sin dividendos reinvertidos.
+            <Link href="/proyecciones/metodologia" style={{
+              color: "#a78bfa", textDecoration: "none", fontSize: "0.82rem", fontWeight: 500,
+              borderBottom: "1px solid rgba(167, 139, 250, 0.3)", paddingBottom: "1px",
+            }}>
+              Ver documentación completa del modelo →
+            </Link>
           </p>
         </div>
       </section>
 
-      {/* Legal disclaimer */}
-      <section
-        style={{
-          background: "rgba(224, 122, 95, 0.05)",
-          border: "1px solid rgba(224, 122, 95, 0.15)",
-          borderRadius: "12px",
-          padding: "1.5rem",
-          marginBottom: "2rem",
-        }}
-      >
-        <h4 style={{ fontFamily: "var(--font-display)", fontSize: "1rem", color: "#e07a5f", marginBottom: "0.75rem" }}>
-          Aviso Legal — Disclaimer
-        </h4>
+      {/* ── Disclaimer ── */}
+      <section style={{
+        background: "rgba(224, 122, 95, 0.05)", border: "1px solid rgba(224, 122, 95, 0.15)",
+        borderRadius: "12px", padding: "1.5rem", marginBottom: "2rem",
+      }}>
+        <h4 style={{ fontFamily: "var(--font-display)", fontSize: "1rem", color: "#e07a5f", marginBottom: "0.75rem" }}>Aviso Legal — Disclaimer</h4>
         <div style={{ fontSize: "0.75rem", color: "#8a9e93", lineHeight: 1.8 }}>
           <p style={{ marginBottom: "0.6rem" }}>
             <strong style={{ color: "#e07a5f" }}>Este contenido es puramente especulativo, informativo y educativo.</strong>{" "}
-            Las proyecciones presentadas son ejercicios matemáticos que extrapolan rendimientos pasados hacia el futuro.
-            NO constituyen predicciones de mercado, asesoría financiera, recomendación de inversión ni oferta de valores.
+            Las proyecciones son ejercicios matemáticos que combinan datos históricos con fundamentales de mercado.
+            NO constituyen predicciones, asesoría financiera, recomendación de inversión ni oferta de valores.
           </p>
           <p style={{ marginBottom: "0.6rem" }}>
-            <strong style={{ color: "#e07a5f" }}>Los rendimientos pasados no garantizan ni son indicativos de resultados futuros.</strong>{" "}
-            Los mercados financieros son inherentemente impredecibles. Los precios reales pueden diferir
-            drásticamente de cualquier proyección, incluyendo pérdida total del capital.
+            <strong style={{ color: "#e07a5f" }}>Los rendimientos pasados y los fundamentales actuales no garantizan resultados futuros.</strong>{" "}
+            Los mercados son inherentemente impredecibles. Los precios reales pueden diferir drásticamente de cualquier proyección.
           </p>
           <p style={{ marginBottom: "0.6rem" }}>
-            Los modelos utilizados son simplificaciones que no consideran factores como: cambios regulatorios,
-            disrupciones tecnológicas, recesiones, guerras, inflación, cambios en la tasa de interés, competencia,
-            ni ningún otro evento futuro que pueda impactar los precios.
+            Los modelos no consideran: cambios regulatorios, disrupciones tecnológicas, recesiones, guerras,
+            inflación, cambios en tasas de interés, ni otros eventos que impacten precios.
           </p>
           <p style={{ marginBottom: "0.6rem" }}>
-            Antes de tomar cualquier decisión de inversión, consulte con un asesor financiero debidamente acreditado.
+            Consulte con un asesor financiero acreditado antes de invertir.
             Los Álamos Capital SpA NO se encuentra regulada por la CMF de Chile ni acepta capital de terceros.
           </p>
-          <p>
-            La información se proporciona &quot;tal cual&quot; sin garantías de ningún tipo respecto a su exactitud,
-            integridad o vigencia.
-          </p>
+          <p>La información se proporciona &quot;tal cual&quot; sin garantías de ningún tipo.</p>
         </div>
       </section>
     </div>

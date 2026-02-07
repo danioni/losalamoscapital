@@ -43,8 +43,20 @@ function formatPrice(ticker: string, price: number): string {
   return `$${price.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
-async function fetchYahooQuotes(tickers: string[]): Promise<Record<string, { price: number; marketCap: number }>> {
-  const results: Record<string, { price: number; marketCap: number }> = {};
+interface QuoteData {
+  price: number;
+  marketCap: number;
+  trailingPE: number | null;
+  forwardPE: number | null;
+  dividendYield: number | null;
+  revenueGrowth: number | null;
+  epsGrowth: number | null;
+  fiftyTwoWeekHigh: number | null;
+  fiftyTwoWeekLow: number | null;
+}
+
+async function fetchYahooQuotes(tickers: string[]): Promise<Record<string, QuoteData>> {
+  const results: Record<string, QuoteData> = {};
 
   // Fetch in batches of 10 to avoid URL length issues
   const batchSize = 10;
@@ -53,7 +65,7 @@ async function fetchYahooQuotes(tickers: string[]): Promise<Record<string, { pri
     const symbols = batch.join(",");
 
     try {
-      const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbols}&fields=regularMarketPrice,marketCap`;
+      const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbols}&fields=regularMarketPrice,marketCap,trailingPE,forwardPE,trailingAnnualDividendYield,revenueGrowth,epsTrailingTwelveMonths,epsForward,fiftyTwoWeekHigh,fiftyTwoWeekLow`;
       const res = await fetch(url, {
         headers: {
           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
@@ -71,9 +83,21 @@ async function fetchYahooQuotes(tickers: string[]): Promise<Record<string, { pri
 
       for (const q of quotes) {
         const internalTicker = TICKER_MAP[q.symbol] || q.symbol;
+        // Derive EPS growth from trailing vs forward EPS
+        let epsGrowth: number | null = null;
+        if (q.epsTrailingTwelveMonths && q.epsForward && q.epsTrailingTwelveMonths > 0) {
+          epsGrowth = (q.epsForward / q.epsTrailingTwelveMonths - 1);
+        }
         results[internalTicker] = {
           price: q.regularMarketPrice || 0,
           marketCap: q.marketCap || 0,
+          trailingPE: q.trailingPE ?? null,
+          forwardPE: q.forwardPE ?? null,
+          dividendYield: q.trailingAnnualDividendYield ?? null,
+          revenueGrowth: q.revenueGrowth ?? null,
+          epsGrowth,
+          fiftyTwoWeekHigh: q.fiftyTwoWeekHigh ?? null,
+          fiftyTwoWeekLow: q.fiftyTwoWeekLow ?? null,
         };
       }
     } catch (err) {
@@ -84,7 +108,7 @@ async function fetchYahooQuotes(tickers: string[]): Promise<Record<string, { pri
   return results;
 }
 
-async function fetchBitcoinPrice(): Promise<{ price: number; marketCap: number }> {
+async function fetchBitcoinPrice(): Promise<QuoteData> {
   try {
     const res = await fetch(
       "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_market_cap=true",
@@ -94,10 +118,17 @@ async function fetchBitcoinPrice(): Promise<{ price: number; marketCap: number }
     return {
       price: data.bitcoin?.usd || 0,
       marketCap: data.bitcoin?.usd_market_cap || 0,
+      trailingPE: null,
+      forwardPE: null,
+      dividendYield: null,
+      revenueGrowth: null,
+      epsGrowth: null,
+      fiftyTwoWeekHigh: null,
+      fiftyTwoWeekLow: null,
     };
   } catch (err) {
     console.error("CoinGecko error:", err);
-    return { price: 0, marketCap: 0 };
+    return { price: 0, marketCap: 0, trailingPE: null, forwardPE: null, dividendYield: null, revenueGrowth: null, epsGrowth: null, fiftyTwoWeekHigh: null, fiftyTwoWeekLow: null };
   }
 }
 
@@ -120,7 +151,7 @@ export async function GET(request: Request) {
     ]);
 
     // Merge BTC data
-    const allPrices: Record<string, { price: number; marketCap: number }> = {
+    const allPrices: Record<string, QuoteData> = {
       ...yahooData,
       BTC: btcData,
     };
@@ -142,12 +173,19 @@ export async function GET(request: Request) {
     // Prepare upsert rows
     const rows = Object.entries(allPrices)
       .filter(([, v]) => v.price > 0)
-      .map(([ticker, { price, marketCap }]) => ({
+      .map(([ticker, data]) => ({
         ticker,
-        current_price: price,
-        market_cap_value: Math.round(marketCap),
-        market_cap_label: ticker === "SPX" ? "Benchmark" : formatMarketCap(marketCap),
-        current_price_label: formatPrice(ticker, price),
+        current_price: data.price,
+        market_cap_value: Math.round(data.marketCap),
+        market_cap_label: ticker === "SPX" ? "Benchmark" : formatMarketCap(data.marketCap),
+        current_price_label: formatPrice(ticker, data.price),
+        trailing_pe: data.trailingPE,
+        forward_pe: data.forwardPE,
+        dividend_yield: data.dividendYield,
+        revenue_growth: data.revenueGrowth,
+        eps_growth: data.epsGrowth,
+        fifty_two_week_high: data.fiftyTwoWeekHigh,
+        fifty_two_week_low: data.fiftyTwoWeekLow,
         updated_at: new Date().toISOString(),
       }));
 
@@ -166,8 +204,9 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // Revalidate the analysis page so it shows fresh data
+    // Revalidate analysis and projections pages so they show fresh data
     revalidatePath("/analisis", "page");
+    revalidatePath("/proyecciones", "page");
 
     console.log(`[CRON] Updated ${rows.length} prices successfully`);
 
