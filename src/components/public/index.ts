@@ -9,3 +9,4 @@ export { Disclaimer } from "./Disclaimer";
 export { Footer } from "./Footer";
 export { Logo } from "./Logo";
 export { AnalisisActivos } from "./AnalisisActivos";
+export { ProyeccionesActivos } from "./ProyeccionesActivos";

@@ -11,6 +11,7 @@ const navLinks = [
   { href: "/#methodology", label: "Metodología" },
   { href: "/tesis", label: "Tesis" },
   { href: "/analisis", label: "Análisis" },
+  { href: "/proyecciones", label: "Proyecciones" },
 ];
 
 export function Header() {
