@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Logo } from "./Logo";
 
 const navLinks = [
@@ -37,6 +38,7 @@ export function Header() {
   }, [mobileMenuOpen]);
 
   return (
+    <>
     <header
       style={{
         borderBottom: "1px solid rgba(45, 106, 79, 0.2)",
@@ -166,8 +168,10 @@ export function Header() {
         </button>
       </div>
 
-      {/* Mobile menu overlay */}
-      {mobileMenuOpen && (
+    </header>
+
+      {/* Mobile menu overlay - portaled to body to escape header stacking context */}
+      {mobileMenuOpen && createPortal(
         <div
           className="mobile-menu-overlay"
           style={{
@@ -177,7 +181,7 @@ export function Header() {
             right: 0,
             bottom: 0,
             background: "#0a0f0d",
-            zIndex: 105,
+            zIndex: 9999,
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -187,6 +191,35 @@ export function Header() {
           }}
           onClick={() => setMobileMenuOpen(false)}
         >
+          {/* Close button */}
+          <button
+            onClick={() => setMobileMenuOpen(false)}
+            aria-label="Cerrar menú"
+            style={{
+              position: "absolute",
+              top: "1rem",
+              right: "1.5rem",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: "0.5rem",
+            }}
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#e8efe6"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+
           {navLinks.map((link) => {
             const isActive =
               !link.href.startsWith("/#") &&
@@ -212,8 +245,9 @@ export function Header() {
               </a>
             );
           })}
-        </div>
+        </div>,
+        document.body
       )}
-    </header>
+    </>
   );
 }
