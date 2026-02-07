@@ -22,15 +22,29 @@ interface AssetData {
   note?: string;
 }
 
+interface LivePrices {
+  [ticker: string]: {
+    price: number;
+    priceLabel: string;
+    marketCap: number;
+    marketCapLabel: string;
+  };
+}
+
+interface AnalisisProps {
+  livePrices?: LivePrices;
+  lastUpdated?: string | null;
+}
+
 // CAGR formula: ((end/start)^(1/years) - 1) * 100
 function calcCAGR(start: number, end: number, years: number): number {
   if (start <= 0 || years <= 0) return 0;
   return (Math.pow(end / start, 1 / years) - 1) * 100;
 }
 
-// Data as of Feb 6, 2026 — prices from live market data
-const ASSETS: AssetData[] = (() => {
-  const now = new Date("2026-02-06");
+// Static fallback data as of Feb 6, 2026
+function buildAssets(livePrices?: LivePrices): AssetData[] {
+  const now = livePrices ? new Date() : new Date("2026-02-06");
   const yearsSince = (d: string) =>
     (now.getTime() - new Date(d).getTime()) / (365.25 * 24 * 60 * 60 * 1000);
 
@@ -91,9 +105,18 @@ const ASSETS: AssetData[] = (() => {
     ["Wells Fargo", "WFC", "company", "Financiero", "1978-01-01", "Ene 1978", 0.05, "$0.05 (adj)", 94.32, "$94.32", "$296B", 296],
   ];
 
-  const raw = d.map(([name, ticker, type, sector, inceptionDate, inceptionLabel, startPrice, startPriceLabel, currentPrice, currentPriceLabel, marketCap, marketCapSort, note]) => ({
-    name, ticker, type, sector, inceptionDate, inceptionLabel, startPrice, startPriceLabel, currentPrice, currentPriceLabel, marketCap, marketCapSort, note,
-  }));
+  const raw = d.map(([name, ticker, type, sector, inceptionDate, inceptionLabel, startPrice, startPriceLabel, currentPrice, currentPriceLabel, marketCap, marketCapSort, note]) => {
+    // Override with live prices if available
+    const live = livePrices?.[ticker];
+    return {
+      name, ticker, type, sector, inceptionDate, inceptionLabel, startPrice, startPriceLabel,
+      currentPrice: live ? live.price : currentPrice,
+      currentPriceLabel: live ? live.priceLabel : currentPriceLabel,
+      marketCap: live ? live.marketCapLabel : marketCap,
+      marketCapSort: live ? Math.round(live.marketCap / 1e9) : marketCapSort,
+      note,
+    };
+  });
 
   // 5-year-ago prices (Feb 2021, adjusted for splits)
   const prices5yAgo: Record<string, number> = {
@@ -120,12 +143,12 @@ const ASSETS: AssetData[] = (() => {
       cagr5y: Math.round(calcCAGR(p5y, a.currentPrice, 5) * 10) / 10,
     };
   });
-})();
+}
 
 type SortKey = "marketCap" | "cagrInception" | "cagr5y" | "years" | "name" | "sector";
 type SortDir = "asc" | "desc";
 
-const SECTORS = Array.from(new Set(ASSETS.map((a) => a.sector))).sort();
+// SECTORS computed inside component now
 
 function getTypeColor(type: string) {
   switch (type) {
@@ -153,7 +176,10 @@ function formatCAGR(value: number) {
   return { color, label: `${sign}${value.toFixed(1)}%` };
 }
 
-export function AnalisisActivos() {
+export function AnalisisActivos({ livePrices, lastUpdated }: AnalisisProps) {
+  const ASSETS = useMemo(() => buildAssets(livePrices), [livePrices]);
+  const SECTORS = useMemo(() => Array.from(new Set(ASSETS.map((a) => a.sector))).sort(), [ASSETS]);
+
   const [sortBy, setSortBy] = useState<SortKey>("marketCap");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [hoveredRow, setHoveredRow] = useState<number | null>(null);
@@ -235,7 +261,7 @@ export function AnalisisActivos() {
               borderRadius: "50%",
             }}
           />
-          Análisis de Mercado · Febrero 2026
+          Análisis de Mercado{lastUpdated ? ` · Actualizado ${new Date(lastUpdated).toLocaleDateString("es-CL", { day: "numeric", month: "long", year: "numeric" })}` : " · Febrero 2026"}
         </div>
         <h2
           className="animate-fade-up animate-delay-1 hero-title-responsive"
@@ -263,7 +289,7 @@ export function AnalisisActivos() {
           }}
         >
           Análisis comparativo de rendimiento compuesto (CAGR) de los 50 activos
-          con mayor capitalización de mercado. Datos al 6 de febrero de 2026.
+          con mayor capitalización de mercado.{livePrices ? " Precios actualizados automáticamente cada semana." : " Datos al 6 de febrero de 2026."}
         </p>
         <div
           className="animate-fade-up animate-delay-3"

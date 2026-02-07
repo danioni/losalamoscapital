@@ -361,14 +361,13 @@ export default function BitcoinTesisPage() {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="footer">
+      {/* Navigation between theses */}
+      <nav className="footer" style={{ borderTop: "1px solid rgba(45, 106, 79, 0.2)", padding: "2rem 0" }}>
         <div className="footer-nav">
           <Link href="/tesis" className="back-link">← Todas las Tesis</Link>
           <Link href="/tesis/tesla" className="next-link">Tesla →</Link>
         </div>
-        <p className="company">Los Álamos Capital</p>
-      </footer>
+      </nav>
     </div>
   )
 }

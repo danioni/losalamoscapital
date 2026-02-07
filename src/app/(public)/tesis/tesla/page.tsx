@@ -364,14 +364,13 @@ export default function TeslaTesisPage() {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="footer">
+      {/* Navigation between theses */}
+      <nav className="footer" style={{ borderTop: "1px solid rgba(45, 106, 79, 0.2)", padding: "2rem 0" }}>
         <div className="footer-nav">
           <Link href="/tesis/bitcoin" className="back-link">← Bitcoin</Link>
           <Link href="/tesis" className="next-link">Todas las Tesis →</Link>
         </div>
-        <p className="company">Los Álamos Capital</p>
-      </footer>
+      </nav>
     </div>
   )
 }

@@ -1,5 +1,4 @@
 import {
-  Header,
   Hero,
   StatsGrid,
   PerformanceChart,
@@ -7,7 +6,6 @@ import {
   DecisionsLog,
   Methodology,
   Disclaimer,
-  Footer,
 } from "@/components/public";
 import { createClient } from "@/lib/supabase/server";
 import { calculateAllocations, snapshotsToChartData } from "@/lib/calculations";
@@ -129,7 +127,6 @@ export default async function Home() {
 
   return (
     <>
-      <Header />
       <Hero />
       <div className="main-container">
         <StatsGrid metrics={metrics} />
@@ -139,7 +136,6 @@ export default async function Home() {
         <Methodology />
         <Disclaimer />
       </div>
-      <Footer lastUpdated={lastUpdated} />
     </>
   );
 }

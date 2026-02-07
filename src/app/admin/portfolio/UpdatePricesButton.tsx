@@ -22,12 +22,21 @@ const inputStyle = {
   transition: "border-color 0.2s",
 };
 
+interface AutoUpdateResult {
+  success: boolean;
+  updated: { ticker: string; oldPrice: number; newPrice: number }[];
+  failed: { ticker: string; error: string }[];
+  summary: string;
+}
+
 export function UpdatePricesButton({ positions }: UpdatePricesButtonProps) {
   const router = useRouter();
   const supabase = createClient();
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [prices, setPrices] = useState<Record<string, string>>({});
+  const [autoLoading, setAutoLoading] = useState(false);
+  const [autoResult, setAutoResult] = useState<AutoUpdateResult | null>(null);
 
   const handleOpen = () => {
     const initialPrices: Record<string, string> = {};
@@ -82,36 +91,108 @@ export function UpdatePricesButton({ positions }: UpdatePricesButtonProps) {
     router.refresh();
   };
 
+  const handleAutoUpdate = async () => {
+    setAutoLoading(true);
+    setAutoResult(null);
+    try {
+      const response = await fetch("/api/update-prices", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET}`,
+        },
+      });
+      const data: AutoUpdateResult = await response.json();
+      setAutoResult(data);
+      if (data.updated && data.updated.length > 0) {
+        router.refresh();
+      }
+    } catch {
+      setAutoResult({
+        success: false,
+        updated: [],
+        failed: [{ ticker: "API", error: "Error de conexión" }],
+        summary: "Error de conexión al servidor",
+      });
+    } finally {
+      setAutoLoading(false);
+    }
+  };
+
   if (positions.length === 0) {
     return null;
   }
 
   if (!isOpen) {
     return (
-      <button
-        onClick={handleOpen}
-        style={{
-          padding: "0.625rem 1rem",
-          background: "transparent",
-          border: "1px solid rgba(45, 106, 79, 0.2)",
-          borderRadius: "8px",
-          color: "#8a9e93",
-          fontSize: "0.875rem",
-          fontWeight: 500,
-          cursor: "pointer",
-          transition: "all 0.2s",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.color = "#e8efe6";
-          e.currentTarget.style.borderColor = "rgba(45, 106, 79, 0.4)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.color = "#8a9e93";
-          e.currentTarget.style.borderColor = "rgba(45, 106, 79, 0.2)";
-        }}
-      >
-        Actualizar Precios
-      </button>
+      <div style={{ display: "flex", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+        <button
+          onClick={handleAutoUpdate}
+          disabled={autoLoading}
+          style={{
+            padding: "0.625rem 1rem",
+            background: autoLoading ? "#1a3a2a" : "#2d6a4f",
+            border: "none",
+            borderRadius: "8px",
+            color: "#ffffff",
+            fontSize: "0.875rem",
+            fontWeight: 500,
+            cursor: autoLoading ? "not-allowed" : "pointer",
+            opacity: autoLoading ? 0.7 : 1,
+            transition: "all 0.2s",
+          }}
+        >
+          {autoLoading ? "Actualizando..." : "Actualizar desde APIs"}
+        </button>
+        <button
+          onClick={handleOpen}
+          style={{
+            padding: "0.625rem 1rem",
+            background: "transparent",
+            border: "1px solid rgba(45, 106, 79, 0.2)",
+            borderRadius: "8px",
+            color: "#8a9e93",
+            fontSize: "0.875rem",
+            fontWeight: 500,
+            cursor: "pointer",
+            transition: "all 0.2s",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = "#e8efe6";
+            e.currentTarget.style.borderColor = "rgba(45, 106, 79, 0.4)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = "#8a9e93";
+            e.currentTarget.style.borderColor = "rgba(45, 106, 79, 0.2)";
+          }}
+        >
+          Manual
+        </button>
+        {autoResult && (
+          <div
+            style={{
+              width: "100%",
+              padding: "0.75rem 1rem",
+              background: autoResult.success ? "rgba(45, 106, 79, 0.1)" : "rgba(224, 122, 95, 0.1)",
+              border: `1px solid ${autoResult.success ? "rgba(45, 106, 79, 0.3)" : "rgba(224, 122, 95, 0.3)"}`,
+              borderRadius: "8px",
+              fontSize: "0.8rem",
+              color: "#e8efe6",
+            }}
+          >
+            <p style={{ margin: 0, fontWeight: 500 }}>{autoResult.summary}</p>
+            {autoResult.updated.length > 0 && (
+              <p style={{ margin: "0.25rem 0 0", color: "#95d5b2", fontFamily: "var(--font-mono)", fontSize: "0.75rem" }}>
+                {autoResult.updated.map((u) => `${u.ticker}: $${u.oldPrice.toFixed(2)} → $${u.newPrice.toFixed(2)}`).join(" | ")}
+              </p>
+            )}
+            {autoResult.failed.length > 0 && (
+              <p style={{ margin: "0.25rem 0 0", color: "#e07a5f", fontSize: "0.75rem" }}>
+                Errores: {autoResult.failed.map((f) => `${f.ticker}: ${f.error}`).join(", ")}
+              </p>
+            )}
+          </div>
+        )}
+      </div>
     );
   }
 

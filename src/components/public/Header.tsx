@@ -1,17 +1,21 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Logo } from "./Logo";
 
 const navLinks = [
-  { href: "#performance", label: "Rendimiento" },
-  { href: "#portfolio", label: "Portafolio" },
-  { href: "#decisions", label: "Decisiones" },
-  { href: "#methodology", label: "Metodología" },
+  { href: "/#performance", label: "Rendimiento" },
+  { href: "/#portfolio", label: "Portafolio" },
+  { href: "/#decisions", label: "Decisiones" },
+  { href: "/#methodology", label: "Metodología" },
   { href: "/tesis", label: "Tesis" },
   { href: "/analisis", label: "Análisis" },
 ];
 
 export function Header() {
+  const pathname = usePathname();
+
   return (
     <header
       style={{
@@ -35,10 +39,13 @@ export function Header() {
           alignItems: "center",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+        <Link
+          href="/"
+          style={{ display: "flex", alignItems: "center", gap: "0.75rem", textDecoration: "none" }}
+        >
           <Logo style={{ width: "32px", height: "32px", flexShrink: 0 }} />
           <div>
-            <h1
+            <span
               className="header-logo-text"
               style={{
                 fontFamily: "var(--font-display)",
@@ -47,10 +54,11 @@ export function Header() {
                 letterSpacing: "0.02em",
                 color: "#e8efe6",
                 lineHeight: 1.2,
+                display: "block",
               }}
             >
               Los Álamos Capital
-            </h1>
+            </span>
             <span
               className="header-subtitle"
               style={{
@@ -65,27 +73,35 @@ export function Header() {
               Historial de Inversiones
             </span>
           </div>
-        </div>
+        </Link>
         <nav className="nav-responsive" style={{ display: "flex" }}>
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              style={{
-                color: "#8a9e93",
-                textDecoration: "none",
-                fontSize: "0.85rem",
-                fontWeight: 500,
-                marginLeft: "2rem",
-                transition: "color 0.3s",
-                letterSpacing: "0.02em",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#52b788")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#8a9e93")}
-            >
-              {link.label}
-            </a>
-          ))}
+          {navLinks.map((link) => {
+            const isActive =
+              !link.href.startsWith("/#") &&
+              pathname === link.href;
+
+            return (
+              <a
+                key={link.href}
+                href={link.href}
+                style={{
+                  color: isActive ? "#52b788" : "#8a9e93",
+                  textDecoration: "none",
+                  fontSize: "0.85rem",
+                  fontWeight: 500,
+                  marginLeft: "2rem",
+                  transition: "color 0.3s",
+                  letterSpacing: "0.02em",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "#52b788")}
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.color = isActive ? "#52b788" : "#8a9e93")
+                }
+              >
+                {link.label}
+              </a>
+            );
+          })}
         </nav>
       </div>
     </header>

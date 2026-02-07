@@ -120,12 +120,6 @@ export default function TesisPage() {
           </div>
         </section>
       </main>
-
-      {/* Footer */}
-      <footer className="footer">
-        <Link href="/" className="back-link">← Volver al inicio</Link>
-        <p className="company">Los Álamos Capital</p>
-      </footer>
     </div>
   )
 }
