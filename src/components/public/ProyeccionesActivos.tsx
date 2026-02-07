@@ -127,10 +127,16 @@ function computeProjectedCAGR(
   fund: Fundamentals | null,
   currentPrice: number,
 ): { conservador: number; base: number; optimista: number; factorCount: number } {
-  // Start with pure CAGR model
-  let conservador = cagrHist * 0.7;
-  let base = cagrHist * 0.4 + cagr5y * 0.6;
-  let optimista = cagr5y;
+  // Use the lower and higher of the two CAGRs to anchor scenarios correctly.
+  // This prevents inversion when historical and recent CAGRs diverge significantly
+  // (e.g., BTC: 90% historical vs 6% recent).
+  const lowerCAGR = Math.min(cagrHist, cagr5y);
+  const higherCAGR = Math.max(cagrHist, cagr5y);
+  const blendedCAGR = cagrHist * 0.4 + cagr5y * 0.6;
+
+  let conservador = lowerCAGR * 0.7;           // 30% haircut on the weaker signal
+  let base = blendedCAGR;                       // Weighted average of both
+  let optimista = higherCAGR;                    // The stronger signal sustained
 
   let factorCount = 2; // CAGR hist + CAGR 5y always available
 
@@ -201,10 +207,17 @@ function computeProjectedCAGR(
     }
   }
 
+  // Enforce logical ordering: conservador ≤ base ≤ optimista
+  // After all adjustments, scenarios could still cross in edge cases
+  const c = round1(conservador);
+  const b = round1(base);
+  const o = round1(optimista);
+  const sorted = [c, b, o].sort((a, b) => a - b);
+
   return {
-    conservador: round1(conservador),
-    base: round1(base),
-    optimista: round1(optimista),
+    conservador: sorted[0],
+    base: sorted[1],
+    optimista: sorted[2],
     factorCount,
   };
 }
@@ -488,14 +501,14 @@ export function ProyeccionesActivos({ livePrices, liveFundamentals, lastUpdated 
       }}>
         {([
           { label: "Conservador", color: "#d4a373",
-            formula: "CAGR×0.70 + Div.Yield",
-            desc: "Mean reversion con boost si P/E bajo o precio cerca de 52w low. Incluye dividendo." },
+            formula: "min(CAGRs) × 0.70 + Div.Yield",
+            desc: "Toma el menor de los dos CAGRs con haircut del 30%. Boost si P/E bajo o precio cerca de 52w low." },
           { label: "Base", color: "#52b788",
             formula: "CAGR blend + P/E adj. + EPS growth + Div",
-            desc: "Combina CAGR histórico y reciente, ajustado por valuación (P/E), crecimiento de EPS y dividendos." },
+            desc: "Promedio ponderado (40% histórico + 60% reciente), ajustado por valuación, EPS y dividendos." },
           { label: "Optimista", color: "#a78bfa",
-            formula: "CAGR 5Y + EPS boost + Div",
-            desc: "Momentum reciente sostenido, con bonus por crecimiento fuerte de EPS. Moderado si cerca de 52w high." },
+            formula: "max(CAGRs) + EPS boost + Div",
+            desc: "El mayor de los dos CAGRs sostenido, con bonus por EPS fuerte. Moderado si cerca de 52w high." },
         ] as const).map((s) => (
           <div key={s.label} style={{
             background: "#111a16", border: `1px solid ${s.color}33`, borderRadius: "12px",

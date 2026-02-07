@@ -192,6 +192,21 @@ export default function MetodologiaProyeccionesPage() {
           dividendos reinvertidos. Los precios de IPO están ajustados por todas las divisiones de acciones
           (splits) posteriores.
         </P>
+        <P>
+          Para asignar los escenarios, el modelo identifica el <Strong color="#52b788">CAGR menor</Strong> y
+          el <Strong color="#52b788">CAGR mayor</Strong> entre los dos, independientemente de cuál sea histórico
+          y cuál reciente. Esto previene inversiones lógicas cuando ambos CAGRs divergen significativamente
+          (por ejemplo, Bitcoin tiene ~90% histórico pero solo ~6% en 5 años):
+        </P>
+        <FormulaBox>
+          Conservador = min(CAGR Hist, CAGR 5Y) × 0.70{"\n"}
+          Base = CAGR Hist × 0.40 + CAGR 5Y × 0.60{"\n"}
+          Optimista = max(CAGR Hist, CAGR 5Y)
+        </FormulaBox>
+        <P>
+          Después de aplicar todos los ajustes fundamentales, el modelo <Strong color="#d4a373">re-ordena</Strong> los
+          tres valores para garantizar que siempre se cumpla: Conservador ≤ Base ≤ Optimista.
+        </P>
       </Section>
 
       {/* Section 4: P/E Adjustment */}
@@ -322,8 +337,8 @@ export default function MetodologiaProyeccionesPage() {
           <ScenarioCard
             name="Conservador"
             color="#d4a373"
-            formula="CAGR Histórico × 0.70 + Div Yield + Bonus P/E bajo + Boost 52w low"
-            description="Aplica mean reversion reduciendo el CAGR histórico un 30%. Refleja la realidad de que tasas de crecimiento altas tienden a desacelerarse con el tiempo, especialmente en empresas que ya alcanzaron gran escala. Los bonuses por P/E bajo y proximidad al 52w low actúan como colchón."
+            formula="min(CAGR Hist, CAGR 5Y) × 0.70 + Div Yield + Bonus P/E bajo + Boost 52w low"
+            description="Toma el menor de los dos CAGRs y le aplica un haircut del 30% (mean reversion). Refleja que las tasas de crecimiento tienden a desacelerarse. Los bonuses por P/E bajo y proximidad al 52w low actúan como colchón."
           />
           <ScenarioCard
             name="Base"
@@ -334,8 +349,8 @@ export default function MetodologiaProyeccionesPage() {
           <ScenarioCard
             name="Optimista"
             color="#a78bfa"
-            formula="CAGR 5 Años - Penalización P/E alto + EPS boost + Div Yield - Moderación 52w high"
-            description="Asume que el rendimiento reciente de 5 años se sostiene. Recibe bonus si hay fuerte crecimiento de EPS, pero se modera si el precio está en máximos de 52 semanas o el P/E está inflado."
+            formula="max(CAGR Hist, CAGR 5Y) - Penalización P/E alto + EPS boost + Div Yield - Mod 52w high"
+            description="Toma el mayor de los dos CAGRs y asume que se sostiene. Recibe bonus si hay fuerte crecimiento de EPS, pero se modera si el precio está en máximos de 52 semanas o el P/E está inflado."
           />
         </div>
         <P>
