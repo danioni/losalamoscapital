@@ -122,8 +122,8 @@ export default function MetodologiaProyeccionesPage() {
           <li><a href="#data-sources" style={{ color: "#52b788", textDecoration: "none" }}>Fuentes de Datos</a></li>
           <li><a href="#cagr-base" style={{ color: "#52b788", textDecoration: "none" }}>Capa 1: CAGR Base</a></li>
           <li><a href="#pe-adjustment" style={{ color: "#52b788", textDecoration: "none" }}>Capa 2: Ajuste por P/E</a></li>
-          <li><a href="#eps-growth" style={{ color: "#52b788", textDecoration: "none" }}>Capa 3: Crecimiento de EPS</a></li>
-          <li><a href="#dividends" style={{ color: "#52b788", textDecoration: "none" }}>Capa 4: Dividend Yield</a></li>
+          <li><a href="#eps-growth" style={{ color: "#52b788", textDecoration: "none" }}>Capa 3: Crecimiento de GPA</a></li>
+          <li><a href="#dividends" style={{ color: "#52b788", textDecoration: "none" }}>Capa 4: Rendimiento por Dividendo</a></li>
           <li><a href="#52w-range" style={{ color: "#52b788", textDecoration: "none" }}>Capa 5: Rango de 52 Semanas</a></li>
           <li><a href="#scenarios" style={{ color: "#52b788", textDecoration: "none" }}>Los Tres Escenarios</a></li>
           <li><a href="#confidence" style={{ color: "#52b788", textDecoration: "none" }}>Indicador de Confianza</a></li>
@@ -146,7 +146,7 @@ export default function MetodologiaProyeccionesPage() {
           Monte Carlo, ni ninguna forma de aleatoriedad.
         </P>
         <FormulaBox>
-          CAGR Proyectado = CAGR Base ± Ajuste P/E ± Ajuste EPS + Dividend Yield ± Ajuste 52w
+          CAGR Proyectado = CAGR Base ± Ajuste P/E ± Ajuste GPA + Rend. Dividendo ± Ajuste 52s
         </FormulaBox>
       </Section>
 
@@ -159,12 +159,12 @@ export default function MetodologiaProyeccionesPage() {
           rows={[
             { dato: "Precio de inicio (IPO)", fuente: "Datos históricos, ajustados por splits", freq: "Estático" },
             { dato: "Precio actual", fuente: "Yahoo Finance API (v7/finance/quote)", freq: "Semanal" },
-            { dato: "Market Cap", fuente: "Yahoo Finance / CoinGecko (BTC)", freq: "Semanal" },
-            { dato: "Trailing P/E", fuente: "Yahoo Finance (trailingPE)", freq: "Semanal" },
-            { dato: "Forward P/E", fuente: "Yahoo Finance (forwardPE)", freq: "Semanal" },
-            { dato: "Dividend Yield", fuente: "Yahoo Finance (trailingAnnualDividendYield)", freq: "Semanal" },
-            { dato: "EPS Growth", fuente: "Derivado: (epsForward / epsTrailing) - 1", freq: "Semanal" },
-            { dato: "52-Week High/Low", fuente: "Yahoo Finance", freq: "Semanal" },
+            { dato: "Cap. de Mercado", fuente: "Yahoo Finance / CoinGecko (BTC)", freq: "Semanal" },
+            { dato: "P/E Actual", fuente: "Yahoo Finance (trailingPE)", freq: "Semanal" },
+            { dato: "P/E Proyectado", fuente: "Yahoo Finance (forwardPE)", freq: "Semanal" },
+            { dato: "Rend. por Dividendo", fuente: "Yahoo Finance (trailingAnnualDividendYield)", freq: "Semanal" },
+            { dato: "Crec. de GPA", fuente: "Derivado: (GPA proyectado / GPA actual) - 1", freq: "Semanal" },
+            { dato: "Máx/Mín 52 Semanas", fuente: "Yahoo Finance", freq: "Semanal" },
             { dato: "Precios 5 años atrás", fuente: "Datos estáticos (Feb 2021)", freq: "Estático" },
           ]}
         />
@@ -185,7 +185,7 @@ export default function MetodologiaProyeccionesPage() {
         </FormulaBox>
         <ul style={{ paddingLeft: "1.25rem", marginBottom: "1rem" }}>
           <Li><Strong color="#52b788">CAGR Histórico</Strong>: Desde la fecha de inicio (IPO o primera cotización significativa) hasta hoy. Para empresas centenarias como P&G (1890) o Coca-Cola (1919), esto puede abarcar más de 100 años.</Li>
-          <Li><Strong color="#52b788">CAGR 5 Años</Strong>: Desde febrero 2021 hasta hoy. Captura el momentum reciente, incluyendo el rally de IA/semiconductores y la volatilidad de crypto.</Li>
+          <Li><Strong color="#52b788">CAGR 5 Años</Strong>: Desde febrero 2021 hasta hoy. Captura el impulso reciente, incluyendo el auge de IA/semiconductores y la volatilidad de las criptomonedas.</Li>
         </ul>
         <P>
           Ambos CAGRs reflejan <Strong color="#d4a373">solo apreciación de precio</Strong>, sin incluir
@@ -212,94 +212,94 @@ export default function MetodologiaProyeccionesPage() {
       {/* Section 4: P/E Adjustment */}
       <Section id="pe-adjustment" number={4} title="Capa 2: Ajuste por Valuación (P/E)">
         <P>
-          El ratio Price-to-Earnings mide cuánto paga el mercado por cada dólar de ganancias.
-          El modelo usa el <Strong color="#52b788">Forward P/E</Strong> (basado en EPS proyectado)
-          como señal principal y la relación entre Forward y Trailing P/E como señal secundaria.
+          El ratio Precio/Ganancia (P/E) mide cuánto paga el mercado por cada dólar de ganancias.
+          El modelo usa el <Strong color="#52b788">P/E Proyectado</Strong> (basado en GPA proyectada)
+          como señal principal y la relación entre P/E Proyectado y P/E Actual como señal secundaria.
         </P>
 
         <SubSection title="A. Penalización por P/E alto">
           <P>
-            Si el Forward P/E supera 35, el activo se considera caro. Se aplica una penalización
+            Si el P/E Proyectado supera 35, el activo se considera caro. Se aplica una penalización
             a los escenarios Base y Optimista:
           </P>
           <FormulaBox>
-            Penalización = min((Forward P/E - 35) × 0.10, 3.0) puntos porcentuales
+            Penalización = mín((P/E Proy. - 35) × 0.10, 3.0) puntos porcentuales
           </FormulaBox>
           <P>
-            Ejemplo: NVDA con Forward P/E = 45 recibiría una penalización de (45-35)×0.10 = 1.0pp.
+            Ejemplo: NVDA con P/E Proyectado = 45 recibiría una penalización de (45-35)×0.10 = 1.0pp.
           </P>
         </SubSection>
 
         <SubSection title="B. Bonus por P/E bajo">
           <P>
-            Si el Forward P/E es menor a 15, el activo se considera barato. Se aplica un bonus
+            Si el P/E Proyectado es menor a 15, el activo se considera barato. Se aplica un bonus
             al escenario Conservador:
           </P>
           <FormulaBox>
-            Bonus = min((15 - Forward P/E) × 0.15, 2.0) puntos porcentuales
+            Bonus = mín((15 - P/E Proy.) × 0.15, 2.0) puntos porcentuales
           </FormulaBox>
         </SubSection>
 
         <SubSection title="C. Señal de compresión de P/E">
           <P>
-            Cuando el Forward P/E es menor que el Trailing P/E, significa que el mercado espera
-            que las ganancias crezcan más rápido que el precio — una señal bullish.
+            Cuando el P/E Proyectado es menor que el P/E Actual, significa que el mercado espera
+            que las ganancias crezcan más rápido que el precio — una señal alcista.
           </P>
           <FormulaBox>
-            Cambio P/E = (Forward P/E - Trailing P/E) / Trailing P/E
+            Cambio P/E = (P/E Proy. - P/E Actual) / P/E Actual
           </FormulaBox>
           <ul style={{ paddingLeft: "1.25rem", marginBottom: "1rem" }}>
-            <Li>Si Cambio P/E &lt; -10%: Boost de hasta +2pp al escenario Base</Li>
-            <Li>Si Cambio P/E &gt; +15%: Drag de hasta -2pp al escenario Base</Li>
+            <Li>Si Cambio P/E &lt; -10%: Impulso de hasta +2pp al escenario Base</Li>
+            <Li>Si Cambio P/E &gt; +15%: Lastre de hasta -2pp al escenario Base</Li>
           </ul>
         </SubSection>
       </Section>
 
       {/* Section 5: EPS Growth */}
-      <Section id="eps-growth" number={5} title="Capa 3: Crecimiento de EPS">
+      <Section id="eps-growth" number={5} title="Capa 3: Crecimiento de GPA">
         <P>
-          El EPS Growth se deriva comparando las ganancias por acción proyectadas (Forward EPS)
-          con las actuales (Trailing EPS):
+          El crecimiento de GPA se deriva comparando las ganancias por acción proyectadas (GPA proyectada)
+          con las actuales (GPA actual):
         </P>
         <FormulaBox>
-          EPS Growth = (EPS Forward / EPS Trailing) - 1
+          Crec. GPA = (GPA Proyectada / GPA Actual) - 1
         </FormulaBox>
         <P>
           Este factor se incorpora al escenario <Strong color="#52b788">Base</Strong> con un
           peso del 20%:
         </P>
         <FormulaBox>
-          Base ajustado = Base × 0.80 + (Base + EPS Growth% × 0.30) × 0.20
+          Base ajustado = Base × 0.80 + (Base + Crec. GPA% × 0.30) × 0.20
         </FormulaBox>
         <P>
-          Adicionalmente, si el EPS Growth supera el 15%, el escenario
-          <Strong color="#a78bfa"> Optimista</Strong> recibe un boost de hasta +3pp:
+          Adicionalmente, si el crecimiento de GPA supera el 15%, el escenario
+          <Strong color="#a78bfa"> Optimista</Strong> recibe un impulso de hasta +3pp:
         </P>
         <FormulaBox>
-          Boost Optimista = min(EPS Growth% × 0.10, 3.0) pp
+          Impulso Optimista = mín(Crec. GPA% × 0.10, 3.0) pp
         </FormulaBox>
         <P>
-          Nota: Este dato solo está disponible para empresas con earnings reportados.
-          No aplica a commodities (XAU, XAG), crypto (BTC) ni índices (SPX).
+          Nota: Este dato solo está disponible para empresas con ganancias reportadas.
+          No aplica a materias primas (XAU, XAG), cripto (BTC) ni índices (SPX).
         </P>
       </Section>
 
       {/* Section 6: Dividends */}
-      <Section id="dividends" number={6} title="Capa 4: Dividend Yield">
+      <Section id="dividends" number={6} title="Capa 4: Rendimiento por Dividendo">
         <P>
-          El Trailing Annual Dividend Yield se suma directamente al retorno proyectado
+          El rendimiento anual por dividendo se suma directamente al retorno proyectado
           en <Strong color="#52b788">los tres escenarios</Strong>. Esto convierte la proyección
           de &quot;solo precio&quot; a una estimación de retorno total.
         </P>
         <FormulaBox>
-          CAGR ajustado = CAGR precio + Dividend Yield%
+          CAGR ajustado = CAGR precio + Rend. Dividendo%
         </FormulaBox>
         <P>
-          Ejemplo: KO (Coca-Cola) con CAGR precio de 8.5% y dividend yield de 2.8%
+          Ejemplo: KO (Coca-Cola) con CAGR precio de 8.5% y rendimiento por dividendo de 2.8%
           tendría un CAGR ajustado de ~11.3%.
         </P>
         <P>
-          <Strong color="#d4a373">Supuesto simplificador</Strong>: Se asume que el dividend yield
+          <Strong color="#d4a373">Supuesto simplificador</Strong>: Se asume que el rendimiento por dividendo
           actual se mantiene constante. En la realidad, los dividendos pueden crecer, reducirse o eliminarse.
           No se modela la reinversión de dividendos (DRIP).
         </P>
@@ -312,7 +312,7 @@ export default function MetodologiaProyeccionesPage() {
           Actúa como un indicador contrario de sentimiento:
         </P>
         <FormulaBox>
-          Posición = (Precio Actual - 52w Low) / (52w High - 52w Low)
+          Posición = (Precio Actual - Mín 52s) / (Máx 52s - Mín 52s)
         </FormulaBox>
         <P>
           Donde Posición = 0 significa que está en el mínimo de 52 semanas, y Posición = 1 en el máximo.
@@ -320,7 +320,7 @@ export default function MetodologiaProyeccionesPage() {
         <ul style={{ paddingLeft: "1.25rem", marginBottom: "1rem" }}>
           <Li>
             <Strong color="#d4a373">Posición &lt; 0.30</Strong> (cerca del mínimo):
-            Boost al Conservador de hasta +2pp. La lógica es que comprar cerca del piso
+            Impulso al Conservador de hasta +2pp. La lógica es que comprar cerca del piso
             históricamente ofrece mejor relación riesgo/retorno.
           </Li>
           <Li>
@@ -337,20 +337,20 @@ export default function MetodologiaProyeccionesPage() {
           <ScenarioCard
             name="Conservador"
             color="#d4a373"
-            formula="min(CAGR Hist, CAGR 5Y) × 0.70 + Div Yield + Bonus P/E bajo + Boost 52w low"
-            description="Toma el menor de los dos CAGRs y le aplica un haircut del 30% (mean reversion). Refleja que las tasas de crecimiento tienden a desacelerarse. Los bonuses por P/E bajo y proximidad al 52w low actúan como colchón."
+            formula="mín(CAGR Hist, CAGR 5A) × 0.70 + Rend. Div. + Bonus P/E bajo + Impulso 52s mín"
+            description="Toma el menor de los dos CAGRs y le aplica un recorte del 30% (reversión a la media). Refleja que las tasas de crecimiento tienden a desacelerarse. Los bonuses por P/E bajo y proximidad al mínimo de 52 semanas actúan como colchón."
           />
           <ScenarioCard
             name="Base"
             color="#52b788"
-            formula="(CAGR Hist × 0.40 + CAGR 5Y × 0.60) ± P/E adj ± EPS adj + Div Yield"
-            description="El escenario más informado. Combina tendencia de largo plazo con momentum reciente (60/40), y luego aplica todas las correcciones fundamentales disponibles. Representa la 'mejor estimación' del modelo con los datos actuales."
+            formula="(CAGR Hist × 0.40 + CAGR 5A × 0.60) ± ajuste P/E ± ajuste GPA + Rend. Div."
+            description="El escenario más informado. Combina tendencia de largo plazo con impulso reciente (60/40), y luego aplica todas las correcciones fundamentales disponibles. Representa la 'mejor estimación' del modelo con los datos actuales."
           />
           <ScenarioCard
             name="Optimista"
             color="#a78bfa"
-            formula="max(CAGR Hist, CAGR 5Y) - Penalización P/E alto + EPS boost + Div Yield - Mod 52w high"
-            description="Toma el mayor de los dos CAGRs y asume que se sostiene. Recibe bonus si hay fuerte crecimiento de EPS, pero se modera si el precio está en máximos de 52 semanas o el P/E está inflado."
+            formula="máx(CAGR Hist, CAGR 5A) - Penalización P/E alto + impulso GPA + Rend. Div. - Mod 52s máx"
+            description="Toma el mayor de los dos CAGRs y asume que se sostiene. Recibe bonus si hay fuerte crecimiento de GPA, pero se modera si el precio está en máximos de 52 semanas o el P/E está inflado."
           />
         </div>
         <P>
@@ -370,16 +370,16 @@ export default function MetodologiaProyeccionesPage() {
         </P>
         <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "0.5rem 1rem", marginBottom: "1rem", fontSize: "0.85rem" }}>
           <span style={{ fontFamily: "var(--font-mono)", color: "#52b788" }}>●●●</span>
-          <span style={{ color: "#8a9e93" }}><Strong color="#52b788">Alta (6-7 factores)</Strong> — Proyección completa con CAGR + P/E + EPS + Dividendos + 52w</span>
+          <span style={{ color: "#8a9e93" }}><Strong color="#52b788">Alta (6-7 factores)</Strong> — Proyección completa con CAGR + P/E + GPA + Dividendos + 52s</span>
           <span style={{ fontFamily: "var(--font-mono)", color: "#d4a373" }}>●●○</span>
-          <span style={{ color: "#8a9e93" }}><Strong color="#d4a373">Media (4-5 factores)</Strong> — Proyección parcial, faltan algunos fundamentals</span>
+          <span style={{ color: "#8a9e93" }}><Strong color="#d4a373">Media (4-5 factores)</Strong> — Proyección parcial, faltan algunos datos fundamentales</span>
           <span style={{ fontFamily: "var(--font-mono)", color: "#e07a5f" }}>●○○</span>
           <span style={{ color: "#8a9e93" }}><Strong color="#e07a5f">Baja (2-3 factores)</Strong> — Solo CAGR, sin datos fundamentales (típico en commodities y crypto)</span>
         </div>
         <P>
-          Los 7 factores son: (1) CAGR Histórico, (2) CAGR 5Y, (3) Forward P/E,
-          (4) Trailing P/E vs Forward P/E, (5) EPS Growth, (6) Dividend Yield,
-          (7) 52-Week Range.
+          Los 7 factores son: (1) CAGR Histórico, (2) CAGR 5 Años, (3) P/E Proyectado,
+          (4) P/E Actual vs P/E Proyectado, (5) Crecimiento de GPA, (6) Rendimiento por Dividendo,
+          (7) Rango de 52 Semanas.
         </P>
       </Section>
 
@@ -398,8 +398,8 @@ export default function MetodologiaProyeccionesPage() {
             valor significativo no aparecen, creando una ilusión de retornos consistentemente positivos.
           </Li>
           <Li>
-            <Strong color="#e07a5f">Modelo estático</Strong>: Los ajustes de P/E, EPS y dividendos
-            se basan en un snapshot semanal. No modela la evolución temporal de estos fundamentals.
+            <Strong color="#e07a5f">Modelo estático</Strong>: Los ajustes de P/E, GPA y dividendos
+            se basan en una captura semanal. No modela la evolución temporal de estos datos fundamentales.
           </Li>
           <Li>
             <Strong color="#e07a5f">Sin factores macro</Strong>: No considera tasas de interés,
@@ -415,8 +415,8 @@ export default function MetodologiaProyeccionesPage() {
             No modela correlaciones entre activos ni efectos de contagio de mercado.
           </Li>
           <Li>
-            <Strong color="#e07a5f">Commodities y Crypto</Strong>: Gold, Silver y Bitcoin no tienen
-            P/E, EPS ni dividendos. Sus proyecciones dependen exclusivamente del CAGR, lo que las
+            <Strong color="#e07a5f">Materias primas y cripto</Strong>: Oro, plata y Bitcoin no tienen
+            P/E, GPA ni dividendos. Sus proyecciones dependen exclusivamente del CAGR, lo que las
             hace menos informadas que las de empresas.
           </Li>
         </ol>

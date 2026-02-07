@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 export const metadata: Metadata = {
   title: "Proyecciones: Rendimiento Futuro Estimado | Solo Informativo — Especulativo",
   description:
-    "Proyecciones especulativas de rendimiento a 5 y 10 años basadas en modelo multi-factor: CAGR histórico, P/E, EPS growth y dividend yield. NO constituye asesoría financiera.",
+    "Proyecciones especulativas de rendimiento a 5 y 10 años basadas en modelo multi-factor: CAGR histórico, P/E, crecimiento de GPA y rendimiento por dividendo. NO constituye asesoría financiera.",
   openGraph: {
     title: "Proyecciones de Rendimiento — Modelo Multi-Factor",
     description:

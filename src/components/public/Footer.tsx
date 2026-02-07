@@ -16,7 +16,7 @@ export function Footer({ lastUpdated }: FooterProps) {
 
   return (
     <footer style={{ padding: "2rem 0", textAlign: "center" }}>
-      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 2rem" }}>
+      <div className="footer-text" style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 1rem" }}>
         <p style={{ fontSize: "0.75rem", color: "#5a6e63" }}>
           Los Álamos Capital ·{" "}
           <a

@@ -231,54 +231,54 @@ function buildProjections(livePrices?: LivePrices, liveFundamentals?: LiveFundam
 
   type R = [string, string, "company"|"commodity"|"crypto"|"index", string, string, number, number, string, string, number];
   const d: R[] = [
-    ["Gold", "XAU", "commodity", "Commodity", "1971-08-15", 35, 4800, "$4,800/oz", "$19.4T", 19400],
-    ["Silver", "XAG", "commodity", "Commodity", "1971-08-15", 1.39, 75, "$75/oz", "$1.6T", 1600],
-    ["Bitcoin", "BTC", "crypto", "Crypto", "2013-01-01", 13.3, 62000, "$62,000", "$1.2T", 1200],
-    ["S&P 500", "SPX", "index", "Indice", "1957-03-04", 44.06, 6000, "6,000", "Benchmark", 0],
+    ["Gold", "XAU", "commodity", "Materias Primas", "1971-08-15", 35, 4800, "$4,800/oz", "$19.4T", 19400],
+    ["Silver", "XAG", "commodity", "Materias Primas", "1971-08-15", 1.39, 75, "$75/oz", "$1.6T", 1600],
+    ["Bitcoin", "BTC", "crypto", "Cripto", "2013-01-01", 13.3, 62000, "$62,000", "$1.2T", 1200],
+    ["S&P 500", "SPX", "index", "Índice", "1957-03-04", 44.06, 6000, "6,000", "Referencia", 0],
     ["NVIDIA", "NVDA", "company", "Semiconductores", "1999-01-22", 0.04, 185.14, "$185.14", "$4.51T", 4507],
-    ["Apple", "AAPL", "company", "Tech", "1980-12-12", 0.10, 277.92, "$277.92", "$4.08T", 4084],
-    ["Alphabet", "GOOGL", "company", "Tech", "2004-08-19", 1.27, 322.89, "$322.89", "$3.91T", 3906],
-    ["Microsoft", "MSFT", "company", "Tech", "1986-03-13", 0.07, 399.78, "$399.78", "$2.97T", 2971],
-    ["Amazon", "AMZN", "company", "E-Commerce", "1997-05-15", 0.075, 206.96, "$206.96", "$2.21T", 2212],
+    ["Apple", "AAPL", "company", "Tecnología", "1980-12-12", 0.10, 277.92, "$277.92", "$4.08T", 4084],
+    ["Alphabet", "GOOGL", "company", "Tecnología", "2004-08-19", 1.27, 322.89, "$322.89", "$3.91T", 3906],
+    ["Microsoft", "MSFT", "company", "Tecnología", "1986-03-13", 0.07, 399.78, "$399.78", "$2.97T", 2971],
+    ["Amazon", "AMZN", "company", "Comercio Electrónico", "1997-05-15", 0.075, 206.96, "$206.96", "$2.21T", 2212],
     ["TSMC", "TSM", "company", "Semiconductores", "1997-10-08", 1.17, 348.61, "$348.61", "$1.81T", 1808],
-    ["Meta", "META", "company", "Tech", "2012-05-18", 38, 658, "$658", "$1.66T", 1664],
+    ["Meta", "META", "company", "Tecnología", "2012-05-18", 38, 658, "$658", "$1.66T", 1664],
     ["Saudi Aramco", "2222.SR", "company", "Energía", "2019-12-11", 32, 25.60, "25.60 SAR", "$1.65T", 1650],
     ["Broadcom", "AVGO", "company", "Semiconductores", "2009-08-06", 1.53, 333.28, "$333.28", "$1.58T", 1580],
     ["Tesla", "TSLA", "company", "Automotriz", "2010-06-29", 1.13, 413.85, "$413.85", "$1.55T", 1552],
     ["Berkshire Hathaway", "BRK.B", "company", "Financiero", "1965-05-10", 0.012, 505.84, "$505.84", "$1.09T", 1091],
-    ["Walmart", "WMT", "company", "Retail", "1970-10-01", 0.006, 130.89, "$130.89", "$1.04T", 1043],
-    ["Eli Lilly", "LLY", "company", "Pharma", "1952-01-01", 0.085, 1057, "$1,057", "$947B", 947],
+    ["Walmart", "WMT", "company", "Comercio", "1970-10-01", 0.006, 130.89, "$130.89", "$1.04T", 1043],
+    ["Eli Lilly", "LLY", "company", "Farmacéutica", "1952-01-01", 0.085, 1057, "$1,057", "$947B", 947],
     ["JPMorgan Chase", "JPM", "company", "Financiero", "1969-03-05", 0.52, 323.13, "$323.13", "$880B", 880],
     ["Samsung", "005930.KS", "company", "Semiconductores", "1975-06-11", 0.05, 108.42, "$108.42", "$725B", 725],
-    ["Tencent", "TCEHY", "company", "Tech", "2004-06-16", 0.07, 71.22, "$71.22", "$642B", 642],
+    ["Tencent", "TCEHY", "company", "Tecnología", "2004-06-16", 0.07, 71.22, "$71.22", "$642B", 642],
     ["Visa", "V", "company", "Pagos", "2008-03-19", 11, 329.96, "$329.96", "$636B", 636],
     ["Exxon Mobil", "XOM", "company", "Energía", "1920-01-01", 0.001, 149.12, "$149.12", "$629B", 629],
-    ["Johnson & Johnson", "JNJ", "company", "Pharma", "1944-09-24", 0.025, 240.61, "$240.61", "$580B", 580],
+    ["Johnson & Johnson", "JNJ", "company", "Farmacéutica", "1944-09-24", 0.025, 240.61, "$240.61", "$580B", 580],
     ["ASML", "ASML", "company", "Semiconductores", "1995-03-14", 0.55, 1411, "$1,411", "$548B", 548],
     ["Mastercard", "MA", "company", "Pagos", "2006-05-25", 3.90, 545.74, "$545.74", "$488B", 488],
-    ["Costco", "COST", "company", "Retail", "1985-12-01", 2.50, 998.12, "$998.12", "$443B", 443],
+    ["Costco", "COST", "company", "Comercio", "1985-12-01", 2.50, 998.12, "$998.12", "$443B", 443],
     ["Micron", "MU", "company", "Semiconductores", "1984-06-01", 0.07, 393.65, "$393.65", "$443B", 443],
     ["Bank of America", "BAC", "company", "Financiero", "1973-01-02", 0.08, 56.52, "$56.52", "$413B", 413],
-    ["Oracle", "ORCL", "company", "Tech", "1986-03-12", 0.03, 140.86, "$140.86", "$405B", 405],
-    ["AbbVie", "ABBV", "company", "Pharma", "2013-01-02", 35.23, 224.38, "$224.38", "$397B", 397],
-    ["Alibaba", "BABA", "company", "E-Commerce", "2014-09-19", 68, 161.90, "$161.90", "$387B", 387],
-    ["Home Depot", "HD", "company", "Retail", "1981-09-29", 0.03, 385.20, "$385.20", "$383B", 383],
+    ["Oracle", "ORCL", "company", "Tecnología", "1986-03-12", 0.03, 140.86, "$140.86", "$405B", 405],
+    ["AbbVie", "ABBV", "company", "Farmacéutica", "2013-01-02", 35.23, 224.38, "$224.38", "$397B", 397],
+    ["Alibaba", "BABA", "company", "Comercio Electrónico", "2014-09-19", 68, 161.90, "$161.90", "$387B", 387],
+    ["Home Depot", "HD", "company", "Comercio", "1981-09-29", 0.03, 385.20, "$385.20", "$383B", 383],
     ["Procter & Gamble", "PG", "company", "Consumo", "1890-01-01", 0.0005, 159.10, "$159.10", "$372B", 372],
-    ["Roche", "ROG.SW", "company", "Pharma", "1956-05-01", 0.15, 459.69, "$459.69", "$366B", 366],
+    ["Roche", "ROG.SW", "company", "Farmacéutica", "1956-05-01", 0.15, 459.69, "$459.69", "$366B", 366],
     ["Chevron", "CVX", "company", "Energía", "1921-06-01", 0.001, 180.34, "$180.34", "$361B", 361],
-    ["Netflix", "NFLX", "company", "Tech", "2002-05-23", 0.054, 81.27, "$81.27", "$345B", 345],
+    ["Netflix", "NFLX", "company", "Tecnología", "2002-05-23", 0.054, 81.27, "$81.27", "$345B", 345],
     ["Coca-Cola", "KO", "company", "Consumo", "1919-09-05", 0.00002, 78.92, "$78.92", "$340B", 340],
     ["General Electric", "GE", "company", "Industrial", "1892-04-15", 0.008, 321.88, "$321.88", "$340B", 340],
     ["Caterpillar", "CAT", "company", "Industrial", "1929-12-02", 0.07, 724.18, "$724.18", "$339B", 339],
     ["AMD", "AMD", "company", "Semiconductores", "1972-09-27", 0.05, 206.84, "$206.84", "$337B", 337],
-    ["Cisco", "CSCO", "company", "Tech", "1990-02-16", 0.04, 84.60, "$84.60", "$334B", 334],
-    ["Palantir", "PLTR", "company", "Tech / IA", "2020-09-30", 9.50, 135.38, "$135.38", "$323B", 323],
+    ["Cisco", "CSCO", "company", "Tecnología", "1990-02-16", 0.04, 84.60, "$84.60", "$334B", 334],
+    ["Palantir", "PLTR", "company", "Tecnología / IA", "2020-09-30", 9.50, 135.38, "$135.38", "$323B", 323],
     ["Toyota", "TM", "company", "Automotriz", "1949-05-01", 0.01, 244.69, "$244.69", "$320B", 320],
     ["LVMH", "MC.PA", "company", "Lujo", "1987-06-01", 0.35, 633.96, "$633.96", "$315B", 315],
     ["HSBC", "HSBC", "company", "Financiero", "1991-01-01", 2.50, 89.38, "$89.38", "$307B", 307],
-    ["Merck", "MRK", "company", "Pharma", "1946-01-01", 0.015, 121.87, "$121.87", "$304B", 304],
-    ["Novartis", "NVS", "company", "Pharma", "1996-12-20", 12.50, 156.25, "$156.25", "$302B", 302],
-    ["AstraZeneca", "AZN", "company", "Pharma", "1999-04-06", 14, 193.58, "$193.58", "$300B", 300],
+    ["Merck", "MRK", "company", "Farmacéutica", "1946-01-01", 0.015, 121.87, "$121.87", "$304B", 304],
+    ["Novartis", "NVS", "company", "Farmacéutica", "1996-12-20", 12.50, 156.25, "$156.25", "$302B", 302],
+    ["AstraZeneca", "AZN", "company", "Farmacéutica", "1999-04-06", 14, 193.58, "$193.58", "$300B", 300],
     ["Wells Fargo", "WFC", "company", "Financiero", "1978-01-01", 0.05, 94.32, "$94.32", "$296B", 296],
   ];
 
@@ -436,6 +436,22 @@ export function ProyeccionesActivos({ livePrices, liveFundamentals, lastUpdated 
 
   const topBase = useMemo(() => [...ASSETS].sort((a, b) => b.cagrBase - a.cagrBase).slice(0, 5), [ASSETS]);
 
+  // Benchmark (S&P 500) and alpha calculations
+  const spx = useMemo(() => ASSETS.find((a) => a.ticker === "SPX"), [ASSETS]);
+  const benchmarkCAGR = spx?.cagrBase ?? 0;
+  const assetsAboveBenchmark = useMemo(
+    () => ASSETS.filter((a) => a.ticker !== "SPX" && a.cagrBase > benchmarkCAGR)
+      .sort((a, b) => b.cagrBase - a.cagrBase),
+    [ASSETS, benchmarkCAGR]
+  );
+  const topAlpha = useMemo(() => assetsAboveBenchmark.slice(0, 5), [assetsAboveBenchmark]);
+  const avgAlpha = useMemo(
+    () => assetsAboveBenchmark.length > 0
+      ? round1(assetsAboveBenchmark.reduce((sum, a) => sum + (a.cagrBase - benchmarkCAGR), 0) / assetsAboveBenchmark.length)
+      : 0,
+    [assetsAboveBenchmark, benchmarkCAGR]
+  );
+
   const simAsset = ASSETS.find((a) => a.ticker === simTicker) || ASSETS[0];
   const simYears = horizon === "5y" ? 5 : 10;
   const simResults = {
@@ -457,7 +473,7 @@ export function ProyeccionesActivos({ livePrices, liveFundamentals, lastUpdated 
           background: "rgba(167, 139, 250, 0.1)",
         }}>
           <span className="animate-pulse-dot" style={{ width: "6px", height: "6px", background: "#a78bfa", borderRadius: "50%" }} />
-          Proyecciones Forward-Looking{lastUpdated ? ` · Datos ${new Date(lastUpdated).toLocaleDateString("es-CL", { day: "numeric", month: "long", year: "numeric" })}` : " · Febrero 2026"}
+          Proyecciones a Futuro{lastUpdated ? ` · Datos ${new Date(lastUpdated).toLocaleDateString("es-CL", { day: "numeric", month: "long", year: "numeric" })}` : " · Febrero 2026"}
         </div>
         <h2 className="animate-fade-up animate-delay-1 hero-title-responsive" style={{
           fontFamily: "var(--font-display)", fontSize: "2.8rem", fontWeight: 400, lineHeight: 1.15,
@@ -469,29 +485,33 @@ export function ProyeccionesActivos({ livePrices, liveFundamentals, lastUpdated 
           fontSize: "1.05rem", color: "#8a9e93", maxWidth: "640px", margin: "0 auto", fontWeight: 300,
         }}>
           Modelo multi-factor que combina CAGR histórico con datos fundamentales en vivo:
-          P/E ratio, crecimiento de EPS, dividend yield y posición en rango de 52 semanas.
+          P/E ratio, crecimiento de GPA, rendimiento por dividendo y posición en rango de 52 semanas.
         </p>
 
-        {/* Live data indicator */}
+        {/* Live data indicator + disclaimer stacked and centered */}
         <div className="animate-fade-up animate-delay-2" style={{
-          display: "inline-flex", alignItems: "center", gap: "0.5rem", marginTop: "1rem",
-          padding: "0.35rem 0.85rem", borderRadius: "100px",
-          border: `1px solid ${hasLiveData ? "rgba(82, 183, 136, 0.3)" : "rgba(224, 122, 95, 0.3)"}`,
-          background: hasLiveData ? "rgba(82, 183, 136, 0.08)" : "rgba(224, 122, 95, 0.08)",
-          fontSize: "0.7rem", color: hasLiveData ? "#52b788" : "#e07a5f",
+          display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem", marginTop: "1.5rem",
         }}>
-          <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: hasLiveData ? "#52b788" : "#e07a5f" }} />
-          {hasLiveData ? "Datos fundamentales en vivo" : "Usando datos estáticos (sin fundamentals)"}
-        </div>
+          <div style={{
+            display: "inline-flex", alignItems: "center", gap: "0.5rem",
+            padding: "0.35rem 0.85rem", borderRadius: "100px",
+            border: `1px solid ${hasLiveData ? "rgba(82, 183, 136, 0.3)" : "rgba(224, 122, 95, 0.3)"}`,
+            background: hasLiveData ? "rgba(82, 183, 136, 0.08)" : "rgba(224, 122, 95, 0.08)",
+            fontSize: "0.7rem", color: hasLiveData ? "#52b788" : "#e07a5f",
+          }}>
+            <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: hasLiveData ? "#52b788" : "#e07a5f" }} />
+            {hasLiveData ? "Datos fundamentales en vivo" : "Usando datos estáticos (sin datos fundamentales)"}
+          </div>
 
-        <div className="animate-fade-up animate-delay-3" style={{
-          display: "inline-block", marginTop: "1.5rem", padding: "0.6rem 1.25rem",
-          background: "rgba(224, 122, 95, 0.08)", border: "1px solid rgba(224, 122, 95, 0.2)",
-          borderRadius: "8px", fontSize: "0.72rem", color: "#e07a5f", fontWeight: 500,
-          letterSpacing: "0.02em", maxWidth: "640px",
-        }}>
-          ESPECULATIVO — Las proyecciones son ejercicios matemáticos. NO constituyen predicciones,
-          asesoría financiera ni recomendaciones de inversión. Los rendimientos pasados no garantizan resultados futuros.
+          <div style={{
+            padding: "0.6rem 1.25rem",
+            background: "rgba(224, 122, 95, 0.08)", border: "1px solid rgba(224, 122, 95, 0.2)",
+            borderRadius: "8px", fontSize: "0.72rem", color: "#e07a5f", fontWeight: 500,
+            letterSpacing: "0.02em", maxWidth: "640px", textAlign: "center",
+          }}>
+            ESPECULATIVO — Las proyecciones son ejercicios matemáticos. NO constituyen predicciones,
+            asesoría financiera ni recomendaciones de inversión. Los rendimientos pasados no garantizan resultados futuros.
+          </div>
         </div>
       </section>
 
@@ -501,14 +521,14 @@ export function ProyeccionesActivos({ livePrices, liveFundamentals, lastUpdated 
       }}>
         {([
           { label: "Conservador", color: "#d4a373",
-            formula: "min(CAGRs) × 0.70 + Div.Yield",
-            desc: "Toma el menor de los dos CAGRs con haircut del 30%. Boost si P/E bajo o precio cerca de 52w low." },
+            formula: "mín(CAGRs) × 0.70 + Dividendo",
+            desc: "Toma el menor de los dos CAGRs con recorte del 30%. Mejora si P/E bajo o precio cerca del mínimo de 52 semanas." },
           { label: "Base", color: "#52b788",
-            formula: "CAGR blend + P/E adj. + EPS growth + Div",
-            desc: "Promedio ponderado (40% histórico + 60% reciente), ajustado por valuación, EPS y dividendos." },
+            formula: "CAGR combinado + ajuste P/E + crec. GPA + Div",
+            desc: "Promedio ponderado (40% histórico + 60% reciente), ajustado por valuación, GPA y dividendos." },
           { label: "Optimista", color: "#a78bfa",
-            formula: "max(CAGRs) + EPS boost + Div",
-            desc: "El mayor de los dos CAGRs sostenido, con bonus por EPS fuerte. Moderado si cerca de 52w high." },
+            formula: "máx(CAGRs) + impulso GPA + Div",
+            desc: "El mayor de los dos CAGRs sostenido, con impulso por GPA fuerte. Moderado si cerca del máximo de 52 semanas." },
         ] as const).map((s) => (
           <div key={s.label} style={{
             background: "#111a16", border: `1px solid ${s.color}33`, borderRadius: "12px",
@@ -570,11 +590,11 @@ export function ProyeccionesActivos({ livePrices, liveFundamentals, lastUpdated 
             border: "1px solid rgba(45, 106, 79, 0.15)",
           }}>
             {([
-              { label: "P/E Trailing", value: simAsset.trailingPE != null ? simAsset.trailingPE.toFixed(1) : "—" },
-              { label: "P/E Forward", value: simAsset.forwardPE != null ? simAsset.forwardPE.toFixed(1) : "—" },
-              { label: "Div. Yield", value: simAsset.dividendYield != null ? `${(simAsset.dividendYield * 100).toFixed(2)}%` : "—" },
-              { label: "EPS Growth", value: simAsset.epsGrowth != null ? `${(simAsset.epsGrowth * 100).toFixed(1)}%` : "—" },
-              { label: "vs 52w High", value: simAsset.pctFrom52wHigh != null ? `${simAsset.pctFrom52wHigh}%` : "—" },
+              { label: "P/E Actual", value: simAsset.trailingPE != null ? simAsset.trailingPE.toFixed(1) : "—" },
+              { label: "P/E Proyectado", value: simAsset.forwardPE != null ? simAsset.forwardPE.toFixed(1) : "—" },
+              { label: "Rend. Div.", value: simAsset.dividendYield != null ? `${(simAsset.dividendYield * 100).toFixed(2)}%` : "—" },
+              { label: "Crec. GPA", value: simAsset.epsGrowth != null ? `${(simAsset.epsGrowth * 100).toFixed(1)}%` : "—" },
+              { label: "vs Máx 52s", value: simAsset.pctFrom52wHigh != null ? `${simAsset.pctFrom52wHigh}%` : "—" },
               { label: "Factores", value: `${simAsset.factorCount}/7` },
             ]).map((item) => (
               <div key={item.label} style={{ textAlign: "center" }}>
@@ -627,6 +647,145 @@ export function ProyeccionesActivos({ livePrices, liveFundamentals, lastUpdated 
           </p>
         </div>
       </section>
+
+      {/* ── Costo de Oportunidad del Capital ── */}
+      {spx && (
+        <section style={{ marginBottom: "3rem" }}>
+          <h3 style={{ fontFamily: "var(--font-display)", fontSize: "1.3rem", color: "#e8efe6", marginBottom: "0.5rem" }}>
+            Costo de Oportunidad del Capital
+          </h3>
+          <p style={{ fontSize: "0.82rem", color: "#8a9e93", marginBottom: "1.25rem", maxWidth: "640px" }}>
+            El S&P 500 es el benchmark pasivo en USD. Cualquier activo que no supere este CAGR destruye valor relativo
+            — porque podrías obtener este retorno sin esfuerzo con un ETF (SPY/VOO).
+          </p>
+
+          <div style={{ background: "#111a16", border: "1px solid rgba(45, 106, 79, 0.2)", borderRadius: "12px", padding: "1.5rem" }}>
+            {/* Benchmark card */}
+            <div style={{
+              display: "flex", alignItems: "center", justifyContent: "space-between",
+              padding: "1rem 1.25rem", background: "#0a0f0d", borderRadius: "10px",
+              border: "1px solid rgba(138, 158, 147, 0.2)", marginBottom: "1.5rem", flexWrap: "wrap", gap: "1rem",
+            }}>
+              <div>
+                <div style={{ fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#5a6e63", marginBottom: "0.3rem" }}>
+                  Referencia — Tasa Mínima
+                </div>
+                <div style={{ display: "flex", alignItems: "baseline", gap: "0.75rem" }}>
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.8rem", color: "#8a9e93" }}>SPX</span>
+                  <span style={{ fontFamily: "var(--font-display)", fontSize: "1.1rem", color: "#e8efe6" }}>S&P 500</span>
+                </div>
+              </div>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontSize: "0.6rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#5a6e63", marginBottom: "0.2rem" }}>CAGR Base</div>
+                <div style={{ fontFamily: "var(--font-display)", fontSize: "1.8rem", color: "#8a9e93" }}>+{benchmarkCAGR}%</div>
+              </div>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontSize: "0.6rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#5a6e93", marginBottom: "0.2rem" }}>
+                  $10K → {horizon === "5y" ? "2031" : "2036"}
+                </div>
+                <div style={{ fontFamily: "var(--font-mono)", fontSize: "1.1rem", color: "#8a9e93" }}>
+                  {formatUSD(10000 * Math.pow(1 + benchmarkCAGR / 100, horizon === "5y" ? 5 : 10))}
+                </div>
+              </div>
+              <div style={{ fontSize: "0.68rem", color: "#5a6e63", fontStyle: "italic", flex: "1 1 100%" }}>
+                Retorno nominal en USD. Invertir pasivamente en SPY/VOO requiere cero análisis.
+              </div>
+            </div>
+
+            {/* Stats row */}
+            <div style={{
+              display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem", marginBottom: "1.5rem",
+            }} className="stats-grid-responsive">
+              <div style={{
+                background: "#0a0f0d", borderRadius: "10px", padding: "1rem", textAlign: "center",
+                border: "1px solid rgba(82, 183, 136, 0.15)",
+              }}>
+                <div style={{ fontSize: "0.6rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#5a6e63", marginBottom: "0.3rem" }}>Superan referencia</div>
+                <div style={{ fontFamily: "var(--font-display)", fontSize: "1.5rem", color: "#52b788" }}>
+                  {assetsAboveBenchmark.length}
+                  <span style={{ fontSize: "0.8rem", color: "#5a6e63" }}> / {ASSETS.length - 1}</span>
+                </div>
+              </div>
+              <div style={{
+                background: "#0a0f0d", borderRadius: "10px", padding: "1rem", textAlign: "center",
+                border: "1px solid rgba(82, 183, 136, 0.15)",
+              }}>
+                <div style={{ fontSize: "0.6rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#5a6e63", marginBottom: "0.3rem" }}>Exceso promedio</div>
+                <div style={{ fontFamily: "var(--font-display)", fontSize: "1.5rem", color: "#52b788" }}>+{avgAlpha}%</div>
+              </div>
+              <div style={{
+                background: "#0a0f0d", borderRadius: "10px", padding: "1rem", textAlign: "center",
+                border: "1px solid rgba(224, 122, 95, 0.15)",
+              }}>
+                <div style={{ fontSize: "0.6rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#5a6e63", marginBottom: "0.3rem" }}>No superan</div>
+                <div style={{ fontFamily: "var(--font-display)", fontSize: "1.5rem", color: "#e07a5f" }}>
+                  {ASSETS.length - 1 - assetsAboveBenchmark.length}
+                  <span style={{ fontSize: "0.8rem", color: "#5a6e63" }}> / {ASSETS.length - 1}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Proportion bar */}
+            <div style={{ marginBottom: "1.5rem" }}>
+              <div style={{
+                height: "8px", background: "rgba(224, 122, 95, 0.2)", borderRadius: "4px", overflow: "hidden",
+              }}>
+                <div style={{
+                  height: "100%",
+                  width: `${(assetsAboveBenchmark.length / (ASSETS.length - 1)) * 100}%`,
+                  background: "linear-gradient(90deg, #2d6a4f, #52b788)",
+                  borderRadius: "4px",
+                  transition: "width 0.5s ease",
+                }} />
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between", marginTop: "0.3rem" }}>
+                <span style={{ fontSize: "0.65rem", color: "#52b788" }}>Superan al índice</span>
+                <span style={{ fontSize: "0.65rem", color: "#e07a5f" }}>No superan al índice</span>
+              </div>
+            </div>
+
+            {/* Top 5 Alpha table */}
+            <div style={{ fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#5a6e63", marginBottom: "0.75rem" }}>
+              Top 5 — Mayor Exceso vs S&P 500
+            </div>
+            {topAlpha.map((asset, i) => {
+              const alpha = round1(asset.cagrBase - benchmarkCAGR);
+              const spxResult = 10000 * Math.pow(1 + benchmarkCAGR / 100, horizon === "5y" ? 5 : 10);
+              const assetResult = 10000 * Math.pow(1 + asset.cagrBase / 100, horizon === "5y" ? 5 : 10);
+              const extraGain = assetResult - spxResult;
+              return (
+                <div key={asset.ticker} style={{
+                  display: "flex", alignItems: "center", justifyContent: "space-between",
+                  padding: "0.6rem 0.75rem", borderBottom: i < 4 ? "1px solid rgba(45, 106, 79, 0.1)" : "none",
+                  flexWrap: "wrap", gap: "0.5rem",
+                }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flex: "1 1 200px" }}>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.7rem", color: getTypeColor(asset.type) }}>{asset.ticker}</span>
+                    <span style={{ fontSize: "0.82rem", color: "#e8efe6" }}>{asset.name}</span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
+                    <div style={{ textAlign: "right" }}>
+                      <div style={{ fontSize: "0.6rem", color: "#5a6e63" }}>CAGR Base</div>
+                      <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.82rem", color: "#52b788", fontWeight: 600 }}>+{asset.cagrBase}%</div>
+                    </div>
+                    <div style={{ textAlign: "right" }}>
+                      <div style={{ fontSize: "0.6rem", color: "#5a6e63" }}>Exceso</div>
+                      <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.82rem", color: "#a78bfa", fontWeight: 600 }}>+{alpha}%</div>
+                    </div>
+                    <div style={{ textAlign: "right" }}>
+                      <div style={{ fontSize: "0.6rem", color: "#5a6e63" }}>Ganancia extra / $10K</div>
+                      <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.82rem", color: "#52b788" }}>+{formatUSD(extraGain)}</div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+            <p style={{ fontSize: "0.68rem", color: "#5a6e63", marginTop: "1rem", fontStyle: "italic" }}>
+              Exceso = CAGR Base del activo menos CAGR Base del S&P 500. Ganancia extra muestra la diferencia sobre $10K invertidos a {horizon === "5y" ? "5" : "10"} años vs el mismo monto en SPX.
+            </p>
+          </div>
+        </section>
+      )}
 
       {/* ── Top 5 bars ── */}
       <section style={{ marginBottom: "3rem" }}>
@@ -712,8 +871,8 @@ export function ProyeccionesActivos({ livePrices, liveFundamentals, lastUpdated 
           )}
         </div>
 
-        <div style={{ overflowX: "auto" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.82rem" }}>
+        <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch", margin: "0 -0.5rem", padding: "0 0.5rem" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.82rem", minWidth: "750px" }}>
             <thead>
               <tr style={{ borderBottom: "1px solid rgba(45, 106, 79, 0.3)" }}>
                 {([
@@ -721,7 +880,7 @@ export function ProyeccionesActivos({ livePrices, liveFundamentals, lastUpdated 
                   { label: "Activo", key: "name" as SortKey, align: "left" },
                   { label: "Sector", key: "sector" as SortKey, align: "left" },
                   { label: "Precio", key: null, align: "right" },
-                  { label: "P/E Fwd", key: null, align: "right" },
+                  { label: "P/E Proy.", key: null, align: "right" },
                   { label: "Conservador", key: "cagrConservador" as SortKey, align: "right" },
                   { label: "Base", key: "cagrBase" as SortKey, align: "right" },
                   { label: "Optimista", key: "cagrOptimista" as SortKey, align: "right" },
@@ -795,19 +954,19 @@ export function ProyeccionesActivos({ livePrices, liveFundamentals, lastUpdated 
             Si datos fundamentales están disponibles, se ajusta por:
           </p>
           <p style={{ marginBottom: "0.5rem", paddingLeft: "1rem" }}>
-            <strong style={{ color: "#52b788" }}>P/E Valuation</strong> — Forward P/E &gt; 35 penaliza; &lt; 15 beneficia.
-            P/E en contracción (forward &lt; trailing) indica expectativa de crecimiento.
+            <strong style={{ color: "#52b788" }}>Valuación P/E</strong> — P/E proyectado &gt; 35 penaliza; &lt; 15 beneficia.
+            P/E en contracción (proyectado &lt; actual) indica expectativa de crecimiento.
           </p>
           <p style={{ marginBottom: "0.5rem", paddingLeft: "1rem" }}>
-            <strong style={{ color: "#52b788" }}>EPS Growth</strong> — Crecimiento de ganancias por acción
-            (trailing vs forward) se incorpora con 20% de peso en el escenario base.
+            <strong style={{ color: "#52b788" }}>Crecimiento de GPA</strong> — Crecimiento de ganancias por acción
+            (actual vs proyectado) se incorpora con 20% de peso en el escenario base.
           </p>
           <p style={{ marginBottom: "0.5rem", paddingLeft: "1rem" }}>
-            <strong style={{ color: "#52b788" }}>Dividend Yield</strong> — Se suma al retorno total proyectado
+            <strong style={{ color: "#52b788" }}>Rendimiento por dividendo</strong> — Se suma al retorno total proyectado
             en los tres escenarios.
           </p>
           <p style={{ marginBottom: "0.5rem", paddingLeft: "1rem" }}>
-            <strong style={{ color: "#52b788" }}>52-Week Range</strong> — Precio cerca del mínimo de 52 semanas
+            <strong style={{ color: "#52b788" }}>Rango de 52 semanas</strong> — Precio cerca del mínimo de 52 semanas
             mejora el escenario conservador; cerca del máximo modera el optimista.
           </p>
           <p style={{ marginBottom: "0.5rem" }}>
@@ -830,7 +989,7 @@ export function ProyeccionesActivos({ livePrices, liveFundamentals, lastUpdated 
         background: "rgba(224, 122, 95, 0.05)", border: "1px solid rgba(224, 122, 95, 0.15)",
         borderRadius: "12px", padding: "1.5rem", marginBottom: "2rem",
       }}>
-        <h4 style={{ fontFamily: "var(--font-display)", fontSize: "1rem", color: "#e07a5f", marginBottom: "0.75rem" }}>Aviso Legal — Disclaimer</h4>
+        <h4 style={{ fontFamily: "var(--font-display)", fontSize: "1rem", color: "#e07a5f", marginBottom: "0.75rem" }}>Aviso Legal</h4>
         <div style={{ fontSize: "0.75rem", color: "#8a9e93", lineHeight: 1.8 }}>
           <p style={{ marginBottom: "0.6rem" }}>
             <strong style={{ color: "#e07a5f" }}>Este contenido es puramente especulativo, informativo y educativo.</strong>{" "}

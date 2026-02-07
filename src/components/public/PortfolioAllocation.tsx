@@ -50,24 +50,27 @@ function AllocationBar({ items, title }: { items: AllocationItem[]; title: strin
                 {item.name}
               </span>
             </div>
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", minWidth: 0 }}>
               <span
                 style={{
                   fontFamily: "var(--font-mono)",
                   fontSize: "0.9rem",
                   color: "#8a9e93",
+                  flexShrink: 0,
                 }}
               >
                 {item.percentage.toFixed(0)}%
               </span>
               <div
+                className="alloc-bar-bg"
                 style={{
                   width: "120px",
                   height: "4px",
                   background: "rgba(255,255,255,0.06)",
                   borderRadius: "2px",
                   overflow: "hidden",
-                  marginLeft: "1rem",
+                  flexShrink: 1,
+                  minWidth: "60px",
                 }}
               >
                 <div
@@ -92,6 +95,7 @@ export function PortfolioAllocation({ data }: PortfolioAllocationProps) {
   return (
     <section id="portfolio" style={{ padding: "3rem 0" }}>
       <div
+        className="section-header"
         style={{
           display: "flex",
           justifyContent: "space-between",
@@ -102,6 +106,7 @@ export function PortfolioAllocation({ data }: PortfolioAllocationProps) {
         }}
       >
         <h3
+          className="section-title"
           style={{
             fontFamily: "var(--font-display)",
             fontSize: "1.6rem",
@@ -111,7 +116,7 @@ export function PortfolioAllocation({ data }: PortfolioAllocationProps) {
         >
           Composición del Portafolio
         </h3>
-        <span style={{ fontSize: "0.8rem", color: "#5a6e63", fontWeight: 500 }}>
+        <span className="section-subtitle" style={{ fontSize: "0.8rem", color: "#5a6e63", fontWeight: 500 }}>
           Distribución actual
         </span>
       </div>

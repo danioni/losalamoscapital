@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
 import { Logo } from "./Logo";
 
 const navLinks = [
@@ -16,6 +17,24 @@ const navLinks = [
 
 export function Header() {
   const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
 
   return (
     <header
@@ -75,6 +94,8 @@ export function Header() {
             </span>
           </div>
         </Link>
+
+        {/* Desktop nav */}
         <nav className="nav-responsive" style={{ display: "flex" }}>
           {navLinks.map((link) => {
             const isActive =
@@ -104,7 +125,96 @@ export function Header() {
             );
           })}
         </nav>
+
+        {/* Mobile hamburger button */}
+        <button
+          className="mobile-menu-btn"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label={mobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
+          style={{
+            display: "none",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            padding: "0.5rem",
+            zIndex: 110,
+          }}
+        >
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#e8efe6"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            {mobileMenuOpen ? (
+              <>
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </>
+            ) : (
+              <>
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+              </>
+            )}
+          </svg>
+        </button>
       </div>
+
+      {/* Mobile menu overlay */}
+      {mobileMenuOpen && (
+        <div
+          className="mobile-menu-overlay"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(10, 15, 13, 0.95)",
+            backdropFilter: "blur(20px)",
+            zIndex: 99,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "0.5rem",
+            animation: "fadeIn 0.2s ease",
+          }}
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          {navLinks.map((link) => {
+            const isActive =
+              !link.href.startsWith("/#") &&
+              pathname === link.href;
+
+            return (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={() => setMobileMenuOpen(false)}
+                style={{
+                  color: isActive ? "#52b788" : "#e8efe6",
+                  textDecoration: "none",
+                  fontSize: "1.25rem",
+                  fontWeight: 500,
+                  padding: "0.75rem 2rem",
+                  letterSpacing: "0.02em",
+                  transition: "color 0.3s",
+                  fontFamily: "var(--font-display)",
+                }}
+              >
+                {link.label}
+              </a>
+            );
+          })}
+        </div>
+      )}
     </header>
   );
 }

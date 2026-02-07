@@ -20,7 +20,7 @@ function getTagStyles(type: Decision["type"]): { background: string; color: stri
   }
 }
 
-const sectionHeaderStyle = {
+const sectionHeaderStyle: React.CSSProperties = {
   display: "flex",
   justifyContent: "space-between",
   alignItems: "baseline",
@@ -29,14 +29,14 @@ const sectionHeaderStyle = {
   borderBottom: "1px solid rgba(45, 106, 79, 0.2)",
 };
 
-const h3Style = {
+const h3Style: React.CSSProperties = {
   fontFamily: "var(--font-display)",
   fontSize: "1.6rem",
   fontWeight: 400,
   color: "#e8efe6",
 };
 
-const subtitleStyle = {
+const subtitleStyle: React.CSSProperties = {
   fontSize: "0.8rem",
   color: "#5a6e63",
   fontWeight: 500,
@@ -46,9 +46,9 @@ export function DecisionsLog({ decisions }: DecisionsLogProps) {
   if (decisions.length === 0) {
     return (
       <section id="decisions" style={{ padding: "3rem 0" }}>
-        <div style={sectionHeaderStyle}>
-          <h3 style={h3Style}>Registro de Decisiones</h3>
-          <span style={subtitleStyle}>Transparencia total</span>
+        <div className="section-header" style={sectionHeaderStyle}>
+          <h3 className="section-title" style={h3Style}>Registro de Decisiones</h3>
+          <span className="section-subtitle" style={subtitleStyle}>Transparencia total</span>
         </div>
         <div
           style={{

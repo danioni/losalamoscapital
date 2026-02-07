@@ -74,6 +74,7 @@ export function PerformanceChart({ data, lastUpdated }: PerformanceChartProps) {
   return (
     <section id="performance" style={{ padding: "3rem 0" }}>
       <div
+        className="section-header"
         style={{
           display: "flex",
           justifyContent: "space-between",
@@ -84,6 +85,7 @@ export function PerformanceChart({ data, lastUpdated }: PerformanceChartProps) {
         }}
       >
         <h3
+          className="section-title"
           style={{
             fontFamily: "var(--font-display)",
             fontSize: "1.6rem",
@@ -93,7 +95,7 @@ export function PerformanceChart({ data, lastUpdated }: PerformanceChartProps) {
         >
           Rendimiento
         </h3>
-        <span style={{ fontSize: "0.8rem", color: "#5a6e63", fontWeight: 500 }}>
+        <span className="section-subtitle" style={{ fontSize: "0.8rem", color: "#5a6e63", fontWeight: 500 }}>
           Actualizado: {formattedDate}
         </span>
       </div>
@@ -103,7 +105,7 @@ export function PerformanceChart({ data, lastUpdated }: PerformanceChartProps) {
           background: "#111a16",
           border: "1px solid rgba(45, 106, 79, 0.2)",
           borderRadius: "16px",
-          padding: "2rem",
+          padding: "1.5rem",
         }}
       >
         <div style={{ display: "flex", gap: "1.5rem", marginBottom: "1.5rem" }}>

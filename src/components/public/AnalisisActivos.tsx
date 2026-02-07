@@ -314,7 +314,7 @@ export function AnalisisActivos({ livePrices, lastUpdated }: AnalisisProps) {
 
       {/* Key insights cards */}
       <section
-        className="animate-fade-up animate-delay-3"
+        className="animate-fade-up animate-delay-3 stats-grid-responsive"
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
@@ -323,7 +323,6 @@ export function AnalisisActivos({ livePrices, lastUpdated }: AnalisisProps) {
         }}
       >
         <div
-          className="stats-grid-responsive"
           style={{
             background: "#111a16",
             border: "1px solid rgba(45, 106, 79, 0.2)",
@@ -531,8 +530,8 @@ export function AnalisisActivos({ livePrices, lastUpdated }: AnalisisProps) {
           )}
         </div>
 
-        <div style={{ overflowX: "auto" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.82rem" }}>
+        <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch", margin: "0 -0.5rem", padding: "0 0.5rem" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.82rem", minWidth: "800px" }}>
             <thead>
               <tr style={{ borderBottom: "1px solid rgba(45, 106, 79, 0.3)" }}>
                 {([

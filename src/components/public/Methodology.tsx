@@ -78,6 +78,7 @@ export function Methodology() {
   return (
     <section id="methodology" style={{ padding: "3rem 0" }}>
       <div
+        className="section-header"
         style={{
           display: "flex",
           justifyContent: "space-between",
@@ -88,6 +89,7 @@ export function Methodology() {
         }}
       >
         <h3
+          className="section-title"
           style={{
             fontFamily: "var(--font-display)",
             fontSize: "1.6rem",
@@ -97,7 +99,7 @@ export function Methodology() {
         >
           Metodología
         </h3>
-        <span style={{ fontSize: "0.8rem", color: "#5a6e63", fontWeight: 500 }}>
+        <span className="section-subtitle" style={{ fontSize: "0.8rem", color: "#5a6e63", fontWeight: 500 }}>
           Cómo invertimos
         </span>
       </div>

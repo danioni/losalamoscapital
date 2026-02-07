@@ -130,15 +130,18 @@ const navItems = [
 
 interface SidebarProps {
   onSignOut: () => void;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
-function NavLink({ href, label, icon, isActive }: { href: string; label: string; icon: React.ReactNode; isActive: boolean }) {
+function NavLink({ href, label, icon, isActive, onClick }: { href: string; label: string; icon: React.ReactNode; isActive: boolean; onClick?: () => void }) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <li>
       <Link
         href={href}
+        onClick={onClick}
         style={{
           display: "flex",
           alignItems: "center",
@@ -162,163 +165,206 @@ function NavLink({ href, label, icon, isActive }: { href: string; label: string;
   );
 }
 
-export function Sidebar({ onSignOut }: SidebarProps) {
+export function Sidebar({ onSignOut, isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
   const [publicLinkHovered, setPublicLinkHovered] = useState(false);
   const [signOutHovered, setSignOutHovered] = useState(false);
 
   return (
-    <aside
-      style={{
-        width: "256px",
-        background: "#111a16",
-        borderRight: "1px solid rgba(45, 106, 79, 0.2)",
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      {/* Logo */}
-      <div
+    <>
+      {/* Mobile overlay */}
+      {isOpen && (
+        <div
+          className="admin-sidebar-overlay"
+          onClick={onClose}
+          style={{
+            display: "none",
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.6)",
+            zIndex: 199,
+          }}
+        />
+      )}
+
+      <aside
+        className={`admin-sidebar ${isOpen ? "open" : ""}`}
         style={{
-          padding: "1.5rem",
-          borderBottom: "1px solid rgba(45, 106, 79, 0.2)",
+          width: "256px",
+          background: "#111a16",
+          borderRight: "1px solid rgba(45, 106, 79, 0.2)",
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          flexShrink: 0,
         }}
       >
-        <Link
-          href="/admin"
+        {/* Logo */}
+        <div
           style={{
+            padding: "1.5rem",
+            borderBottom: "1px solid rgba(45, 106, 79, 0.2)",
             display: "flex",
+            justifyContent: "space-between",
             alignItems: "center",
-            gap: "0.75rem",
-            textDecoration: "none",
           }}
         >
-          <Logo style={{ width: "32px", height: "32px" }} />
-          <div>
-            <h1
+          <Link
+            href="/admin"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.75rem",
+              textDecoration: "none",
+            }}
+          >
+            <Logo style={{ width: "32px", height: "32px" }} />
+            <div>
+              <h1
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontSize: "1.125rem",
+                  color: "#e8efe6",
+                  fontWeight: 400,
+                }}
+              >
+                Los Álamos
+              </h1>
+              <span
+                style={{
+                  fontSize: "0.6rem",
+                  fontWeight: 500,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "#40916c",
+                }}
+              >
+                Panel Admin
+              </span>
+            </div>
+          </Link>
+          {/* Close button for mobile */}
+          {onClose && (
+            <button
+              className="admin-sidebar-close"
+              onClick={onClose}
               style={{
-                fontFamily: "var(--font-display)",
-                fontSize: "1.125rem",
-                color: "#e8efe6",
-                fontWeight: 400,
+                display: "none",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: "0.5rem",
+                color: "#8a9e93",
               }}
             >
-              Los Álamos
-            </h1>
-            <span
-              style={{
-                fontSize: "0.6rem",
-                fontWeight: 500,
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                color: "#40916c",
-              }}
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          )}
+        </div>
+
+        {/* Navigation */}
+        <nav style={{ flex: 1, padding: "1rem" }}>
+          <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+            {navItems.map((item) => {
+              const isActive =
+                pathname === item.href ||
+                (item.href !== "/admin" && pathname.startsWith(item.href));
+
+              return (
+                <NavLink
+                  key={item.href}
+                  href={item.href}
+                  label={item.label}
+                  icon={item.icon}
+                  isActive={isActive}
+                  onClick={onClose}
+                />
+              );
+            })}
+          </ul>
+        </nav>
+
+        {/* Footer */}
+        <div
+          style={{
+            padding: "1rem",
+            borderTop: "1px solid rgba(45, 106, 79, 0.2)",
+          }}
+        >
+          <Link
+            href="/"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.75rem",
+              padding: "0.75rem 1rem",
+              borderRadius: "8px",
+              fontSize: "0.875rem",
+              fontWeight: 500,
+              transition: "all 0.2s",
+              textDecoration: "none",
+              marginBottom: "0.5rem",
+              background: publicLinkHovered ? "#162320" : "transparent",
+              color: publicLinkHovered ? "#e8efe6" : "#8a9e93",
+            }}
+            onMouseEnter={() => setPublicLinkHovered(true)}
+            onMouseLeave={() => setPublicLinkHovered(false)}
+          >
+            <svg
+              style={{ width: "20px", height: "20px" }}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              Panel Admin
-            </span>
-          </div>
-        </Link>
-      </div>
-
-      {/* Navigation */}
-      <nav style={{ flex: 1, padding: "1rem" }}>
-        <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.25rem" }}>
-          {navItems.map((item) => {
-            const isActive =
-              pathname === item.href ||
-              (item.href !== "/admin" && pathname.startsWith(item.href));
-
-            return (
-              <NavLink
-                key={item.href}
-                href={item.href}
-                label={item.label}
-                icon={item.icon}
-                isActive={isActive}
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
               />
-            );
-          })}
-        </ul>
-      </nav>
-
-      {/* Footer */}
-      <div
-        style={{
-          padding: "1rem",
-          borderTop: "1px solid rgba(45, 106, 79, 0.2)",
-        }}
-      >
-        <Link
-          href="/"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "0.75rem",
-            padding: "0.75rem 1rem",
-            borderRadius: "8px",
-            fontSize: "0.875rem",
-            fontWeight: 500,
-            transition: "all 0.2s",
-            textDecoration: "none",
-            marginBottom: "0.5rem",
-            background: publicLinkHovered ? "#162320" : "transparent",
-            color: publicLinkHovered ? "#e8efe6" : "#8a9e93",
-          }}
-          onMouseEnter={() => setPublicLinkHovered(true)}
-          onMouseLeave={() => setPublicLinkHovered(false)}
-        >
-          <svg
-            style={{ width: "20px", height: "20px" }}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+            </svg>
+            Ver sitio público
+          </Link>
+          <button
+            onClick={onSignOut}
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.75rem",
+              padding: "0.75rem 1rem",
+              borderRadius: "8px",
+              fontSize: "0.875rem",
+              fontWeight: 500,
+              transition: "all 0.2s",
+              border: "none",
+              cursor: "pointer",
+              background: signOutHovered ? "rgba(224, 122, 95, 0.1)" : "transparent",
+              color: "#e07a5f",
+            }}
+            onMouseEnter={() => setSignOutHovered(true)}
+            onMouseLeave={() => setSignOutHovered(false)}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-            />
-          </svg>
-          Ver sitio público
-        </Link>
-        <button
-          onClick={onSignOut}
-          style={{
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.75rem",
-            padding: "0.75rem 1rem",
-            borderRadius: "8px",
-            fontSize: "0.875rem",
-            fontWeight: 500,
-            transition: "all 0.2s",
-            border: "none",
-            cursor: "pointer",
-            background: signOutHovered ? "rgba(224, 122, 95, 0.1)" : "transparent",
-            color: "#e07a5f",
-          }}
-          onMouseEnter={() => setSignOutHovered(true)}
-          onMouseLeave={() => setSignOutHovered(false)}
-        >
-          <svg
-            style={{ width: "20px", height: "20px" }}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-            />
-          </svg>
-          Cerrar sesión
-        </button>
-      </div>
-    </aside>
+            <svg
+              style={{ width: "20px", height: "20px" }}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+              />
+            </svg>
+            Cerrar sesión
+          </button>
+        </div>
+      </aside>
+    </>
   );
 }
